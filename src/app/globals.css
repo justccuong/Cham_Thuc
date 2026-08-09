@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+@theme {
+  --color-paper-ivory: #F8F5F0;
+  --color-paper-warm: #EFE9DE;
+  --color-brand-red: #9A1B1F;
+  --color-brand-red-hover: #7A1518;
+  --color-heritage-red: #9A1B1F;
+  --color-heritage-red-hover: #7A1518;
+  --color-brand-gold: #F4E8C1;
+  --color-bamboo-green: #285834;
+  --color-clay-terracotta: #DC866B;
+  --color-text-wood: #3A2618;
+  --color-wood-brown: #3A2618;
+
+  --font-serif: var(--font-cormorant), serif;
+  --font-sans: var(--font-be-vietnam), sans-serif;
+}
+
+:root {
+  --background: #F8F5F0;
+  --foreground: #3A2618;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-paper-ivory);
+  color: var(--color-text-wood);
+  font-family: var(--font-be-vietnam), system-ui, sans-serif;
+  font-size: 16px;
+  overflow-x: hidden;
+}
+
+/* Prevent horizontal overflow on mobile */
+#__next,
+main {
+  overflow-x: hidden;
+}
+
+/* Navigation link underline animation */
+.ct-nav-link {
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.ct-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #9A1B1F;
+  transition: width 0.3s ease-in-out;
+}
+
+.ct-nav-link:hover::after {
+  width: 100%;
+}
+
+/* Hide scrollbar for horizontal carousel */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+/* Prevent iOS auto-zoom on focus */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+select,
+textarea {
+  font-size: 16px;
+}
