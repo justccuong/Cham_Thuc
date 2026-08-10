@@ -32,6 +32,11 @@ export const metadata: Metadata = {
     "ESG",
   ],
   authors: [{ name: "Ngũ Sắc Team" }],
+  icons: {
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
+  },
   openGraph: {
     title: "Chạm Thức | Chạm tinh hoa - Mở văn hóa",
     description:

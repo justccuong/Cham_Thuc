@@ -14,7 +14,7 @@ const collectionItems: CraftItem[] = [
     village: "Làng Nón Chuông — Hà Nội",
     subtitle: "Trang trí nón lá thủ công",
     description: "Bộ kit tự làm nón lá mini kèm quà tặng ngẫu nhiên.",
-    image: "/products/non-chuong.jpg",
+    image: "/products/non-chuong.png",
     materials: [
       "Frame nón lá mini thủ công",
       "Bộ màu vẽ Acrylic 6 màu",
@@ -32,7 +32,7 @@ const collectionItems: CraftItem[] = [
     village: "Làng Tò He Xuân La — Hà Nội",
     subtitle: "Nặn tò he truyền thống",
     description: "Nặn tò he bằng bột màu tự nhiên kèm khuôn con giống bí ẩn.",
-    image: "/products/to-he.jpg",
+    image: "/products/to-he.png",
     materials: [
       "Bột màu tự nhiên dẻo mịn",
       "Que gỗ nặn truyền thống",
@@ -50,7 +50,7 @@ const collectionItems: CraftItem[] = [
     village: "Làng Tre Thạch Xá — Hà Nội",
     subtitle: "Tô màu chuồn chuồn thăng bằng",
     description: "Tô màu chuồn chuồn tre thăng bằng kèm chân đế ngẫu nhiên.",
-    image: "/products/chuon-chuon-tre.jpg",
+    image: "/products/chuon-chuon-tre.png",
     materials: [
       "Mô hình tre đẽo gọt thủ công",
       "Bộ màu vẽ Acrylic cao cấp",
