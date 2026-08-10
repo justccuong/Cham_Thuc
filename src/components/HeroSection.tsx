@@ -22,27 +22,27 @@ export const HeroSection: React.FC = () => {
           className="object-cover object-center"
         />
 
-        {/* Dark + blur overlay — fades in quickly after 0.4s */}
+        {/* Dark + blur overlay — starts almost immediately (0.1s) */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.4, ease: "easeInOut" }}
+          transition={{ duration: 0.6, delay: 0.1, ease: "easeInOut" }}
           className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/35 to-black/65 backdrop-blur-[3px]"
         />
       </div>
 
-      {/* Text content — fades in right after overlay */}
+      {/* Text content — fast staggered entrance starting at 0.2s */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.6, ease: "easeOut" }}
+        transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
         className="relative z-10 w-full max-w-4xl mx-auto px-5 sm:px-6 flex flex-col items-center flex-1 justify-center"
       >
         {/* Logo badge */}
         <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
+          initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.7 }}
+          transition={{ duration: 0.4, delay: 0.25 }}
           className="mb-5 sm:mb-8 p-3 sm:p-4 rounded-2xl bg-black/20 backdrop-blur-md border border-paper-ivory/15 shadow-2xl"
         >
           <Image
@@ -59,7 +59,7 @@ export const HeroSection: React.FC = () => {
         <motion.span
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.85 }}
+          transition={{ duration: 0.4, delay: 0.35 }}
           className="inline-block font-sans text-[11px] sm:text-xs font-semibold tracking-[0.2em] sm:tracking-[0.3em] uppercase text-paper-ivory/90 bg-paper-ivory/10 backdrop-blur-sm px-3 sm:px-4 py-1.5 rounded-full border border-paper-ivory/20 mb-4 sm:mb-6"
         >
           Trải nghiệm văn hóa Việt
@@ -67,9 +67,9 @@ export const HeroSection: React.FC = () => {
 
         {/* Headline */}
         <motion.h1
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.0, ease: "easeOut" }}
+          transition={{ duration: 0.5, delay: 0.45, ease: "easeOut" }}
           className="font-serif text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-normal leading-[1.1] text-paper-ivory mb-4 sm:mb-6 tracking-tight"
         >
           Chạm tinh hoa
@@ -79,9 +79,9 @@ export const HeroSection: React.FC = () => {
 
         {/* Subtitle */}
         <motion.p
-          initial={{ opacity: 0, y: 15 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 1.15 }}
+          transition={{ duration: 0.4, delay: 0.55 }}
           className="font-sans text-sm sm:text-base md:text-lg text-paper-ivory/80 max-w-sm sm:max-w-md font-light leading-relaxed"
         >
           Mỗi chiếc hộp là một hành trình nhỏ về làng nghề — nơi bạn tự tay chạm vào di sản.
@@ -93,7 +93,7 @@ export const HeroSection: React.FC = () => {
         href="#products"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 1.3 }}
+        transition={{ duration: 0.4, delay: 0.65 }}
         onClick={(e) => {
           e.preventDefault();
           document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
