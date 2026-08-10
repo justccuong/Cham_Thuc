@@ -22,7 +22,7 @@ export const Footer: React.FC = () => {
             />
           </Link>
 
-          <h3 className="font-serif text-lg sm:text-xl text-paper-ivory font-normal tracking-wide">
+          <h3 className="font-serif text-lg sm:text-xl text-paper-ivory font-bold tracking-wide">
             Chạm Tinh Hoa — Mở Văn Hóa
           </h3>
 

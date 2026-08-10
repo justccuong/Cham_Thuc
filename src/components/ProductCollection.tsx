@@ -88,7 +88,7 @@ export const ProductCollection: React.FC = () => {
             Hộp Khám Phá Văn Hóa
           </span>
 
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal text-brand-red mb-3 sm:mb-4 tracking-tight">
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-brand-red mb-3 sm:mb-4 tracking-tight">
             Bộ Kit Trải Nghiệm DIY
           </h2>
 

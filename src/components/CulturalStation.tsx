@@ -23,7 +23,7 @@ export const CulturalStation: React.FC = () => {
           <span className="inline-block font-sans text-[11px] sm:text-xs font-bold uppercase tracking-widest text-brand-red bg-brand-red/8 px-3 sm:px-4 py-1.5 rounded-full border border-brand-red/15 mb-4 sm:mb-5">
             Trạm Kể Chuyện
           </span>
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal text-brand-red tracking-tight">
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-brand-red tracking-tight">
             Làng Nghề Truyền Thống
           </h2>
         </motion.div>
