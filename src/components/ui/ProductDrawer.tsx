@@ -3,16 +3,18 @@
 import React from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, CheckCircle2, Gift, QrCode } from "lucide-react";
+import { X, CheckCircle2, Gift, QrCode, ShoppingBag } from "lucide-react";
 import { CraftItem } from "@/types";
+import { ProductKey } from "@/components/CartDrawer";
 import { Button } from "./Button";
 
 interface ProductDrawerProps {
   item: CraftItem | null;
   onClose: () => void;
+  onOrder: (key: ProductKey) => void;
 }
 
-export const ProductDrawer: React.FC<ProductDrawerProps> = ({ item, onClose }) => {
+export const ProductDrawer: React.FC<ProductDrawerProps> = ({ item, onClose, onOrder }) => {
   return (
     <AnimatePresence>
       {item && (
@@ -118,14 +120,19 @@ export const ProductDrawer: React.FC<ProductDrawerProps> = ({ item, onClose }) =
             </div>
 
             {/* Footer CTA */}
-            <div className="p-4 sm:p-6 border-t border-text-wood/10 bg-paper-warm pb-[calc(1rem+env(safe-area-inset-bottom))]">
+            <div className="p-4 sm:p-6 border-t border-text-wood/10 bg-paper-warm pb-[calc(1rem+env(safe-area-inset-bottom))] flex gap-3">
               <Button
                 variant="primary"
                 size="lg"
-                onClick={onClose}
-                className="w-full h-12 bg-brand-red hover:bg-brand-red-hover text-brand-gold shadow-md"
+                onClick={() => {
+                  const key = item.id as ProductKey;
+                  onClose();
+                  onOrder(key);
+                }}
+                className="flex-1 h-12 bg-brand-red hover:bg-brand-red-hover text-brand-gold shadow-md flex items-center justify-center gap-2"
               >
-                {item.ctaLabel}
+                <ShoppingBag size={18} />
+                <span>{item.ctaLabel}</span>
               </Button>
             </div>
           </motion.div>

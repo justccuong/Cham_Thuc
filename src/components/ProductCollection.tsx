@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { CraftItem } from "@/types";
 import { CraftCard } from "@/components/ui/CraftCard";
 import { ProductDrawer } from "@/components/ui/ProductDrawer";
+import { CartDrawer, ProductKey } from "@/components/CartDrawer";
 
 const collectionItems: CraftItem[] = [
   {
@@ -64,6 +65,13 @@ const collectionItems: CraftItem[] = [
 
 export const ProductCollection: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState<CraftItem | null>(null);
+  const [cartOpen, setCartOpen] = useState(false);
+  const [cartProductKey, setCartProductKey] = useState<ProductKey>("non-la");
+
+  const handleOrder = (key: ProductKey) => {
+    setCartProductKey(key);
+    setCartOpen(true);
+  };
 
   return (
     <section id="products" className="py-14 sm:py-20 md:py-28 lg:py-32 bg-paper-ivory">
@@ -106,7 +114,18 @@ export const ProductCollection: React.FC = () => {
       </div>
 
       {/* Product detail drawer */}
-      <ProductDrawer item={selectedItem} onClose={() => setSelectedItem(null)} />
+      <ProductDrawer
+        item={selectedItem}
+        onClose={() => setSelectedItem(null)}
+        onOrder={handleOrder}
+      />
+
+      {/* Cart & COD Order Drawer */}
+      <CartDrawer
+        isOpen={cartOpen}
+        onClose={() => setCartOpen(false)}
+        initialProductKey={cartProductKey}
+      />
     </section>
   );
 };

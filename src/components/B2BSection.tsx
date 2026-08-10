@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Send, CheckCircle } from "lucide-react";
+import { Send, CheckCircle, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
 interface ImpactPillar {
@@ -27,7 +27,7 @@ const pillars: ImpactPillar[] = [
   {
     title: "Bao Bì Xanh",
     description:
-      "Sử dụng 100% vật liệu giấy dó, tre nứa, lụa và bao bì tự nhiên phân hủy sinh học theo định hướng ESG.",
+      "Sử dụng 100% vật liệu tre nứa và bao bì tự nhiên phân hủy sinh học theo định hướng ESG.",
     accent: "bg-clay-terracotta/8 border-clay-terracotta/15",
   },
 ];
@@ -35,10 +35,56 @@ const pillars: ImpactPillar[] = [
 export const B2BSection: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", phone: "" });
+  const [errors, setErrors] = useState<{ name?: string; email?: string; phone?: string }>({});
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value.replace(/\D/g, "").slice(0, 10);
+    setForm({ ...form, phone: val });
+    if (errors.phone) setErrors((prev) => ({ ...prev, phone: undefined }));
+  };
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value.slice(0, 80);
+    setForm({ ...form, name: val });
+    if (errors.name) setErrors((prev) => ({ ...prev, name: undefined }));
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value.slice(0, 80);
+    setForm({ ...form, email: val });
+    if (errors.email) setErrors((prev) => ({ ...prev, email: undefined }));
+  };
+
+  const validateB2BForm = () => {
+    const newErrors: { name?: string; email?: string; phone?: string } = {};
+
+    if (!form.name.trim()) {
+      newErrors.name = "Vui lòng nhập tên đơn vị / tổ chức.";
+    } else if (form.name.trim().length < 3) {
+      newErrors.name = "Tên đơn vị quá ngắn (tối thiểu 3 ký tự).";
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!form.email.trim()) {
+      newErrors.email = "Vui lòng nhập địa chỉ email liên hệ.";
+    } else if (!emailRegex.test(form.email.trim())) {
+      newErrors.email = "Địa chỉ email không đúng định dạng (ví dụ: contact@company.com).";
+    }
+
+    const phoneRegex = /^0(3|5|7|8|9)\d{8}$/;
+    if (!form.phone) {
+      newErrors.phone = "Vui lòng nhập số điện thoại liên hệ.";
+    } else if (!phoneRegex.test(form.phone)) {
+      newErrors.phone = "Số điện thoại không hợp lệ (10 chữ số, bắt đầu bằng 03, 05, 07, 08, 09).";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (form.name && form.email && form.phone) {
+    if (validateB2BForm()) {
       setSubmitted(true);
     }
   };
@@ -123,44 +169,68 @@ export const B2BSection: React.FC = () => {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block font-sans text-xs font-bold text-text-wood uppercase tracking-wider mb-1.5">
-                  Tên Đơn Vị *
+                  Tên Đơn Vị * <span className="text-text-wood/40 font-normal">({form.name.length}/80)</span>
                 </label>
                 <input
                   type="text"
-                  required
-                  placeholder="Ví dụ: Trường THPT Chuyên..."
+                  maxLength={80}
+                  placeholder="Ví dụ: Trường THPT Chuyên Tuyên Quang..."
                   value={form.name}
-                  onChange={(e) => setForm({ ...form, name: e.target.value })}
-                  className="w-full bg-paper-ivory border border-text-wood/15 rounded-xl px-4 h-12 text-base text-text-wood focus:outline-none focus:border-brand-red transition-colors font-sans"
+                  onChange={handleNameChange}
+                  className={`w-full bg-paper-ivory border ${
+                    errors.name ? "border-red-500 bg-red-50/30" : "border-text-wood/15"
+                  } rounded-xl px-4 h-12 text-base text-text-wood focus:outline-none focus:border-brand-red transition-colors font-sans`}
                 />
+                {errors.name && (
+                  <p className="text-[11px] text-red-600 mt-1 flex items-center gap-1">
+                    <AlertCircle size={12} />
+                    {errors.name}
+                  </p>
+                )}
               </div>
 
               <div>
                 <label className="block font-sans text-xs font-bold text-text-wood uppercase tracking-wider mb-1.5">
-                  Email *
+                  Email * <span className="text-text-wood/40 font-normal">({form.email.length}/80)</span>
                 </label>
                 <input
                   type="email"
-                  required
+                  maxLength={80}
                   placeholder="contact@company.com"
                   value={form.email}
-                  onChange={(e) => setForm({ ...form, email: e.target.value })}
-                  className="w-full bg-paper-ivory border border-text-wood/15 rounded-xl px-4 h-12 text-base text-text-wood focus:outline-none focus:border-brand-red transition-colors font-sans"
+                  onChange={handleEmailChange}
+                  className={`w-full bg-paper-ivory border ${
+                    errors.email ? "border-red-500 bg-red-50/30" : "border-text-wood/15"
+                  } rounded-xl px-4 h-12 text-base text-text-wood focus:outline-none focus:border-brand-red transition-colors font-sans`}
                 />
+                {errors.email && (
+                  <p className="text-[11px] text-red-600 mt-1 flex items-center gap-1">
+                    <AlertCircle size={12} />
+                    {errors.email}
+                  </p>
+                )}
               </div>
 
               <div>
                 <label className="block font-sans text-xs font-bold text-text-wood uppercase tracking-wider mb-1.5">
-                  Số Điện Thoại *
+                  Số Điện Thoại * <span className="text-text-wood/40 font-normal">({form.phone.length}/10)</span>
                 </label>
                 <input
                   type="tel"
-                  required
-                  placeholder="0987 xxx xxx"
+                  maxLength={10}
+                  placeholder="0987123456"
                   value={form.phone}
-                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                  className="w-full bg-paper-ivory border border-text-wood/15 rounded-xl px-4 h-12 text-base text-text-wood focus:outline-none focus:border-brand-red transition-colors font-sans"
+                  onChange={handlePhoneChange}
+                  className={`w-full bg-paper-ivory border ${
+                    errors.phone ? "border-red-500 bg-red-50/30" : "border-text-wood/15"
+                  } rounded-xl px-4 h-12 text-base text-text-wood focus:outline-none focus:border-brand-red transition-colors font-sans`}
                 />
+                {errors.phone && (
+                  <p className="text-[11px] text-red-600 mt-1 flex items-center gap-1">
+                    <AlertCircle size={12} />
+                    {errors.phone}
+                  </p>
+                )}
               </div>
 
               <Button

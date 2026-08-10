@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { QrCode, Play, Quote } from "lucide-react";
+import { QrCode, Play } from "lucide-react";
 
 export const CulturalStation: React.FC = () => {
   return (
@@ -71,16 +71,12 @@ export const CulturalStation: React.FC = () => {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="flex flex-col justify-center"
           >
-            {/* Artisan quote */}
-            <div className="relative mb-8 sm:mb-12">
-              <Quote
-                size={40}
-                className="text-brand-red/10 absolute -top-3 -left-2 sm:-top-4 sm:-left-3 pointer-events-none"
-              />
-              <blockquote className="font-serif text-xl sm:text-2xl md:text-3xl lg:text-4xl text-brand-red leading-relaxed italic relative z-10 pl-4 sm:pl-6 border-l-3 sm:border-l-4 border-brand-red/20">
-                Giữ được nghề không chỉ là giữ miếng cơm, mà là giữ lấy cái hồn quê đã thấm vào từng sợi tre, lá nón qua mấy thế hệ.
+            {/* Artisan quote — clean typography, full quotation marks, author aligned right */}
+            <div className="relative mb-8 sm:mb-12 bg-paper-ivory/60 rounded-2xl p-6 sm:p-8 border border-brand-red/10 shadow-sm">
+              <blockquote className="font-serif text-xl sm:text-2xl md:text-3xl text-brand-red leading-relaxed italic text-left">
+                “Giữ được nghề không chỉ là giữ miếng cơm, mà là giữ lấy cái hồn quê đã thấm vào từng sợi tre, lá nón qua mấy thế hệ.”
               </blockquote>
-              <p className="font-sans text-xs sm:text-sm font-bold text-text-wood/70 tracking-wider uppercase mt-4 sm:mt-6 pl-4 sm:pl-6">
+              <p className="font-sans text-xs sm:text-sm font-bold text-text-wood/70 tracking-wider uppercase mt-4 sm:mt-6 text-right">
                 — Nghệ Nhân Làng Chuông
               </p>
             </div>
