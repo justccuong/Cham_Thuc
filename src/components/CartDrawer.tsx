@@ -10,24 +10,20 @@ interface CartDrawerProps {
   onClose: () => void;
 }
 
+type ProductKey = "non-la" | "to-he" | "chuon-chuon";
+
+const products: Record<ProductKey, { label: string; price: number }> = {
+  "non-la": { label: "Hộp DIY Nón Lá Mini", price: 299000 },
+  "to-he": { label: "Hộp DIY Tò He Dân Gian", price: 299000 },
+  "chuon-chuon": { label: "Hộp DIY Chuồn Chuồn Tre", price: 299000 },
+};
+
 export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
-  const [packageType, setPackageType] = useState<"single" | "set" | "b2b">("single");
+  const [selectedProduct, setSelectedProduct] = useState<ProductKey>("non-la");
   const [quantity, setQuantity] = useState(1);
   const [showVietQR, setShowVietQR] = useState(false);
 
-  const packagePrices = {
-    single: 299000,
-    set: 1390000,
-    b2b: 2490000,
-  };
-
-  const packageLabels = {
-    single: "Hộp Mua Lẻ (Ngẫu nhiên 1/5)",
-    set: "Full Combo Sưu Tầm (5 Hộp)",
-    b2b: "Gói B2B (10 Hộp + Logo)",
-  };
-
-  const totalPrice = packagePrices[packageType] * quantity;
+  const totalPrice = products[selectedProduct].price * quantity;
 
   return (
     <>
@@ -43,7 +39,6 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
               className="absolute inset-0 bg-text-wood/60 backdrop-blur-sm cursor-pointer"
             />
 
-            {/* Drawer — full width on mobile, max-w-md on desktop */}
             <motion.div
               key="cart-sheet"
               initial={{ x: "100%" }}
@@ -52,7 +47,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
               transition={{ type: "spring", damping: 25, stiffness: 220 }}
               className="relative w-full sm:max-w-md h-full bg-paper-ivory shadow-2xl flex flex-col border-l border-text-wood/10 text-text-wood z-10"
             >
-              {/* Header — h-14 consistent with navbar */}
+              {/* Header */}
               <div className="h-14 px-4 sm:px-6 border-b border-text-wood/10 flex items-center justify-between bg-paper-warm flex-shrink-0">
                 <div className="flex items-center gap-2">
                   <ShoppingBag className="text-brand-red" size={18} />
@@ -66,52 +61,44 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
                 </button>
               </div>
 
-              {/* Content Body */}
+              {/* Content */}
               <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 sm:space-y-6">
-                {/* Package options — min h-12 touch targets */}
+                {/* Product selector */}
                 <div>
                   <label className="block text-xs font-bold text-text-wood uppercase tracking-wider mb-2 sm:mb-3">
-                    Chọn Loại Hình:
+                    Chọn Hộp Trải Nghiệm:
                   </label>
                   <div className="space-y-2">
-                    {(["single", "set", "b2b"] as const).map((type) => {
-                      const labels = { single: "🎁 Mua Lẻ (1 Hộp)", set: "⭐ Full Set (5 Hộp)", b2b: "🏢 B2B (10 Hộp)" };
-                      const prices = { single: "299.000đ", set: "1.390.000đ", b2b: "2.490.000đ" };
-                      return (
-                        <button
-                          key={type}
-                          onClick={() => setPackageType(type)}
-                          className={`w-full h-12 px-4 rounded-xl border text-sm flex items-center justify-between transition-all ${
-                            packageType === type
-                              ? "bg-white border-brand-red shadow-sm text-brand-red font-bold"
-                              : "bg-paper-warm border-text-wood/10 hover:border-text-wood/30 text-text-wood"
-                          }`}
-                        >
-                          <span className="flex items-center gap-1.5">
-                            {labels[type]}
-                            {type === "set" && (
-                              <span className="bg-brand-red text-white text-[9px] px-1.5 py-0.5 rounded">Tiết kiệm</span>
-                            )}
-                          </span>
-                          <span className="font-serif font-bold text-brand-red">{prices[type]}</span>
-                        </button>
-                      );
-                    })}
+                    {(Object.keys(products) as ProductKey[]).map((key) => (
+                      <button
+                        key={key}
+                        onClick={() => setSelectedProduct(key)}
+                        className={`w-full h-12 px-4 rounded-xl border text-sm flex items-center justify-between transition-all ${
+                          selectedProduct === key
+                            ? "bg-white border-brand-red shadow-sm text-brand-red font-bold"
+                            : "bg-paper-warm border-text-wood/10 hover:border-text-wood/30 text-text-wood"
+                        }`}
+                      >
+                        <span>{products[key].label}</span>
+                        <span className="font-serif font-bold text-brand-red">
+                          {products[key].price.toLocaleString("vi-VN")}đ
+                        </span>
+                      </button>
+                    ))}
                   </div>
                 </div>
 
-                {/* Summary box */}
+                {/* Summary */}
                 <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 border border-text-wood/10 shadow-sm space-y-3 sm:space-y-4">
                   <div>
                     <h4 className="font-serif font-bold text-sm sm:text-base text-brand-red mb-1">
-                      {packageLabels[packageType]}
+                      {products[selectedProduct].label}
                     </h4>
-                    <p className="text-xs text-bamboo-green font-semibold">
-                      Tặng kèm: Thư cảm ơn + Photocard
+                    <p className="text-xs text-clay-terracotta font-semibold">
+                      Tặng kèm: Phụ kiện ngẫu nhiên + Photocard nghệ nhân
                     </p>
                   </div>
 
-                  {/* Quantity — h-12 buttons */}
                   <div className="flex items-center justify-between pt-3 border-t border-text-wood/10">
                     <span className="text-xs font-semibold text-text-wood/80">Số lượng:</span>
                     <div className="flex items-center gap-2 bg-paper-warm rounded-lg border border-text-wood/10">
@@ -133,13 +120,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ isOpen, onClose }) => {
                 </div>
 
                 {/* Promo */}
-                <div className="bg-bamboo-green/10 border border-bamboo-green/20 rounded-xl p-3 text-xs text-bamboo-green flex items-center gap-2">
+                <div className="bg-brand-red/5 border border-brand-red/15 rounded-xl p-3 text-xs text-brand-red flex items-center gap-2">
                   <CheckCircle2 size={16} className="flex-shrink-0" />
                   <span>Freeship cho đơn từ 500.000đ</span>
                 </div>
               </div>
 
-              {/* Footer — safe area aware */}
+              {/* Footer */}
               <div className="p-4 sm:p-6 border-t border-text-wood/10 bg-paper-warm space-y-3 sm:space-y-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
                 <div className="flex justify-between items-center">
                   <span className="text-xs sm:text-sm font-semibold text-text-wood/80">Tổng tiền:</span>

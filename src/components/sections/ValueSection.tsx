@@ -27,7 +27,7 @@ const values: ValueItem[] = [
     id: "4",
     icon: "🎁",
     title: "Trải Nghiệm Đột Phá",
-    description: "Mô hình hộp quà bí ẩn (Blind Box) tăng tính sưu tầm và tạo niềm vui khám phá."
+    description: "Mỗi hộp ẩn chứa những điều bất ngờ nho nhỏ — tăng niềm vui khám phá và tính sưu tầm."
   }
 ];
 

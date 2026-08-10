@@ -17,9 +17,49 @@ const beVietnamPro = Be_Vietnam_Pro({
 });
 
 export const metadata: Metadata = {
-  title: "Chạm Thức | Đánh Thức Giá Trị Văn Hóa Việt Nam",
+  metadataBase: new URL("https://chamthuc.vn"),
+  title: "Chạm Thức | Chạm tinh hoa - Mở văn hóa",
   description:
-    "Dự án phát triển các hộp trải nghiệm văn hóa Việt Nam theo chủ đề làng nghề truyền thống. Mô hình Hộp Khám Phá Ngẫu Nhiên (Blind Box) kết hợp DIY.",
+    "Dự án phát triển các hộp trải nghiệm văn hóa Việt Nam và bộ kit DIY làng nghề truyền thống.",
+  keywords: [
+    "Chạm Thức",
+    "Trải nghiệm văn hóa Việt Nam",
+    "Bộ kit DIY làng nghề",
+    "Làng nón Chuông",
+    "Làng tò he Xuân La",
+    "Làng tre Thạch Xá",
+    "Quà tặng di sản",
+    "ESG",
+  ],
+  authors: [{ name: "Ngũ Sắc Team" }],
+  openGraph: {
+    title: "Chạm Thức | Chạm tinh hoa - Mở văn hóa",
+    description:
+      "Dự án phát triển các hộp trải nghiệm văn hóa Việt Nam và bộ kit DIY làng nghề truyền thống.",
+    url: "https://chamthuc.vn",
+    siteName: "Chạm Thức",
+    images: [
+      {
+        url: "/hero-bg.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Chạm Thức — Chạm tinh hoa, Mở văn hóa",
+      },
+    ],
+    locale: "vi_VN",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Chạm Thức | Chạm tinh hoa - Mở văn hóa",
+    description:
+      "Dự án phát triển các hộp trải nghiệm văn hóa Việt Nam và bộ kit DIY làng nghề truyền thống.",
+    images: ["/hero-bg.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({

@@ -21,7 +21,7 @@ export const HeroSection: React.FC = () => {
         {/* Badge */}
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#285834]/10 text-[#285834] text-xs font-bold uppercase tracking-widest mb-8 border border-[#285834]/20">
           <Sparkles size={14} />
-          <span>Blind Box Văn Hóa Việt Nam</span>
+          <span>Trải Nghiệm Văn Hóa Việt Nam</span>
         </div>
 
         {/* Central Logo Box */}
@@ -41,7 +41,7 @@ export const HeroSection: React.FC = () => {
         </h1>
 
         <p className="font-sans text-base sm:text-lg max-w-2xl text-[#3A2618]/80 leading-relaxed mb-10 font-normal">
-          Tiên phong ứng dụng mô hình phân phối <strong className="font-semibold text-[#9A1B1F]">Hộp khám phá ngẫu nhiên (Blind Box)</strong> kết hợp bộ nguyên liệu DIY cá nhân hóa trải nghiệm văn hóa bản địa.
+          Mỗi chiếc hộp là một <strong className="font-semibold text-[#9A1B1F]">hành trình nhỏ về làng nghề</strong> — nơi bạn tự tay chạm vào nguyên liệu thật, tạo nên tác phẩm thủ công của riêng mình.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4">

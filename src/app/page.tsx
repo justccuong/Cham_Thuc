@@ -1,6 +1,6 @@
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
-import BlindBoxGrid from "@/components/BlindBoxGrid";
+import ProductCollection from "@/components/ProductCollection";
 import CulturalStation from "@/components/CulturalStation";
 import B2BSection from "@/components/B2BSection";
 import ShowOncePopup from "@/components/ShowOncePopup";
@@ -19,7 +19,7 @@ export default function Home() {
       <Navbar />
       <main className="flex-grow">
         <HeroSection />
-        <BlindBoxGrid />
+        <ProductCollection />
         <CulturalStation />
         <B2BSection />
       </main>

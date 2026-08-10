@@ -1,6 +1,6 @@
 "use client";
 
-import BlindBoxGrid from "@/components/BlindBoxGrid";
+import ProductCollection from "@/components/ProductCollection";
 
-export const ProductsSection = BlindBoxGrid;
+export const ProductsSection = ProductCollection;
 export default ProductsSection;

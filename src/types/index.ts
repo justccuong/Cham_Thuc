@@ -7,7 +7,9 @@ export interface CraftItem {
   icon: string;
   image: string;
   materials: string[];
+  secretItem: string;
   tag: string;
+  ctaLabel: string;
 }
 
 export interface ValueItem {
