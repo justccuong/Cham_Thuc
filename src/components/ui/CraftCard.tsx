@@ -17,10 +17,10 @@ export const CraftCard: React.FC<CraftCardProps> = ({ item, onSelect }) => {
       whileHover={{ y: -8 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
       onClick={() => onSelect(item)}
-      className="group bg-paper-warm rounded-xl overflow-hidden cursor-pointer shadow-sm hover:shadow-lg transition-shadow duration-500"
+      className="group bg-[#EFE9DE] rounded-2xl overflow-hidden cursor-pointer border border-[#9A1B1F]/15 shadow-[0_10px_25px_-5px_rgba(58,38,24,0.08)] hover:shadow-[0_18px_35px_-5px_rgba(58,38,24,0.16)] transition-all duration-500"
     >
       {/* Product Image */}
-      <div className="relative w-full aspect-[4/3] overflow-hidden rounded-t-xl">
+      <div className="relative w-full aspect-[4/3] overflow-hidden rounded-t-2xl">
         <Image
           src={item.image}
           alt={item.name}
@@ -30,7 +30,7 @@ export const CraftCard: React.FC<CraftCardProps> = ({ item, onSelect }) => {
         />
       </div>
 
-      {/* Minimal card body */}
+      {/* Card body */}
       <div className="p-5 sm:p-6">
         <span className="font-sans text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-bamboo-green mb-2 block">
           {item.tag}
@@ -40,7 +40,7 @@ export const CraftCard: React.FC<CraftCardProps> = ({ item, onSelect }) => {
           {item.name}
         </h3>
 
-        <p className="font-sans text-sm text-text-wood/60 leading-relaxed mb-4">
+        <p className="font-sans text-sm text-text-wood/70 leading-relaxed mb-4 font-normal">
           {item.description}
         </p>
 

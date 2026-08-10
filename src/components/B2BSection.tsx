@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/Button";
 interface ImpactPillar {
   title: string;
   description: string;
-  accent: string;
 }
 
 const pillars: ImpactPillar[] = [
@@ -16,19 +15,16 @@ const pillars: ImpactPillar[] = [
     title: "Bảo Tồn Di Sản",
     description:
       "Đóng góp trực tiếp vào quỹ bảo tồn các giá trị di sản văn hóa phi vật thể và làng nghề thủ công Việt Nam.",
-    accent: "bg-brand-red/8 border-brand-red/15",
   },
   {
     title: "Sinh Kế Nghệ Nhân",
     description:
       "Tạo nguồn thu nhập ổn định và cải thiện chất lượng cuộc sống cho đội ngũ nghệ nhân làng nghề truyền thống.",
-    accent: "bg-bamboo-green/8 border-bamboo-green/15",
   },
   {
     title: "Bao Bì Xanh",
     description:
       "Sử dụng 100% vật liệu tre nứa và bao bì tự nhiên phân hủy sinh học theo định hướng ESG.",
-    accent: "bg-clay-terracotta/8 border-clay-terracotta/15",
   },
 ];
 
@@ -119,8 +115,8 @@ export const B2BSection: React.FC = () => {
           </p>
         </motion.div>
 
-        {/* 3 Impact Pillars — stacked on mobile */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-12 sm:mb-16 md:mb-20">
+        {/* 3 Impact Pillars with red left-border accent & warm depth */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-6 mb-12 sm:mb-16 md:mb-20">
           {pillars.map((pillar, idx) => (
             <motion.div
               key={pillar.title}
@@ -128,25 +124,25 @@ export const B2BSection: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.15, duration: 0.6, ease: "easeOut" }}
-              className={`rounded-xl sm:rounded-2xl p-5 sm:p-8 border text-center ${pillar.accent}`}
+              className="bg-[#EFE9DE] rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-[#9A1B1F]/15 border-l-4 border-l-[#9A1B1F] shadow-[0_10px_25px_-5px_rgba(58,38,24,0.08)] text-left hover:shadow-[0_15px_30px_-5px_rgba(58,38,24,0.14)] transition-all duration-300"
             >
               <h3 className="font-serif text-xl sm:text-2xl font-bold text-brand-red mb-2 sm:mb-3">
                 {pillar.title}
               </h3>
-              <p className="font-sans text-sm text-text-wood/75 leading-relaxed font-light">
+              <p className="font-sans text-sm text-text-wood/75 leading-relaxed font-normal">
                 {pillar.description}
               </p>
             </motion.div>
           ))}
         </div>
 
-        {/* B2B Form */}
+        {/* B2B Form with depth polish */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, ease: "easeOut" }}
-          className="max-w-xl mx-auto bg-paper-warm rounded-2xl sm:rounded-3xl p-5 sm:p-8 md:p-10 border border-text-wood/10 shadow-lg"
+          className="max-w-xl mx-auto bg-[#EFE9DE] rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10 border border-[#9A1B1F]/20 shadow-[0_15px_35px_-5px_rgba(58,38,24,0.12)]"
         >
           <h3 className="font-serif text-xl sm:text-2xl md:text-3xl font-bold text-brand-red mb-1.5 sm:mb-2 text-center">
             Nhận Báo Giá B2B
