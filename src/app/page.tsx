@@ -3,7 +3,6 @@ import HeroSection from "@/components/HeroSection";
 import ProductCollection from "@/components/ProductCollection";
 import CulturalStation from "@/components/CulturalStation";
 import B2BSection from "@/components/B2BSection";
-import ShowOncePopup from "@/components/ShowOncePopup";
 import Footer from "@/components/Footer";
 
 export default function Home() {
@@ -15,7 +14,6 @@ export default function Home() {
         aria-hidden="true"
       />
 
-      <ShowOncePopup />
       <Navbar />
       <main className="flex-grow">
         <HeroSection />
