@@ -5,7 +5,7 @@ interface CloudPatternOverlayProps {
 export function CloudPatternOverlay({ variant = "light" }: CloudPatternOverlayProps) {
   const isDark = variant === "dark";
   const filterClass = isDark
-    ? "filter invert sepia saturate-200 hue-rotate-30"
+    ? "filter invert brightness-200 sepia saturate-200 hue-rotate-30"
     : "filter sepia saturate-200 hue-rotate-320";
 
   const cloudImages = ["/patterns/cl1.png", "/patterns/cl2.png", "/patterns/cl3.png"];
@@ -19,16 +19,20 @@ export function CloudPatternOverlay({ variant = "light" }: CloudPatternOverlayPr
     rotate: string;
   }> = [
     // LEFT MARGIN COLUMN (Dải lề trái)
-    { top: "8%", left: "2%", size: "w-12 md:w-16", opacity: "opacity-15 md:opacity-20", rotate: "rotate-0" },
-    { top: "32%", left: "3%", size: "w-10 md:w-14", opacity: "opacity-10 md:opacity-15", rotate: "-rotate-12" },
-    { top: "58%", left: "2%", size: "w-14 md:w-18", opacity: "opacity-15 md:opacity-20", rotate: "rotate-6" },
-    { top: "82%", left: "4%", size: "w-12 md:w-16", opacity: "opacity-10 md:opacity-15", rotate: "rotate-0" },
+    { top: "8%", left: "2%", size: "w-12 md:w-16", opacity: isDark ? "opacity-20 md:opacity-25" : "opacity-15 md:opacity-20", rotate: "rotate-0" },
+    { top: "32%", left: "3%", size: "w-10 md:w-14", opacity: isDark ? "opacity-15 md:opacity-20" : "opacity-10 md:opacity-15", rotate: "-rotate-12" },
+    { top: "58%", left: "2%", size: "w-14 md:w-18", opacity: isDark ? "opacity-20 md:opacity-25" : "opacity-15 md:opacity-20", rotate: "rotate-6" },
+    { top: "82%", left: "4%", size: "w-12 md:w-16", opacity: isDark ? "opacity-15 md:opacity-20" : "opacity-10 md:opacity-15", rotate: "rotate-0" },
+
+    // MIDDLE NEGATIVE SPACE MICRO-CLOUDS
+    { top: "22%", left: "42%", size: "w-10", opacity: isDark ? "opacity-15" : "opacity-10", rotate: "rotate-12" },
+    { top: "26%", right: "38%", size: "w-8", opacity: isDark ? "opacity-12" : "opacity-8", rotate: "-rotate-6" },
 
     // RIGHT MARGIN COLUMN (Dải lề phải)
-    { top: "15%", right: "3%", size: "w-14 md:w-18", opacity: "opacity-15 md:opacity-20", rotate: "rotate-12" },
-    { top: "42%", right: "2%", size: "w-12 md:w-16", opacity: "opacity-10 md:opacity-15", rotate: "rotate-0" },
-    { top: "68%", right: "4%", size: "w-10 md:w-14", opacity: "opacity-15 md:opacity-20", rotate: "-rotate-6" },
-    { top: "90%", right: "2%", size: "w-14 md:w-18", opacity: "opacity-10 md:opacity-15", rotate: "rotate-12" },
+    { top: "15%", right: "3%", size: "w-14 md:w-18", opacity: isDark ? "opacity-20 md:opacity-25" : "opacity-15 md:opacity-20", rotate: "rotate-12" },
+    { top: "42%", right: "2%", size: "w-12 md:w-16", opacity: isDark ? "opacity-15 md:opacity-20" : "opacity-10 md:opacity-15", rotate: "rotate-0" },
+    { top: "68%", right: "4%", size: "w-10 md:w-14", opacity: isDark ? "opacity-20 md:opacity-25" : "opacity-15 md:opacity-20", rotate: "-rotate-6" },
+    { top: "90%", right: "2%", size: "w-14 md:w-18", opacity: isDark ? "opacity-15 md:opacity-20" : "opacity-10 md:opacity-15", rotate: "rotate-12" },
   ];
 
   return (

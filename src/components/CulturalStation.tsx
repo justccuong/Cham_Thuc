@@ -28,6 +28,14 @@ export const CulturalStation: React.FC = () => {
           <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-brand-gold tracking-tight">
             Làng Nghề Truyền Thống
           </h2>
+
+          {/* Editorial Heritage Divider */}
+          <div className="flex items-center justify-center gap-4 my-6 opacity-30">
+            <div className="h-[1px] w-16 bg-[#F8F5F0]" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/patterns/cl3.png" alt="" className="w-6 h-6 object-contain" />
+            <div className="h-[1px] w-16 bg-[#F8F5F0]" />
+          </div>
         </motion.div>
 
         {/* Editorial layout */}
