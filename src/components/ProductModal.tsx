@@ -177,21 +177,21 @@ export const ProductModal: React.FC<ProductModalProps> = ({ item, onClose, onOrd
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: "spring", damping: 28, stiffness: 280 }}
-            className="relative w-full max-w-md md:max-w-3xl lg:max-w-4xl h-full sm:h-auto max-h-[90vh] my-auto bg-paper-ivory shadow-2xl flex flex-col md:flex-row rounded-none sm:rounded-3xl border-0 sm:border border-text-wood/10 z-[100] overflow-y-auto sm:overflow-hidden"
+            className="relative w-full max-w-md md:max-w-3xl lg:max-w-4xl h-auto max-h-[88vh] sm:max-h-[90vh] my-auto bg-paper-ivory shadow-2xl flex flex-col md:flex-row rounded-2xl sm:rounded-3xl border border-text-wood/10 z-[100] overflow-y-auto md:overflow-hidden m-3 sm:m-0"
           >
             {/* Close Button */}
             <button
               onClick={onClose}
-              className="absolute top-3 right-3 z-30 w-10 h-10 rounded-full bg-white/80 hover:bg-white text-[#3A2618]/70 hover:text-[#9A1B1F] flex items-center justify-center shadow-md backdrop-blur-sm transition-all"
+              className="absolute top-3 right-3 z-30 w-10 h-10 rounded-full bg-white/80 hover:bg-white text-[#3A2618]/70 hover:text-[#9A1B1F] flex items-center justify-center shadow-md backdrop-blur-sm transition-all cursor-pointer"
               aria-label="Đóng"
             >
               <X size={20} />
             </button>
 
             {/* Left Column: Visuals & Interactive Blind Box Gallery */}
-            <div className="w-full md:w-1/2 p-4 sm:p-6 bg-[#FAF7F2] border-r border-[#3A2618]/10 flex flex-col justify-between space-y-4">
+            <div className="w-full md:w-1/2 p-4 sm:p-6 bg-[#FAF7F2] border-b md:border-b-0 md:border-r border-[#3A2618]/10 flex flex-col justify-between space-y-3 sm:space-y-4 flex-shrink-0">
               {/* Main Display Image */}
-              <div className="relative w-full aspect-[4/3] md:aspect-[5/4] rounded-2xl overflow-hidden shadow-inner bg-stone-200/50">
+              <div className="relative w-full aspect-[16/10] sm:aspect-[4/3] md:aspect-[5/4] rounded-2xl overflow-hidden shadow-inner bg-stone-200/50">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeVariant.id}
@@ -259,7 +259,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ item, onClose, onOrd
             </div>
 
             {/* Right Column: Information & CTA */}
-            <div className="w-full md:w-1/2 p-6 sm:p-8 flex flex-col justify-between overflow-y-auto bg-paper-ivory space-y-5">
+            <div className="w-full md:w-1/2 p-5 sm:p-8 flex flex-col justify-between md:overflow-y-auto bg-paper-ivory space-y-5 pb-6 sm:pb-8 flex-shrink-0">
               <div className="space-y-4">
                 {/* Village Tag + Title + Price */}
                 <div>
@@ -301,7 +301,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ item, onClose, onOrd
               </div>
 
               {/* Bottom Primary CTA */}
-              <div className="pt-2">
+              <div className="pt-3 pb-2">
                 <Button
                   variant="primary"
                   size="lg"
@@ -310,7 +310,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ item, onClose, onOrd
                     onClose();
                     onOrder(key);
                   }}
-                  className="w-full h-12 bg-[#9A1B1F] hover:bg-[#7A1518] text-[#F4E8C1] shadow-lg flex items-center justify-center gap-2 rounded-xl text-base font-bold uppercase tracking-wider"
+                  className="w-full h-12 sm:h-13 bg-[#9A1B1F] hover:bg-[#7A1518] text-[#F4E8C1] shadow-lg flex items-center justify-center gap-2 rounded-xl text-base font-bold uppercase tracking-wider cursor-pointer"
                 >
                   <ShoppingBag size={18} />
                   <span>CHỌN HỘP NÀY - {priceDisplay} đ</span>
