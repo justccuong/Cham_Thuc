@@ -4,7 +4,6 @@ import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { CraftItem } from "@/types";
-import { ArrowRight } from "lucide-react";
 
 interface CraftCardProps {
   item: CraftItem;
@@ -12,19 +11,21 @@ interface CraftCardProps {
 }
 
 export const CraftCard: React.FC<CraftCardProps> = ({ item, onSelect }) => {
+  const priceDisplay = new Intl.NumberFormat("vi-VN").format(item.price);
+
   return (
     <motion.div
-      whileHover={{ y: -8 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
+      whileHover={{ y: -6 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
       onClick={() => onSelect(item)}
-      className="group relative bg-white rounded-2xl overflow-hidden cursor-pointer border border-[#9A1B1F]/10 shadow-[0_8px_20px_rgba(58,38,24,0.05)] hover:shadow-[0_18px_35px_rgba(58,38,24,0.14)] h-full flex flex-col justify-between transition-all duration-500"
+      className="group relative bg-white rounded-2xl overflow-hidden cursor-pointer border border-[#9A1B1F]/10 shadow-[0_8px_20px_rgba(58,38,24,0.05)] hover:shadow-[0_16px_30px_rgba(58,38,24,0.12)] h-full flex flex-col justify-between transition-all duration-300"
     >
-      {/* In-Card Cloud Watermark */}
+      {/* In-Card Background Watermark */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src="/patterns/cl3.png"
         alt=""
-        className="pointer-events-none absolute -bottom-2 -right-2 w-16 opacity-10 filter sepia saturate-200 hue-rotate-320 group-hover:scale-110 transition-transform duration-300 z-0"
+        className="pointer-events-none absolute bottom-0 right-0 w-16 opacity-10 filter sepia saturate-200 hue-rotate-320 group-hover:scale-110 transition-transform duration-300 z-0"
       />
 
       {/* Product Image */}
@@ -41,34 +42,34 @@ export const CraftCard: React.FC<CraftCardProps> = ({ item, onSelect }) => {
       {/* Card body */}
       <div className="p-5 sm:p-6 flex-grow flex flex-col justify-between relative z-10">
         <div>
-          <span className="font-sans text-xs sm:text-sm font-extrabold uppercase tracking-widest text-bamboo-green mb-2 block">
-            {item.tag}
+          <span className="font-sans text-xs font-bold uppercase tracking-wider text-[#285834] mb-1.5 block">
+            {item.tag.toUpperCase()}
           </span>
 
           <div className="min-h-[3.5rem] flex items-center mb-2">
-            <h3 className="font-serif text-2xl sm:text-3xl font-extrabold text-brand-red leading-snug">
+            <h3 className="font-serif text-xl font-bold text-[#9A1B1F] leading-snug">
               {item.name}
             </h3>
           </div>
 
-          <p className="font-sans text-sm text-text-wood/80 leading-relaxed mb-4 font-medium">
+          <p className="font-sans text-sm text-[#3A2618]/80 leading-relaxed mb-4 font-normal line-clamp-1">
             {item.description}
           </p>
         </div>
 
-        {/* Bottom Action Area (Price & CTA) */}
-        <div className="mt-auto pt-2">
-          {/* Price */}
-          <p className="font-price text-2xl sm:text-3xl font-extrabold text-brand-red mb-3">
-            {new Intl.NumberFormat('vi-VN').format(item.price)}<span className="text-base font-semibold ml-1">₫</span>
+        {/* Bottom Action Area */}
+        <div className="mt-auto pt-3 flex items-center justify-between border-t border-[#9A1B1F]/10">
+          <p className="font-price text-xl font-bold text-[#9A1B1F]">
+            {priceDisplay} đ
           </p>
 
-          <span className="inline-flex items-center gap-1.5 font-sans text-sm font-semibold text-brand-red group-hover:gap-2.5 transition-all duration-300">
-            Xem chi tiết
-            <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-1" />
+          <span className="inline-flex items-center gap-1 font-sans text-sm font-semibold text-[#9A1B1F] group-hover:gap-2 transition-all duration-300">
+            Xem chi tiết -&gt;
           </span>
         </div>
       </div>
     </motion.div>
   );
 };
+
+export default CraftCard;

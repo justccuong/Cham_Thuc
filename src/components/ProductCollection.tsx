@@ -4,14 +4,13 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { CraftItem } from "@/types";
 import { CraftCard } from "@/components/ui/CraftCard";
-import { ProductDrawer } from "@/components/ui/ProductDrawer";
+import { ProductModal } from "@/components/ProductModal";
 import { CartDrawer, ProductKey } from "@/components/CartDrawer";
-import { CloudPatternOverlay } from "@/components/CloudPatternOverlay";
 
 const collectionItems: CraftItem[] = [
   {
     id: "non-la",
-    icon: "👒",
+    icon: "",
     name: "Bộ DIY Nón Lá Mini",
     village: "Làng Nón Chuông — Hà Nội",
     subtitle: "Trang trí nón lá thủ công",
@@ -26,12 +25,12 @@ const collectionItems: CraftItem[] = [
       "Photocard Nghệ Nhân",
     ],
     secretItem: "Chi tiết trang trí ngẫu nhiên — mẫu màu tô đặc biệt hoặc phụ kiện độc bản",
-    tag: "Làng nón Chuông",
-    ctaLabel: "Chọn Hộp Nón Lá",
+    tag: "LÀNG NÓN CHUÔNG",
+    ctaLabel: "CHỌN HỘP NÓN LÁ",
   },
   {
     id: "to-he",
-    icon: "🎎",
+    icon: "",
     name: "Bộ DIY Tò He Dân Gian",
     village: "Làng Tò He Xuân La — Hà Nội",
     subtitle: "Nặn tò he truyền thống",
@@ -46,12 +45,12 @@ const collectionItems: CraftItem[] = [
       "Sách hướng dẫn tạo hình",
     ],
     secretItem: "Khuôn nặn con giống bí ẩn — mẫu ngẫu nhiên trong 6 con giống dân gian",
-    tag: "Làng tò he Xuân La",
-    ctaLabel: "Chọn Hộp Tò He",
+    tag: "LÀNG TÒ HE XUÂN LA",
+    ctaLabel: "CHỌN HỘP TÒ HE",
   },
   {
     id: "chuon-chuon",
-    icon: "🎋",
+    icon: "",
     name: "Bộ DIY Chuồn Chuồn Tre",
     village: "Làng Tre Thạch Xá — Hà Nội",
     subtitle: "Tô màu chuồn chuồn thăng bằng",
@@ -65,8 +64,8 @@ const collectionItems: CraftItem[] = [
       "Cọ vẽ chuyên dụng",
     ],
     secretItem: "Chân đế mây tre ngẫu nhiên — 1 trong 4 kiểu dáng thủ công độc bản",
-    tag: "Làng tre Thạch Xá",
-    ctaLabel: "Chọn Hộp Chuồn Chuồn",
+    tag: "LÀNG TRE THẠCH XÁ",
+    ctaLabel: "CHỌN HỘP CHUỒN CHUỒN",
   },
 ];
 
@@ -81,8 +80,10 @@ export const ProductCollection: React.FC = () => {
   };
 
   return (
-    <section id="products" className="py-14 sm:py-20 md:py-28 lg:py-32 bg-paper-warm border-y border-brand-red/10 relative z-10 overflow-hidden">
-      <CloudPatternOverlay variant="light" />
+    <section
+      id="products"
+      className="py-14 sm:py-20 md:py-28 lg:py-32 bg-[#F8F5F0] border-y border-[#9A1B1F]/10 relative z-10 overflow-hidden"
+    >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section header */}
         <motion.div
@@ -92,20 +93,28 @@ export const ProductCollection: React.FC = () => {
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="text-center mb-12 sm:mb-16 md:mb-20"
         >
-          <span className="inline-block font-sans text-xs sm:text-sm font-extrabold uppercase tracking-widest text-brand-red bg-brand-red/8 px-4 py-1.5 rounded-full border border-brand-red/15 mb-4 sm:mb-5">
-            Hộp Khám Phá Văn Hóa
+          <span className="inline-block font-sans text-xs sm:text-sm font-extrabold uppercase tracking-widest text-[#9A1B1F] bg-[#9A1B1F]/8 px-4 py-1.5 rounded-full border border-[#9A1B1F]/15 mb-4 sm:mb-5">
+            HỘP KHÁM PHÁ VĂN HÓA
           </span>
 
-          <h2 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-brand-red mb-3 sm:mb-4 tracking-tight">
+          <h2 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-[#9A1B1F] mb-3 sm:mb-4 tracking-tight">
             Bộ Kit Trải Nghiệm DIY
           </h2>
 
-          <p className="font-sans text-sm sm:text-base text-text-wood/55 max-w-md mx-auto font-light leading-relaxed">
+          {/* Section Divider */}
+          <div className="flex items-center justify-center gap-4 my-6 opacity-30">
+            <div className="h-[1px] w-16 bg-[#9A1B1F]" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/patterns/cl3.png" alt="" className="w-6 h-6 object-contain" />
+            <div className="h-[1px] w-16 bg-[#9A1B1F]" />
+          </div>
+
+          <p className="font-sans text-sm sm:text-base text-[#3A2618]/65 max-w-md mx-auto font-light leading-relaxed">
             Chọn hộp bạn yêu thích — mỗi hộp ẩn chứa phụ kiện ngẫu nhiên.
           </p>
         </motion.div>
 
-        {/* 3 Minimal Cards */}
+        {/* 3 Editorial Lookbook Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 md:gap-10 items-stretch">
           {collectionItems.map((item, idx) => (
             <motion.div
@@ -122,8 +131,8 @@ export const ProductCollection: React.FC = () => {
         </div>
       </div>
 
-      {/* Product detail drawer */}
-      <ProductDrawer
+      {/* Product detail modal */}
+      <ProductModal
         item={selectedItem}
         onClose={() => setSelectedItem(null)}
         onOrder={handleOrder}

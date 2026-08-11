@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Be_Vietnam_Pro, Space_Grotesk } from "next/font/google";
+import { CloudPatternOverlay } from "@/components/CloudPatternOverlay";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -84,7 +85,8 @@ export default function RootLayout({
       lang="vi"
       className={`${cormorant.variable} ${beVietnamPro.variable} ${spaceGrotesk.variable} scroll-smooth`}
     >
-      <body className="min-h-screen flex flex-col bg-paper-ivory text-text-wood font-sans antialiased">
+      <body className="min-h-screen flex flex-col bg-paper-ivory text-text-wood font-sans antialiased relative">
+        <CloudPatternOverlay />
         {children}
       </body>
     </html>
