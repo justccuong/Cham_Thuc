@@ -14,7 +14,32 @@ export async function POST(request: Request) {
       );
     }
 
-    const orderCode = generateOrderCode();
+    // Collision-check retry loop (maximum 5 attempts)
+    let orderCode = "";
+    let isUnique = false;
+    let attempts = 0;
+
+    while (!isUnique && attempts < 5) {
+      orderCode = generateOrderCode();
+      const { data } = await supabase
+        .from("orders")
+        .select("order_code")
+        .eq("order_code", orderCode)
+        .maybeSingle();
+
+      if (!data) {
+        isUnique = true;
+      } else {
+        attempts++;
+      }
+    }
+
+    if (!isUnique) {
+      return NextResponse.json(
+        { success: false, error: "Failed to generate unique order code. Please try again." },
+        { status: 500 }
+      );
+    }
 
     // Insert order into Supabase orders table
     const { error: dbError } = await supabase.from("orders").insert([

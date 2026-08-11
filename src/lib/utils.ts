@@ -6,13 +6,17 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 /**
- * Generates an order code in format: CT + MMDD + "-" + 4-digit random number
- * Example: CT0811-4892
+ * Generates an order code in format: CT + MMDD + "-" + 6 random uppercase alphanumeric chars
+ * Example: CT0811-K9X2M4
  */
 export function generateOrderCode(): string {
   const now = new Date();
   const month = String(now.getMonth() + 1).padStart(2, "0");
   const day = String(now.getDate()).padStart(2, "0");
-  const randomDigits = Math.floor(1000 + Math.random() * 9000).toString();
-  return `CT${month}${day}-${randomDigits}`;
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  let randomAlphanumeric = "";
+  for (let i = 0; i < 6; i++) {
+    randomAlphanumeric += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return `CT${month}${day}-${randomAlphanumeric}`;
 }
