@@ -77,19 +77,27 @@ export async function POST(request: Request) {
       `Ghi chu: ${notes || ""}`,
     ].join("\n");
 
-    // Send HTTP POST request containing { text: formattedMessage } to ORDER_WEBHOOK_URL
-    const webhookUrl = process.env.ORDER_WEBHOOK_URL;
-    if (webhookUrl) {
+    // Send order notification directly to Facebook Messenger via Graph API
+    const fbPageAccessToken = process.env.FB_PAGE_ACCESS_TOKEN;
+    const adminFbPsid = process.env.ADMIN_FB_PSID;
+
+    if (fbPageAccessToken && adminFbPsid) {
       try {
-        await fetch(webhookUrl, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ text: formattedMessage }),
-        });
-      } catch (webhookError) {
-        console.error("Webhook POST error:", webhookError);
+        await fetch(
+          `https://graph.facebook.com/v18.0/me/messages?access_token=${fbPageAccessToken}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              recipient: { id: adminFbPsid },
+              message: { text: formattedMessage },
+            }),
+          }
+        );
+      } catch (fbError) {
+        console.error("Facebook Messenger notification error:", fbError);
       }
     }
 
