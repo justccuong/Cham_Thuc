@@ -6,6 +6,7 @@ import { CraftItem } from "@/types";
 import { CraftCard } from "@/components/ui/CraftCard";
 import { ProductDrawer } from "@/components/ui/ProductDrawer";
 import { CartDrawer, ProductKey } from "@/components/CartDrawer";
+import { CloudPatternOverlay } from "@/components/CloudPatternOverlay";
 
 const collectionItems: CraftItem[] = [
   {
@@ -80,8 +81,9 @@ export const ProductCollection: React.FC = () => {
   };
 
   return (
-    <section id="products" className="py-14 sm:py-20 md:py-28 lg:py-32 bg-paper-warm/85 border-y border-brand-red/10 relative z-10 overflow-hidden">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="products" className="py-14 sm:py-20 md:py-28 lg:py-32 bg-paper-warm border-y border-brand-red/10 relative z-10 overflow-hidden">
+      <CloudPatternOverlay variant="light" />
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

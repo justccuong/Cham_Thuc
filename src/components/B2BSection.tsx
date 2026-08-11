@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Send, CheckCircle, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { CloudPatternOverlay } from "@/components/CloudPatternOverlay";
 
 interface ImpactPillar {
   title: string;
@@ -86,8 +87,9 @@ export const B2BSection: React.FC = () => {
   };
 
   return (
-    <section id="b2b" className="py-14 sm:py-20 md:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 bg-paper-ivory/85 relative z-10 overflow-hidden">
-      <div className="max-w-7xl mx-auto">
+    <section id="b2b" className="py-14 sm:py-20 md:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 bg-paper-ivory relative z-10 overflow-hidden">
+      <CloudPatternOverlay variant="light" />
+      <div className="max-w-7xl mx-auto relative z-10">
         {/* Section header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}

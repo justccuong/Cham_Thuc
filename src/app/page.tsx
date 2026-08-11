@@ -4,7 +4,6 @@ import ProductCollection from "@/components/ProductCollection";
 import CulturalStation from "@/components/CulturalStation";
 import B2BSection from "@/components/B2BSection";
 import Footer from "@/components/Footer";
-import { CloudPatternOverlay } from "@/components/CloudPatternOverlay";
 
 export default function Home() {
   return (
@@ -14,8 +13,6 @@ export default function Home() {
         className="pointer-events-none fixed inset-0 z-50 opacity-[0.04] mix-blend-multiply bg-[url('/textures/paper-grain.png')] bg-repeat"
         aria-hidden="true"
       />
-
-      <CloudPatternOverlay />
 
       <Navbar />
       <main className="flex-grow">

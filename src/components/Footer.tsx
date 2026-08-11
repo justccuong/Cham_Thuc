@@ -2,14 +2,16 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Video, Heart, ShieldCheck } from "lucide-react";
+import { CloudPatternOverlay } from "@/components/CloudPatternOverlay";
 
 export const Footer: React.FC = () => {
   return (
     <footer
       id="footer"
-      className="bg-text-wood/90 text-paper-ivory py-10 sm:py-16 px-4 sm:px-6 lg:px-8 border-t border-paper-ivory/10 font-sans relative z-10"
+      className="bg-text-wood text-paper-ivory py-10 sm:py-16 px-4 sm:px-6 lg:px-8 border-t border-paper-ivory/10 font-sans relative z-10 overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 sm:gap-12 pb-8 sm:pb-12 border-b border-paper-ivory/10">
+      <CloudPatternOverlay variant="dark" />
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 sm:gap-12 pb-8 sm:pb-12 border-b border-paper-ivory/10 relative z-10">
         {/* Brand & Logo */}
         <div className="md:col-span-5 space-y-3 sm:space-y-4">
           <Link href="/" className="inline-block">
@@ -108,7 +110,7 @@ export const Footer: React.FC = () => {
       </div>
 
       {/* Bottom Bar */}
-      <div className="max-w-7xl mx-auto pt-6 sm:pt-8 flex flex-col sm:flex-row items-center justify-between text-[10px] sm:text-xs text-paper-ivory/50 gap-3 sm:gap-4">
+      <div className="max-w-7xl mx-auto pt-6 sm:pt-8 flex flex-col sm:flex-row items-center justify-between text-[10px] sm:text-xs text-paper-ivory/50 gap-3 sm:gap-4 relative z-10">
         <div>© 2026 Chạm Thức by Ngũ Sắc Team.</div>
         <div className="flex items-center gap-4 sm:gap-6">
           <span>Bảo mật</span>
