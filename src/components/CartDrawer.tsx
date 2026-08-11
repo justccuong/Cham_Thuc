@@ -6,6 +6,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ShoppingBag, X, CheckCircle2, Plus, Minus, Truck, AlertCircle, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { generateOrderCode } from "@/lib/utils";
 
 interface CartDrawerProps {
   isOpen: boolean;
@@ -82,6 +83,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [note, setNote] = useState("");
+  const [orderCode, setOrderCode] = useState("");
 
   // Validation Errors State
   const [errors, setErrors] = useState<{ fullName?: string; phone?: string; address?: string }>({});
@@ -220,6 +222,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   const handleOrderSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
+      setOrderCode(generateOrderCode());
       setStep("success");
     }
   };
@@ -230,6 +233,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     setPhone("");
     setAddress("");
     setNote("");
+    setOrderCode("");
     setErrors({});
     onClose();
   };
@@ -580,6 +584,10 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 </p>
 
                 <div className="w-full bg-paper-warm rounded-2xl p-4 sm:p-5 border border-text-wood/10 text-xs sm:text-sm text-left space-y-2.5">
+                  <div className="flex justify-between border-b border-text-wood/10 pb-2">
+                    <span className="text-text-wood/60 font-medium">Mã đơn hàng:</span>
+                    <span className="font-price font-extrabold text-brand-red tracking-wider">{orderCode}</span>
+                  </div>
                   <div className="border-b border-text-wood/10 pb-2">
                     <span className="text-text-wood/60 block mb-1">Sản phẩm đặt mua:</span>
                     {cartEntries.map((k) => (
