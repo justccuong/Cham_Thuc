@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ShoppingBag } from "lucide-react";
@@ -127,6 +128,11 @@ const getBlindBoxVariants = (item: CraftItem): BlindBoxVariant[] => {
 
 export const ProductModal: React.FC<ProductModalProps> = ({ item, onClose, onOrder }) => {
   const [activeIdx, setActiveIdx] = useState(0);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     setActiveIdx(0);
@@ -144,13 +150,13 @@ export const ProductModal: React.FC<ProductModalProps> = ({ item, onClose, onOrd
     };
   }, [item]);
 
-  if (!item) return null;
+  if (!mounted) return null;
 
-  const variants = getBlindBoxVariants(item);
+  const variants = item ? getBlindBoxVariants(item) : [];
   const activeVariant = variants[activeIdx] || variants[0];
-  const priceDisplay = new Intl.NumberFormat("vi-VN").format(item.price);
+  const priceDisplay = item ? new Intl.NumberFormat("vi-VN").format(item.price) : "";
 
-  return (
+  return createPortal(
     <AnimatePresence>
       {item && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-0 sm:p-4 sm:py-6 overflow-hidden">
@@ -314,7 +320,8 @@ export const ProductModal: React.FC<ProductModalProps> = ({ item, onClose, onOrd
           </motion.div>
         </div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 };
 

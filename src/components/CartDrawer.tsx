@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ShoppingBag, X, CheckCircle2, Plus, Minus, Truck, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/Button";
@@ -106,6 +107,11 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     onClose();
   };
 
+  const [mounted, setMounted] = useState(false);
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
   // Lock body scroll when drawer is open
   React.useEffect(() => {
     if (isOpen) {
@@ -118,7 +124,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     };
   }, [isOpen]);
 
-  return (
+  if (!mounted) return null;
+
+  return createPortal(
     <AnimatePresence>
       {isOpen && (
         <div key="cart-drawer-wrapper" className="fixed inset-0 z-[100] flex justify-end sm:items-center sm:justify-center p-0 sm:p-4 sm:py-6 overflow-hidden">
@@ -423,7 +431,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
           </motion.div>
         </div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 };
 
