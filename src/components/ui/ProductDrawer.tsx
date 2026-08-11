@@ -36,7 +36,7 @@ export const ProductDrawer: React.FC<ProductDrawerProps> = ({ item, onClose, onO
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 28, stiffness: 260 }}
-            className="relative w-full sm:max-w-md h-full bg-paper-ivory shadow-2xl flex flex-col border-l border-text-wood/10 z-10"
+            className="relative w-full sm:max-w-lg lg:max-w-2xl h-full bg-paper-ivory shadow-2xl flex flex-col border-l border-text-wood/10 z-10"
           >
             {/* Header */}
             <div className="h-14 px-4 sm:px-6 border-b border-text-wood/10 flex items-center justify-between bg-paper-warm flex-shrink-0">
@@ -51,15 +51,28 @@ export const ProductDrawer: React.FC<ProductDrawerProps> = ({ item, onClose, onO
 
             {/* Scrollable content */}
             <div className="flex-1 overflow-y-auto">
-              {/* Product image */}
-              <div className="relative w-full aspect-[4/3]">
-                <Image
-                  src={item.image}
-                  alt={item.name}
-                  fill
-                  sizes="(max-width: 640px) 100vw, 448px"
-                  className="object-cover"
-                />
+              {/* Product images gallery */}
+              <div className="relative w-full overflow-x-auto scrollbar-none">
+                <div className="flex snap-x snap-mandatory">
+                  {(item.gallery && item.gallery.length > 0 ? item.gallery : [item.image]).map((src, idx) => (
+                    <div key={idx} className="w-full flex-shrink-0 snap-center relative aspect-[4/3]">
+                      <Image
+                        src={src}
+                        alt={`${item.name} - Ảnh ${idx + 1}`}
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 448px, 672px"
+                        className="object-cover"
+                      />
+                    </div>
+                  ))}
+                </div>
+                {item.gallery && item.gallery.length > 1 && (
+                  <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+                    {item.gallery.map((_, idx) => (
+                      <span key={idx} className="w-2 h-2 rounded-full bg-white/60 shadow-sm" />
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div className="p-5 sm:p-6 space-y-5">
@@ -73,6 +86,9 @@ export const ProductDrawer: React.FC<ProductDrawerProps> = ({ item, onClose, onO
                   </h3>
                   <p className="font-sans text-sm text-text-wood/70 leading-relaxed">
                     {item.description}
+                  </p>
+                  <p className="font-price text-2xl sm:text-3xl font-bold text-brand-red mt-2">
+                    {new Intl.NumberFormat('vi-VN').format(item.price)}<span className="text-base font-medium ml-1">₫</span>
                   </p>
                 </div>
 

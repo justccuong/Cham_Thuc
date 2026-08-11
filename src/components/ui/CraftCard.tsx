@@ -44,6 +44,11 @@ export const CraftCard: React.FC<CraftCardProps> = ({ item, onSelect }) => {
           {item.description}
         </p>
 
+        {/* Price */}
+        <p className="font-price text-xl sm:text-2xl font-bold text-brand-red mb-4">
+          {new Intl.NumberFormat('vi-VN').format(item.price)}<span className="text-sm font-medium ml-1">₫</span>
+        </p>
+
         <span className="inline-flex items-center gap-1.5 font-sans text-sm font-semibold text-brand-red group-hover:gap-2.5 transition-all duration-300">
           Xem chi tiết
           <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-1" />

@@ -6,6 +6,8 @@ export interface CraftItem {
   description: string;
   icon: string;
   image: string;
+  gallery?: string[];  // multiple product images
+  price: number;       // price in VND
   materials: string[];
   secretItem: string;
   tag: string;

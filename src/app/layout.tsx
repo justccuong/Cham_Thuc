@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Be_Vietnam_Pro } from "next/font/google";
+import { Cormorant_Garamond, Be_Vietnam_Pro, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -13,6 +13,13 @@ const beVietnamPro = Be_Vietnam_Pro({
   variable: "--font-be-vietnam",
   subsets: ["latin", "vietnamese"],
   weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -75,7 +82,7 @@ export default function RootLayout({
   return (
     <html
       lang="vi"
-      className={`${cormorant.variable} ${beVietnamPro.variable} scroll-smooth`}
+      className={`${cormorant.variable} ${beVietnamPro.variable} ${spaceGrotesk.variable} scroll-smooth`}
     >
       <body className="min-h-screen flex flex-col bg-paper-ivory text-text-wood font-sans antialiased">
         {children}

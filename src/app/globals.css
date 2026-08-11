@@ -15,6 +15,7 @@
 
   --font-serif: var(--font-cormorant), serif;
   --font-sans: var(--font-be-vietnam), sans-serif;
+  --font-price: var(--font-space-grotesk), 'Tabular Nums', sans-serif;
 }
 
 :root {
