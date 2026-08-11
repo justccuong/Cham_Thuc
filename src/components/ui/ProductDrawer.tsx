@@ -53,6 +53,18 @@ export const ProductDrawer: React.FC<ProductDrawerProps> = ({ item, onClose, onO
     setActiveIdx(0);
   }, [item?.id]);
 
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (item) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [item]);
+
   if (!item) return null;
 
   const variants = getVariants(item);
@@ -63,7 +75,7 @@ export const ProductDrawer: React.FC<ProductDrawerProps> = ({ item, onClose, onO
   return (
     <AnimatePresence>
       {item && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-0 sm:p-4 sm:py-6">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-0 sm:p-4 sm:py-6 overflow-hidden">
           {/* Backdrop */}
           <motion.div
             key="drawer-backdrop"
@@ -71,7 +83,7 @@ export const ProductDrawer: React.FC<ProductDrawerProps> = ({ item, onClose, onO
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-text-wood/65 backdrop-blur-sm cursor-pointer"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[90] cursor-pointer"
           />
 
           {/* Modal Container */}
@@ -81,7 +93,7 @@ export const ProductDrawer: React.FC<ProductDrawerProps> = ({ item, onClose, onO
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: "spring", damping: 28, stiffness: 280 }}
-            className="relative w-full max-w-md md:max-w-3xl lg:max-w-4xl h-full sm:h-auto max-h-[92vh] bg-paper-ivory shadow-2xl flex flex-col md:flex-row rounded-none sm:rounded-3xl border-0 sm:border border-text-wood/10 z-10 overflow-hidden"
+            className="relative w-full max-w-md md:max-w-3xl lg:max-w-4xl h-full sm:h-auto max-h-[90vh] my-auto bg-paper-ivory shadow-2xl flex flex-col md:flex-row rounded-none sm:rounded-3xl border-0 sm:border border-text-wood/10 z-[100] overflow-y-auto sm:overflow-hidden"
           >
             {/* Sleek Close Button */}
             <button

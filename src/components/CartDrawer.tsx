@@ -106,17 +106,29 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     onClose();
   };
 
+  // Lock body scroll when drawer is open
+  React.useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
   return (
     <AnimatePresence>
       {isOpen && (
-        <div key="cart-drawer-wrapper" className="fixed inset-0 z-50 flex justify-end sm:items-center sm:justify-center p-0 sm:p-4 sm:py-6">
+        <div key="cart-drawer-wrapper" className="fixed inset-0 z-[100] flex justify-end sm:items-center sm:justify-center p-0 sm:p-4 sm:py-6 overflow-hidden">
           <motion.div
             key="cart-backdrop"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={resetDrawer}
-            className="absolute inset-0 bg-text-wood/60 backdrop-blur-sm cursor-pointer"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[90] cursor-pointer"
           />
 
           <motion.div
@@ -125,7 +137,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="relative w-full sm:max-w-lg h-full sm:h-auto sm:max-h-[88vh] bg-paper-ivory shadow-2xl flex flex-col sm:rounded-3xl border border-text-wood/10 text-text-wood z-10 overflow-hidden"
+            className="relative w-full sm:max-w-lg h-full sm:h-auto max-h-[90vh] my-auto bg-paper-ivory shadow-2xl flex flex-col sm:rounded-3xl border border-text-wood/10 text-text-wood z-[100] overflow-hidden"
           >
             {/* Header */}
             <div className="h-14 px-4 sm:px-6 border-b border-text-wood/10 flex items-center justify-between bg-paper-warm flex-shrink-0">
