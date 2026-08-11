@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ShoppingBag } from "lucide-react";
-import CartDrawer from "./CartDrawer";
+import CartDrawer, { getCartTotalCount } from "./CartDrawer";
 
 interface NavLink {
   label: string;
@@ -23,6 +23,19 @@ export const Navbar: React.FC = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
+  const [totalCartCount, setTotalCartCount] = useState(0);
+
+  useEffect(() => {
+    const updateCount = () => setTotalCartCount(getCartTotalCount());
+    updateCount();
+
+    window.addEventListener("cart_updated", updateCount);
+    window.addEventListener("storage", updateCount);
+    return () => {
+      window.removeEventListener("cart_updated", updateCount);
+      window.removeEventListener("storage", updateCount);
+    };
+  }, [cartOpen]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 80);
@@ -82,10 +95,15 @@ export const Navbar: React.FC = () => {
           <div className="hidden lg:flex items-center">
             <button
               onClick={() => setCartOpen(true)}
-              className="inline-flex items-center gap-2 bg-brand-red text-brand-gold rounded-full px-6 py-2 text-xs font-semibold uppercase tracking-widest hover:bg-brand-red-hover transition-all shadow-sm hover:shadow-md active:scale-95 cursor-pointer"
+              className="relative inline-flex items-center gap-2.5 bg-brand-red text-brand-gold rounded-full px-5 py-2.5 text-xs font-bold uppercase tracking-wider hover:bg-brand-red-hover transition-all shadow-md hover:shadow-lg active:scale-95 cursor-pointer"
             >
-              <ShoppingBag size={14} />
-              <span>Khám phá Hộp</span>
+              <ShoppingBag size={16} />
+              <span>Giỏ Hàng</span>
+              {totalCartCount > 0 && (
+                <span className="w-5 h-5 rounded-full bg-brand-gold text-brand-red font-price text-xs font-extrabold flex items-center justify-center shadow-sm">
+                  {totalCartCount}
+                </span>
+              )}
             </button>
           </div>
 
@@ -93,10 +111,15 @@ export const Navbar: React.FC = () => {
           <div className="flex lg:hidden items-center gap-1">
             <button
               onClick={() => setCartOpen(true)}
-              className="w-11 h-11 flex items-center justify-center text-brand-red rounded-lg hover:bg-text-wood/5 transition-colors"
+              className="relative w-11 h-11 flex items-center justify-center text-brand-red rounded-xl hover:bg-text-wood/5 transition-colors cursor-pointer"
               aria-label="Giỏ hàng"
             >
               <ShoppingBag size={22} />
+              {totalCartCount > 0 && (
+                <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-brand-red text-brand-gold font-price text-[10px] font-bold flex items-center justify-center shadow-sm">
+                  {totalCartCount}
+                </span>
+              )}
             </button>
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
