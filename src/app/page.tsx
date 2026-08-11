@@ -14,12 +14,6 @@ export default function Home() {
         aria-hidden="true"
       />
 
-      {/* Traditional Vân Mây Cloud Pattern Watermark Overlay (Single Large Corner Accent) */}
-      <div
-        className="pointer-events-none fixed inset-0 z-40 opacity-[0.05] bg-[url('/patterns/van-may.svg')] bg-no-repeat bg-[position:top_right_-100px] bg-[size:650px] sm:bg-[size:850px]"
-        aria-hidden="true"
-      />
-
       <Navbar />
       <main className="flex-grow">
         <HeroSection />

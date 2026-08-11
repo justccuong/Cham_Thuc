@@ -80,7 +80,16 @@ export const ProductCollection: React.FC = () => {
   };
 
   return (
-    <section id="products" className="py-14 sm:py-20 md:py-28 lg:py-32 bg-paper-warm border-y border-brand-red/10 relative z-10">
+    <section id="products" className="py-14 sm:py-20 md:py-28 lg:py-32 bg-paper-warm border-y border-brand-red/10 relative z-10 overflow-hidden">
+      {/* Corner Cloud Decorators */}
+      <div
+        className="absolute top-4 right-4 md:top-8 md:right-8 hidden md:block pointer-events-none select-none z-0 w-36 h-36 md:w-52 md:h-52 bg-brand-red/15 [mask-image:url('/patterns/cl1.png')] [-webkit-mask-image:url('/patterns/cl1.png')] [mask-size:contain] [-webkit-mask-size:contain] [mask-repeat:no-repeat] [-webkit-mask-repeat:no-repeat]"
+        aria-hidden="true"
+      />
+      <div
+        className="absolute bottom-4 left-4 md:bottom-8 md:left-8 hidden md:block pointer-events-none select-none z-0 w-32 h-32 md:w-44 md:h-44 bg-brand-red/15 [mask-image:url('/patterns/cl2.png')] [-webkit-mask-image:url('/patterns/cl2.png')] [mask-size:contain] [-webkit-mask-size:contain] [mask-repeat:no-repeat] [-webkit-mask-repeat:no-repeat]"
+        aria-hidden="true"
+      />
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section header */}
         <motion.div
