@@ -88,6 +88,7 @@ export const B2BSection: React.FC = () => {
 
   return (
     <section id="b2b" className="py-14 sm:py-20 md:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 bg-[#F8F5F0] relative z-10 overflow-hidden">
+      <CloudPatternOverlay variant="light" />
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Section header */}
         <motion.div

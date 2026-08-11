@@ -85,8 +85,7 @@ export default function RootLayout({
       lang="vi"
       className={`${cormorant.variable} ${beVietnamPro.variable} ${spaceGrotesk.variable} scroll-smooth`}
     >
-      <body className="min-h-screen flex flex-col bg-paper-ivory text-text-wood font-sans antialiased relative">
-        <CloudPatternOverlay />
+      <body className="min-h-screen flex flex-col bg-paper-ivory text-text-wood font-sans antialiased">
         {children}
       </body>
     </html>

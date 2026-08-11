@@ -10,6 +10,7 @@ export const Footer: React.FC = () => {
       id="footer"
       className="bg-[#3A2618] text-[#F8F5F0] py-10 sm:py-16 px-4 sm:px-6 lg:px-8 border-t border-[#F8F5F0]/10 font-sans relative z-10 overflow-hidden"
     >
+      <CloudPatternOverlay variant="dark" />
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 sm:gap-12 pb-8 sm:pb-12 border-b border-[#F8F5F0]/10 relative z-10">
         {/* Brand & Logo */}
         <div className="md:col-span-5 space-y-3 sm:space-y-4">
