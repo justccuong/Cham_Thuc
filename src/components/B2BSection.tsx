@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Send, CheckCircle, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { CloudDecorators } from "@/components/ui/CloudDecorators";
 
 interface ImpactPillar {
   title: string;
@@ -87,15 +88,8 @@ export const B2BSection: React.FC = () => {
 
   return (
     <section id="b2b" className="py-14 sm:py-20 md:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 bg-paper-ivory relative z-10 overflow-hidden">
-      {/* Corner Cloud Decorators */}
-      <div
-        className="absolute top-4 right-4 md:top-8 md:right-8 hidden md:block pointer-events-none select-none z-0 w-36 h-36 md:w-48 md:h-48 bg-brand-red/15 [mask-image:url('/patterns/cl2.png')] [-webkit-mask-image:url('/patterns/cl2.png')] [mask-size:contain] [-webkit-mask-size:contain] [mask-repeat:no-repeat] [-webkit-mask-repeat:no-repeat]"
-        aria-hidden="true"
-      />
-      <div
-        className="absolute bottom-4 left-4 md:bottom-8 md:left-8 hidden md:block pointer-events-none select-none z-0 w-40 h-40 md:w-56 md:h-56 bg-brand-red/15 [mask-image:url('/patterns/cl3.png')] [-webkit-mask-image:url('/patterns/cl3.png')] [mask-size:contain] [-webkit-mask-size:contain] [mask-repeat:no-repeat] [-webkit-mask-repeat:no-repeat]"
-        aria-hidden="true"
-      />
+      {/* Scattered Cloud Decorators */}
+      <CloudDecorators variant="red" />
       <div className="max-w-7xl mx-auto">
         {/* Section header */}
         <motion.div
