@@ -8,10 +8,8 @@ export function CloudPatternOverlay({ variant = "light" }: CloudPatternOverlayPr
     ? "filter invert sepia saturate-200 hue-rotate-30"
     : "filter sepia saturate-200 hue-rotate-320";
 
-  // Array of cloud image sources
   const cloudImages = ["/patterns/cl1.png", "/patterns/cl2.png", "/patterns/cl3.png"];
 
-  // Pre-calculated scattered position coordinates across the section height
   const cloudPositions: Array<{
     top: string;
     left?: string;
@@ -20,14 +18,17 @@ export function CloudPatternOverlay({ variant = "light" }: CloudPatternOverlayPr
     opacity: string;
     rotate: string;
   }> = [
-    { top: "5%", left: "3%", size: "w-16", opacity: "opacity-15", rotate: "rotate-0" },
-    { top: "12%", right: "4%", size: "w-20", opacity: "opacity-20", rotate: "rotate-6" },
-    { top: "28%", left: "8%", size: "w-14", opacity: "opacity-10", rotate: "-rotate-12" },
-    { top: "35%", right: "12%", size: "w-16", opacity: "opacity-15", rotate: "rotate-0" },
-    { top: "52%", left: "4%", size: "w-20", opacity: "opacity-20", rotate: "rotate-12" },
-    { top: "65%", right: "6%", size: "w-14", opacity: "opacity-15", rotate: "-rotate-6" },
-    { top: "80%", left: "10%", size: "w-16", opacity: "opacity-15", rotate: "rotate-0" },
-    { top: "92%", right: "5%", size: "w-18", opacity: "opacity-20", rotate: "rotate-12" },
+    // LEFT MARGIN COLUMN (Dải lề trái)
+    { top: "8%", left: "2%", size: "w-12 md:w-16", opacity: "opacity-15 md:opacity-20", rotate: "rotate-0" },
+    { top: "32%", left: "3%", size: "w-10 md:w-14", opacity: "opacity-10 md:opacity-15", rotate: "-rotate-12" },
+    { top: "58%", left: "2%", size: "w-14 md:w-18", opacity: "opacity-15 md:opacity-20", rotate: "rotate-6" },
+    { top: "82%", left: "4%", size: "w-12 md:w-16", opacity: "opacity-10 md:opacity-15", rotate: "rotate-0" },
+
+    // RIGHT MARGIN COLUMN (Dải lề phải)
+    { top: "15%", right: "3%", size: "w-14 md:w-18", opacity: "opacity-15 md:opacity-20", rotate: "rotate-12" },
+    { top: "42%", right: "2%", size: "w-12 md:w-16", opacity: "opacity-10 md:opacity-15", rotate: "rotate-0" },
+    { top: "68%", right: "4%", size: "w-10 md:w-14", opacity: "opacity-15 md:opacity-20", rotate: "-rotate-6" },
+    { top: "90%", right: "2%", size: "w-14 md:w-18", opacity: "opacity-10 md:opacity-15", rotate: "rotate-12" },
   ];
 
   return (
@@ -45,7 +46,7 @@ export function CloudPatternOverlay({ variant = "light" }: CloudPatternOverlayPr
               left: pos.left,
               right: pos.right,
             }}
-            className={`absolute ${pos.size} ${pos.opacity} ${pos.rotate} ${filterClass} transition-all`}
+            className={`absolute ${pos.size} ${pos.opacity} ${pos.rotate} ${filterClass}`}
           />
         );
       })}
