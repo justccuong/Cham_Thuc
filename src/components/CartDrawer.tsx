@@ -71,12 +71,10 @@ export function getCartTotalCount(): number {
 export const CartDrawer: React.FC<CartDrawerProps> = ({
   isOpen,
   onClose,
-  initialProductKey = "non-la",
+  initialProductKey,
 }) => {
   const [mounted, setMounted] = useState(false);
-  const [cartState, setCartState] = useState<Record<string, number>>({
-    [initialProductKey]: 1,
-  });
+  const [cartState, setCartState] = useState<Record<string, number>>({});
   const [step, setStep] = useState<"cart" | "checkout" | "success">("cart");
 
   // Form State

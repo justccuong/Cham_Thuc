@@ -47,7 +47,7 @@ export const CraftCard: React.FC<CraftCardProps> = ({ item, onSelect }) => {
           </span>
 
           <div className="min-h-[3.5rem] flex items-center mb-2">
-            <h3 className="font-serif text-xl font-bold text-[#9A1B1F] leading-snug">
+            <h3 className="font-serif text-xl sm:text-2xl font-black text-[#9A1B1F] leading-snug">
               {item.name}
             </h3>
           </div>

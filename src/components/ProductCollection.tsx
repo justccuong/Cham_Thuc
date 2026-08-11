@@ -73,7 +73,7 @@ const collectionItems: CraftItem[] = [
 export const ProductCollection: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState<CraftItem | null>(null);
   const [cartOpen, setCartOpen] = useState(false);
-  const [cartProductKey, setCartProductKey] = useState<ProductKey>("non-la");
+  const [cartProductKey, setCartProductKey] = useState<ProductKey | undefined>(undefined);
 
   const handleOrder = (key: ProductKey) => {
     setCartProductKey(key);
