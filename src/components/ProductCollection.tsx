@@ -106,7 +106,7 @@ export const ProductCollection: React.FC = () => {
         </motion.div>
 
         {/* 3 Minimal Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 md:gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 md:gap-10 items-stretch">
           {collectionItems.map((item, idx) => (
             <motion.div
               key={item.id}
@@ -114,6 +114,7 @@ export const ProductCollection: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: idx * 0.15, duration: 0.6, ease: "easeOut" }}
+              className="h-full"
             >
               <CraftCard item={item} onSelect={setSelectedItem} />
             </motion.div>
