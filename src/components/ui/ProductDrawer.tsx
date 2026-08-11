@@ -26,7 +26,7 @@ const getVariants = (item: CraftItem): VariantThumb[] => {
     return [
       { id: "v1", name: "Tứ Linh Dân Gian", image: "/products/to-he.jpg" },
       { id: "v2", name: "Ký Ức Làng Quê", image: "/products/to-he.png" },
-      { id: "v3", name: "Màu & Phụ Kiện", image: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?q=80&w=800&auto=format&fit=crop" },
+      { id: "v3", name: "Màu & Phụ Kiện", image: "/products/tranh-dong-ho.jpg" },
       { id: "v4", name: "Mẫu Bí Ẩn", isSecret: true },
     ];
   }
@@ -34,14 +34,14 @@ const getVariants = (item: CraftItem): VariantThumb[] => {
     return [
       { id: "v1", name: "Họa Tiết Mộc", image: "/products/non-chuong.jpg" },
       { id: "v2", name: "Sơn Thủy Mini", image: "/products/non-chuong.png" },
-      { id: "v3", name: "Bộ Màu Acrylic", image: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?q=80&w=800&auto=format&fit=crop" },
+      { id: "v3", name: "Bộ Màu Acrylic", image: "/products/lua-van-phuc.jpg" },
       { id: "v4", name: "Mẫu Bí Ẩn", isSecret: true },
     ];
   }
   return [
     { id: "v1", name: "Tre Mộc Thăng Bằng", image: "/products/chuon-chuon-tre.jpg" },
     { id: "v2", name: "Chuồn Chuồn Son", image: "/products/chuon-chuon-tre.png" },
-    { id: "v3", name: "Chân Đế Mây Tre", image: "https://images.unsplash.com/photo-1544816155-12df9643f363?q=80&w=800&auto=format&fit=crop" },
+    { id: "v3", name: "Chân Đế Mây Tre", image: "/products/tranh-dong-ho.jpg" },
     { id: "v4", name: "Mẫu Bí Ẩn", isSecret: true },
   ];
 };
