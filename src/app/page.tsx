@@ -14,6 +14,18 @@ export default function Home() {
         aria-hidden="true"
       />
 
+      {/* Seamless Multi-Image Cloud Pattern Overlay (cl1, cl2, cl3 repeating down full page) */}
+      <div
+        className="pointer-events-none fixed inset-0 z-0 opacity-12 filter sepia(0.8) saturate(250%) hue-rotate(320deg) brightness(0.85)"
+        style={{
+          backgroundImage: `url('/patterns/cl1.png'), url('/patterns/cl2.png'), url('/patterns/cl3.png')`,
+          backgroundRepeat: 'repeat, repeat, repeat',
+          backgroundPosition: '0 0, 150px 200px, 300px 100px',
+          backgroundSize: '90px auto, 70px auto, 110px auto',
+        }}
+        aria-hidden="true"
+      />
+
       <Navbar />
       <main className="flex-grow">
         <HeroSection />

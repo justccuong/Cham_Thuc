@@ -4,7 +4,6 @@ import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { QrCode, Play } from "lucide-react";
-import { CloudDecorators } from "@/components/ui/CloudDecorators";
 
 export const CulturalStation: React.FC = () => {
   return (
@@ -12,8 +11,6 @@ export const CulturalStation: React.FC = () => {
       id="story"
       className="py-14 sm:py-20 md:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 bg-[#2A1B12] text-paper-ivory border-y border-brand-red/20 relative z-10 overflow-hidden"
     >
-      {/* Scattered Cloud Decorators */}
-      <CloudDecorators variant="gold" />
       <div className="max-w-7xl mx-auto">
         {/* Section header */}
         <motion.div

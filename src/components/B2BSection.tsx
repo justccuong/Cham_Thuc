@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Send, CheckCircle, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { CloudDecorators } from "@/components/ui/CloudDecorators";
 
 interface ImpactPillar {
   title: string;
@@ -88,8 +87,6 @@ export const B2BSection: React.FC = () => {
 
   return (
     <section id="b2b" className="py-14 sm:py-20 md:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 bg-paper-ivory relative z-10 overflow-hidden">
-      {/* Scattered Cloud Decorators */}
-      <CloudDecorators variant="red" />
       <div className="max-w-7xl mx-auto">
         {/* Section header */}
         <motion.div
