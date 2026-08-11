@@ -43,14 +43,14 @@ export const HeroSection: React.FC = () => {
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.4, delay: 0.25 }}
-          className="mb-5 sm:mb-8 p-3 sm:p-4 rounded-2xl bg-black/20 backdrop-blur-md border border-paper-ivory/15 shadow-2xl"
+          className="mb-5 sm:mb-8 p-1.5 sm:p-2 rounded-full bg-black/30 backdrop-blur-md border border-paper-ivory/20 shadow-2xl inline-flex items-center justify-center"
         >
           <Image
             src="/logo.png"
             alt="CHẠM THỨC"
-            width={180}
-            height={60}
-            className="h-12 sm:h-16 md:h-20 w-auto object-contain"
+            width={96}
+            height={96}
+            className="h-16 sm:h-20 md:h-24 w-16 sm:w-20 md:w-24 rounded-full object-cover shadow-lg border border-brand-gold/30"
             priority
           />
         </motion.div>

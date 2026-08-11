@@ -14,14 +14,17 @@ export const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 sm:gap-12 pb-8 sm:pb-12 border-b border-paper-ivory/10 relative z-10">
         {/* Brand & Logo */}
         <div className="md:col-span-5 space-y-3 sm:space-y-4">
-          <Link href="/" className="inline-block">
+          <Link href="/" className="inline-flex items-center gap-3">
             <Image
               src="/logo.png"
               alt="Chạm Thức Logo"
-              width={150}
-              height={50}
-              className="h-10 sm:h-14 w-auto opacity-95 object-contain"
+              width={48}
+              height={48}
+              className="h-10 sm:h-12 w-10 sm:w-12 rounded-full object-cover border border-paper-ivory/20 opacity-95 shadow-sm flex-shrink-0"
             />
+            <span className="font-serif font-bold text-xl sm:text-2xl text-paper-ivory tracking-wide">
+              CHẠM THỨC
+            </span>
           </Link>
 
           <h3 className="font-serif text-lg sm:text-xl text-paper-ivory font-bold tracking-wide">

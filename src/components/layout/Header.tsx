@@ -18,11 +18,14 @@ export const Header: React.FC = () => {
           <Image
             src="/logo.png"
             alt="Chạm Thức Official Logo"
-            width={160}
-            height={50}
-            className="h-10 md:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+            width={44}
+            height={44}
+            className="h-10 md:h-11 w-10 md:w-11 rounded-full object-cover border border-[#9A1B1F]/20 shadow-sm transition-transform duration-300 group-hover:scale-105"
             priority
           />
+          <span className="font-serif font-bold text-lg md:text-xl text-[#9A1B1F] tracking-wide">
+            CHẠM THỨC
+          </span>
         </Link>
 
         {/* DESKTOP NAVIGATION */}

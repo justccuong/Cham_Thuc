@@ -51,13 +51,13 @@ export const Navbar: React.FC = () => {
       >
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 sm:gap-3 group flex-shrink-0">
+          <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group flex-shrink-0">
             <Image
               src="/logo.png"
               alt="CHẠM THỨC"
-              width={120}
-              height={38}
-              className="h-8 sm:h-10 w-auto object-contain"
+              width={40}
+              height={40}
+              className="h-9 sm:h-10 w-9 sm:w-10 rounded-full object-cover border border-brand-red/20 shadow-sm flex-shrink-0"
               priority
             />
             <span className="font-serif font-bold text-lg sm:text-xl md:text-2xl text-brand-red tracking-wide">

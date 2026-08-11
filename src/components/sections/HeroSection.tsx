@@ -25,13 +25,13 @@ export const HeroSection: React.FC = () => {
         </div>
 
         {/* Central Logo Box */}
-        <div className="mb-8 p-6 rounded-3xl bg-gradient-to-b from-[#9A1B1F] to-[#6E1215] border border-[#9A1B1F]/20 shadow-2xl">
+        <div className="mb-8 p-2 rounded-full bg-gradient-to-b from-[#9A1B1F] to-[#6E1215] border border-[#9A1B1F]/20 shadow-2xl inline-flex items-center justify-center">
           <Image
             src="/logo.png"
             alt="Chạm Thức Banner Logo"
-            width={240}
-            height={80}
-            className="h-32 sm:h-44 md:h-52 w-auto object-contain drop-shadow-2xl"
+            width={120}
+            height={120}
+            className="h-28 sm:h-36 md:h-44 w-28 sm:w-36 md:w-44 rounded-full object-cover shadow-2xl border border-amber-200/30"
             priority
           />
         </div>
