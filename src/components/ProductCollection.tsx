@@ -17,7 +17,7 @@ const collectionItems: CraftItem[] = [
     description: "Bộ kit tự làm nón lá mini kèm quà tặng ngẫu nhiên.",
     image: "/products/non-chuong.jpg",
     gallery: ["/products/non-chuong.jpg", "/products/non-chuong.png"],
-    price: 199000,
+    price: 299000,
     materials: [
       "Frame nón lá mini thủ công",
       "Bộ màu vẽ Acrylic 6 màu",
@@ -37,7 +37,7 @@ const collectionItems: CraftItem[] = [
     description: "Nặn tò he bằng bột màu tự nhiên kèm khuôn con giống bí ẩn.",
     image: "/products/to-he.jpg",
     gallery: ["/products/to-he.jpg", "/products/to-he.png"],
-    price: 179000,
+    price: 299000,
     materials: [
       "Bột màu tự nhiên dẻo mịn",
       "Que gỗ nặn truyền thống",
@@ -57,7 +57,7 @@ const collectionItems: CraftItem[] = [
     description: "Tô màu chuồn chuồn tre thăng bằng kèm chân đế ngẫu nhiên.",
     image: "/products/chuon-chuon-tre.jpg",
     gallery: ["/products/chuon-chuon-tre.jpg", "/products/chuon-chuon-tre.png"],
-    price: 189000,
+    price: 299000,
     materials: [
       "Mô hình tre đẽo gọt thủ công",
       "Bộ màu vẽ Acrylic cao cấp",

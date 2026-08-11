@@ -18,7 +18,7 @@ export const ProductDrawer: React.FC<ProductDrawerProps> = ({ item, onClose, onO
   return (
     <AnimatePresence>
       {item && (
-        <div className="fixed inset-0 z-50 flex justify-end">
+        <div className="fixed inset-0 z-50 flex justify-end sm:items-center sm:justify-center p-0 sm:p-4 sm:py-6">
           {/* Backdrop */}
           <motion.div
             key="drawer-backdrop"
@@ -32,11 +32,11 @@ export const ProductDrawer: React.FC<ProductDrawerProps> = ({ item, onClose, onO
           {/* Drawer panel */}
           <motion.div
             key="drawer-panel"
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: "spring", damping: 28, stiffness: 260 }}
-            className="relative w-full sm:max-w-lg lg:max-w-2xl h-full bg-paper-ivory shadow-2xl flex flex-col border-l border-text-wood/10 z-10"
+            className="relative w-full sm:max-w-lg lg:max-w-2xl h-full sm:h-auto sm:max-h-[88vh] bg-paper-ivory shadow-2xl flex flex-col sm:rounded-3xl border border-text-wood/10 z-10 overflow-hidden"
           >
             {/* Header */}
             <div className="h-14 px-4 sm:px-6 border-b border-text-wood/10 flex items-center justify-between bg-paper-warm flex-shrink-0">

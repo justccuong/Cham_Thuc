@@ -109,7 +109,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   return (
     <AnimatePresence>
       {isOpen && (
-        <div key="cart-drawer-wrapper" className="fixed inset-0 z-50 flex justify-end">
+        <div key="cart-drawer-wrapper" className="fixed inset-0 z-50 flex justify-end sm:items-center sm:justify-center p-0 sm:p-4 sm:py-6">
           <motion.div
             key="cart-backdrop"
             initial={{ opacity: 0 }}
@@ -121,11 +121,11 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
           <motion.div
             key="cart-sheet"
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 25, stiffness: 220 }}
-            className="relative w-full sm:max-w-md h-full bg-paper-ivory shadow-2xl flex flex-col border-l border-text-wood/10 text-text-wood z-10"
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            className="relative w-full sm:max-w-lg h-full sm:h-auto sm:max-h-[88vh] bg-paper-ivory shadow-2xl flex flex-col sm:rounded-3xl border border-text-wood/10 text-text-wood z-10 overflow-hidden"
           >
             {/* Header */}
             <div className="h-14 px-4 sm:px-6 border-b border-text-wood/10 flex items-center justify-between bg-paper-warm flex-shrink-0">
@@ -154,20 +154,20 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     <label className="block text-xs font-bold text-text-wood uppercase tracking-wider mb-2 sm:mb-3">
                       Chọn Hộp Trải Nghiệm:
                     </label>
-                    <div className="space-y-2">
+                    <div className="space-y-2.5">
                       {(Object.keys(products) as ProductKey[]).map((key) => (
                         <button
                           key={key}
                           onClick={() => setSelectedProduct(key)}
-                          className={`w-full h-12 px-4 rounded-xl border text-sm flex items-center justify-between transition-all ${
+                          className={`w-full h-13 px-4 rounded-xl border text-sm flex items-center justify-between transition-all ${
                             selectedProduct === key
                               ? "bg-white border-brand-red shadow-sm text-brand-red font-bold"
                               : "bg-paper-warm border-text-wood/10 hover:border-text-wood/30 text-text-wood"
                           }`}
                         >
-                          <span>{products[key].label}</span>
-                          <span className="font-serif font-bold text-brand-red">
-                            {products[key].price.toLocaleString("vi-VN")}đ
+                          <span className="font-medium">{products[key].label}</span>
+                          <span className="font-price text-base font-bold text-brand-red">
+                            {products[key].price.toLocaleString("vi-VN")}₫
                           </span>
                         </button>
                       ))}
@@ -177,7 +177,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   {/* Summary */}
                   <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 border border-text-wood/10 shadow-sm space-y-3 sm:space-y-4">
                     <div>
-                      <h4 className="font-serif font-bold text-sm sm:text-base text-brand-red mb-1">
+                      <h4 className="font-serif font-bold text-base sm:text-lg text-brand-red mb-1">
                         {products[selectedProduct].label}
                       </h4>
                       <p className="text-xs text-clay-terracotta font-semibold">
@@ -194,7 +194,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         >
                           <Minus size={16} />
                         </button>
-                        <span className="font-serif font-bold text-base w-8 text-center">{quantity}</span>
+                        <span className="font-price font-bold text-base w-8 text-center">{quantity}</span>
                         <button
                           onClick={() => setQuantity(Math.min(99, quantity + 1))}
                           className="w-10 h-10 flex items-center justify-center text-text-wood/70 hover:text-brand-red"
@@ -216,8 +216,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 <div className="p-4 sm:p-6 border-t border-text-wood/10 bg-paper-warm space-y-3 sm:space-y-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
                   <div className="flex justify-between items-center">
                     <span className="text-xs sm:text-sm font-semibold text-text-wood/80">Tổng tiền:</span>
-                    <span className="font-serif text-xl sm:text-2xl font-bold text-brand-red">
-                      {totalPrice.toLocaleString("vi-VN")}đ
+                    <span className="font-price text-2xl sm:text-3xl font-bold text-brand-red">
+                      {totalPrice.toLocaleString("vi-VN")}₫
                     </span>
                   </div>
 
@@ -243,8 +243,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                       <p className="font-serif font-bold text-brand-red">{products[selectedProduct].label}</p>
                       <p className="text-text-wood/60">Số lượng: {quantity}</p>
                     </div>
-                    <span className="font-serif font-bold text-sm text-brand-red">
-                      {totalPrice.toLocaleString("vi-VN")}đ
+                    <span className="font-price font-bold text-base text-brand-red">
+                      {totalPrice.toLocaleString("vi-VN")}₫
                     </span>
                   </div>
 
@@ -382,7 +382,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   </div>
                   <div className="flex justify-between border-b border-text-wood/10 pb-2">
                     <span className="text-text-wood/60">Tổng tiền COD:</span>
-                    <span className="font-bold text-brand-red">{totalPrice.toLocaleString("vi-VN")}đ</span>
+                    <span className="font-price font-bold text-base text-brand-red">{totalPrice.toLocaleString("vi-VN")}₫</span>
                   </div>
                   <div className="flex justify-between border-b border-text-wood/10 pb-2">
                     <span className="text-text-wood/60">Số điện thoại:</span>
