@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Be_Vietnam_Pro, Space_Grotesk } from "next/font/google";
 import { CloudPatternOverlay } from "@/components/CloudPatternOverlay";
+import { MessengerChat } from "@/components/MessengerChat";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -87,6 +88,7 @@ export default function RootLayout({
     >
       <body className="min-h-screen flex flex-col bg-paper-ivory text-text-wood font-sans antialiased">
         {children}
+        <MessengerChat />
       </body>
     </html>
   );
