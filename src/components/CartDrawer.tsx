@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShoppingBag, X, CheckCircle2, Plus, Minus, Truck, AlertCircle } from "lucide-react";
+import { ShoppingBag, X, CheckCircle2, Plus, Minus, Truck, AlertCircle, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
 interface CartDrawerProps {
@@ -14,19 +15,49 @@ interface CartDrawerProps {
 
 export type ProductKey = "non-la" | "to-he" | "chuon-chuon";
 
-const products: Record<ProductKey, { label: string; price: number }> = {
-  "non-la": { label: "Hộp DIY Nón Lá Mini", price: 299000 },
-  "to-he": { label: "Hộp DIY Tò He Dân Gian", price: 299000 },
-  "chuon-chuon": { label: "Hộp DIY Chuồn Chuồn Tre", price: 299000 },
+export interface ProductInfo {
+  key: ProductKey;
+  label: string;
+  village: string;
+  price: number;
+  image: string;
+}
+
+export const PRODUCTS_CATALOG: Record<ProductKey, ProductInfo> = {
+  "non-la": {
+    key: "non-la",
+    label: "Hộp DIY Nón Lá Mini",
+    village: "Làng Nón Chuông",
+    price: 299000,
+    image: "/products/non-chuong.jpg",
+  },
+  "to-he": {
+    key: "to-he",
+    label: "Hộp DIY Tò He Dân Gian",
+    village: "Làng Tò He Xuân La",
+    price: 299000,
+    image: "/products/to-he.jpg",
+  },
+  "chuon-chuon": {
+    key: "chuon-chuon",
+    label: "Hộp DIY Chuồn Chuồn Tre",
+    village: "Làng Tre Thạch Xá",
+    price: 299000,
+    image: "/products/chuon-chuon-tre.jpg",
+  },
 };
+
+const STORAGE_KEY = "cham_thuc_multi_cart";
 
 export const CartDrawer: React.FC<CartDrawerProps> = ({
   isOpen,
   onClose,
   initialProductKey = "non-la",
 }) => {
-  const [selectedProduct, setSelectedProduct] = useState<ProductKey>(initialProductKey);
-  const [quantity, setQuantity] = useState(1);
+  const [mounted, setMounted] = useState(false);
+  const [cartState, setCartState] = useState<Record<string, number>>({
+    [initialProductKey]: 1,
+  });
   const [step, setStep] = useState<"cart" | "checkout" | "success">("cart");
 
   // Form State
@@ -38,38 +69,108 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   // Validation Errors State
   const [errors, setErrors] = useState<{ fullName?: string; phone?: string; address?: string }>({});
 
-  const totalPrice = products[selectedProduct].price * quantity;
+  useEffect(() => {
+    setMounted(true);
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (typeof parsed === "object" && parsed !== null) {
+          setCartState(parsed);
+        }
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
 
-  // Handle phone input change (only digits, max 10)
+  // Update cart state when initialProductKey is passed on open
+  useEffect(() => {
+    if (isOpen && initialProductKey) {
+      setCartState((prev) => {
+        const currentQty = prev[initialProductKey] || 0;
+        const nextState = { ...prev, [initialProductKey]: Math.max(1, currentQty) };
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(nextState));
+        } catch {
+          // ignore
+        }
+        return nextState;
+      });
+    }
+  }, [isOpen, initialProductKey]);
+
+  // Lock body scroll when drawer is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
+  const updateQuantity = (key: ProductKey, qty: number) => {
+    setCartState((prev) => {
+      const nextState = { ...prev };
+      if (qty <= 0) {
+        delete nextState[key];
+      } else {
+        nextState[key] = Math.min(99, qty);
+      }
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(nextState));
+      } catch {
+        // ignore
+      }
+      return nextState;
+    });
+  };
+
+  const addItemToCart = (key: ProductKey) => {
+    updateQuantity(key, (cartState[key] || 0) + 1);
+  };
+
+  const removeItemFromCart = (key: ProductKey) => {
+    updateQuantity(key, 0);
+  };
+
+  // Calculate totals
+  const cartEntries = (Object.keys(cartState) as ProductKey[]).filter((k) => (cartState[k] || 0) > 0);
+  const totalItemCount = cartEntries.reduce((sum, k) => sum + (cartState[k] || 0), 0);
+  const totalPrice = cartEntries.reduce(
+    (sum, k) => sum + PRODUCTS_CATALOG[k].price * (cartState[k] || 0),
+    0
+  );
+
+  // Form input handlers
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value.replace(/\D/g, "").slice(0, 10);
     setPhone(val);
     if (errors.phone) setErrors((prev) => ({ ...prev, phone: undefined }));
   };
 
-  // Handle full name change (max 50)
   const handleFullNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value.slice(0, 50);
     setFullName(val);
     if (errors.fullName) setErrors((prev) => ({ ...prev, fullName: undefined }));
   };
 
-  // Handle address change (max 150)
   const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value.slice(0, 150);
     setAddress(val);
     if (errors.address) setErrors((prev) => ({ ...prev, address: undefined }));
   };
 
-  // Validate form
   const validateForm = () => {
     const newErrors: { fullName?: string; phone?: string; address?: string } = {};
 
-    const trimmedName = fullName.trim();
-    if (!trimmedName) {
+    if (!fullName.trim()) {
       newErrors.fullName = "Vui lòng nhập họ và tên nhận hàng.";
-    } else if (trimmedName.length < 2) {
-      newErrors.fullName = "Họ và tên phải có ít nhất 2 ký tự.";
+    } else if (fullName.trim().length < 2) {
+      newErrors.fullName = "Họ và tên quá ngắn (tối thiểu 2 ký tự).";
     }
 
     const phoneRegex = /^0(3|5|7|8|9)\d{8}$/;
@@ -79,11 +180,10 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
       newErrors.phone = "Số điện thoại không hợp lệ (10 chữ số, bắt đầu bằng 03, 05, 07, 08, 09).";
     }
 
-    const trimmedAddress = address.trim();
-    if (!trimmedAddress) {
-      newErrors.address = "Vui lòng nhập địa chỉ nhận hàng.";
-    } else if (trimmedAddress.length < 10) {
-      newErrors.address = "Địa chỉ quá ngắn (vui lòng nhập rõ số nhà, tên đường, phường/xã, quận/huyện).";
+    if (!address.trim()) {
+      newErrors.address = "Vui lòng nhập địa chỉ giao hàng chi tiết.";
+    } else if (address.trim().length < 5) {
+      newErrors.address = "Địa chỉ giao hàng quá ngắn (tối thiểu 5 ký tự).";
     }
 
     setErrors(newErrors);
@@ -107,29 +207,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     onClose();
   };
 
-  const [mounted, setMounted] = useState(false);
-  React.useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // Lock body scroll when drawer is open
-  React.useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isOpen]);
-
   if (!mounted) return null;
 
   return createPortal(
     <AnimatePresence>
       {isOpen && (
         <div key="cart-drawer-wrapper" className="fixed inset-0 z-[100] flex justify-end sm:items-center sm:justify-center p-0 sm:p-4 sm:py-6 overflow-hidden">
+          {/* Backdrop */}
           <motion.div
             key="cart-backdrop"
             initial={{ opacity: 0 }}
@@ -139,6 +223,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[90] cursor-pointer"
           />
 
+          {/* Sheet Container */}
           <motion.div
             key="cart-sheet"
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -152,80 +237,140 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               <div className="flex items-center gap-2">
                 <ShoppingBag className="text-brand-red" size={18} />
                 <h3 className="font-serif text-lg sm:text-xl font-bold text-brand-red">
-                  {step === "cart" && "Giỏ Hàng & Chọn Hộp"}
+                  {step === "cart" && `Giỏ Hàng (${totalItemCount} sản phẩm)`}
                   {step === "checkout" && "Thông Tin Đặt Hàng COD"}
                   {step === "success" && "Đặt Hàng Thành Công"}
                 </h3>
               </div>
               <button
                 onClick={resetDrawer}
-                className="w-11 h-11 flex items-center justify-center text-text-wood/60 hover:text-brand-red transition-colors rounded-full hover:bg-black/5"
+                className="w-10 h-10 flex items-center justify-center text-text-wood/60 hover:text-brand-red transition-colors rounded-full hover:bg-black/5"
               >
                 <X size={20} />
               </button>
             </div>
 
-            {/* STEP 1: CART SELECTOR */}
+            {/* STEP 1: MULTI-PRODUCT CART LIST */}
             {step === "cart" && (
               <>
-                <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 sm:space-y-6">
-                  {/* Product selector */}
-                  <div>
-                    <label className="block text-xs font-bold text-text-wood uppercase tracking-wider mb-2 sm:mb-3">
-                      Chọn Hộp Trải Nghiệm:
-                    </label>
-                    <div className="space-y-2.5">
-                      {(Object.keys(products) as ProductKey[]).map((key) => (
-                        <button
-                          key={key}
-                          onClick={() => setSelectedProduct(key)}
-                          className={`w-full h-13 px-4 rounded-xl border text-sm flex items-center justify-between transition-all ${
-                            selectedProduct === key
-                              ? "bg-white border-brand-red shadow-sm text-brand-red font-bold"
-                              : "bg-paper-warm border-text-wood/10 hover:border-text-wood/30 text-text-wood"
-                          }`}
-                        >
-                          <span className="font-bold text-text-wood">{products[key].label}</span>
-                          <span className="font-price text-lg font-extrabold text-brand-red">
-                            {products[key].price.toLocaleString("vi-VN")}₫
-                          </span>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Summary */}
-                  <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 border border-text-wood/10 shadow-sm space-y-3 sm:space-y-4">
-                    <div>
-                      <h4 className="font-serif font-black text-lg sm:text-xl text-brand-red mb-1">
-                        {products[selectedProduct].label}
-                      </h4>
-                      <p className="text-xs text-clay-terracotta font-semibold">
-                        Tặng kèm: Phụ kiện ngẫu nhiên + Photocard nghệ nhân
+                <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-5">
+                  {cartEntries.length === 0 ? (
+                    <div className="text-center py-10 space-y-3">
+                      <ShoppingBag size={48} className="mx-auto text-text-wood/30" />
+                      <p className="font-sans text-sm text-text-wood/70 font-medium">
+                        Giỏ hàng của bạn đang trống.
+                      </p>
+                      <p className="font-sans text-xs text-text-wood/50">
+                        Chọn thêm các Hộp DIY bên dưới để đặt mua chung một đơn hàng!
                       </p>
                     </div>
+                  ) : (
+                    <div className="space-y-3">
+                      <label className="block text-xs font-bold text-text-wood uppercase tracking-wider mb-2">
+                        Sản phẩm đã chọn:
+                      </label>
+                      {cartEntries.map((key) => {
+                        const product = PRODUCTS_CATALOG[key];
+                        const qty = cartState[key] || 0;
+                        const itemSubtotal = product.price * qty;
 
-                    <div className="flex items-center justify-between pt-3 border-t border-text-wood/10">
-                      <span className="text-xs font-semibold text-text-wood/80">Số lượng:</span>
-                      <div className="flex items-center gap-2 bg-paper-warm rounded-lg border border-text-wood/10">
-                        <button
-                          onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                          className="w-10 h-10 flex items-center justify-center text-text-wood/70 hover:text-brand-red"
-                        >
-                          <Minus size={16} />
-                        </button>
-                        <span className="font-price font-bold text-base w-8 text-center">{quantity}</span>
-                        <button
-                          onClick={() => setQuantity(Math.min(99, quantity + 1))}
-                          className="w-10 h-10 flex items-center justify-center text-text-wood/70 hover:text-brand-red"
-                        >
-                          <Plus size={16} />
-                        </button>
-                      </div>
+                        return (
+                          <div
+                            key={key}
+                            className="bg-white rounded-xl p-3 border border-text-wood/10 shadow-sm flex items-center gap-3 relative"
+                          >
+                            <div className="relative w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 border border-text-wood/10">
+                              <Image
+                                src={product.image}
+                                alt={product.label}
+                                fill
+                                className="object-cover"
+                              />
+                            </div>
+
+                            <div className="flex-grow min-w-0">
+                              <span className="text-[10px] font-bold uppercase tracking-wider text-bamboo-green block">
+                                {product.village}
+                              </span>
+                              <h4 className="font-serif font-bold text-sm text-brand-red truncate">
+                                {product.label}
+                              </h4>
+                              <p className="font-price font-bold text-sm text-brand-red mt-0.5">
+                                {itemSubtotal.toLocaleString("vi-VN")} đ
+                              </p>
+                            </div>
+
+                            <div className="flex items-center gap-1 bg-paper-warm rounded-lg border border-text-wood/10 p-0.5">
+                              <button
+                                onClick={() => updateQuantity(key, qty - 1)}
+                                className="w-7 h-7 flex items-center justify-center text-text-wood/70 hover:text-brand-red"
+                                aria-label="Giảm"
+                              >
+                                <Minus size={14} />
+                              </button>
+                              <span className="font-price font-bold text-xs w-6 text-center">{qty}</span>
+                              <button
+                                onClick={() => updateQuantity(key, qty + 1)}
+                                className="w-7 h-7 flex items-center justify-center text-text-wood/70 hover:text-brand-red"
+                                aria-label="Tăng"
+                              >
+                                <Plus size={14} />
+                              </button>
+                            </div>
+
+                            <button
+                              onClick={() => removeItemFromCart(key)}
+                              className="w-8 h-8 flex items-center justify-center text-text-wood/40 hover:text-red-600 transition-colors rounded-lg"
+                              aria-label="Xóa"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  {/* Add More Products Section */}
+                  <div className="pt-2 border-t border-text-wood/10">
+                    <label className="block text-xs font-bold text-text-wood uppercase tracking-wider mb-2.5">
+                      Thêm Hộp Khác Về Cùng Chuyến:
+                    </label>
+                    <div className="space-y-2">
+                      {(Object.keys(PRODUCTS_CATALOG) as ProductKey[]).map((key) => {
+                        const product = PRODUCTS_CATALOG[key];
+                        const inCart = (cartState[key] || 0) > 0;
+                        return (
+                          <div
+                            key={key}
+                            className="bg-paper-warm/80 rounded-xl p-2.5 border border-text-wood/10 flex items-center justify-between"
+                          >
+                            <div className="flex items-center gap-2.5 min-w-0">
+                              <div className="relative w-10 h-10 rounded-lg overflow-hidden flex-shrink-0">
+                                <Image src={product.image} alt={product.label} fill className="object-cover" />
+                              </div>
+                              <div className="truncate">
+                                <p className="font-serif font-bold text-xs text-text-wood truncate">{product.label}</p>
+                                <p className="font-price text-xs font-bold text-brand-red">
+                                  {product.price.toLocaleString("vi-VN")} đ
+                                </p>
+                              </div>
+                            </div>
+
+                            <button
+                              onClick={() => addItemToCart(key)}
+                              className="px-3 py-1.5 bg-white border border-brand-red/30 hover:border-brand-red text-brand-red font-bold text-xs rounded-lg shadow-sm transition-all flex items-center gap-1 flex-shrink-0 cursor-pointer"
+                            >
+                              <Plus size={13} />
+                              <span>{inCart ? "Thêm" : "Chọn thêm"}</span>
+                            </button>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
 
-                  {/* COD Note & Promo */}
+                  {/* COD Note */}
                   <div className="bg-brand-red/5 border border-brand-red/15 rounded-xl p-3 text-xs text-brand-red flex items-center gap-2">
                     <Truck size={16} className="flex-shrink-0" />
                     <span>Thanh toán COD khi nhận hàng — Kiểm tra hàng thoải mái!</span>
@@ -233,19 +378,22 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 </div>
 
                 {/* Footer CTA */}
-                <div className="p-4 sm:p-6 border-t border-text-wood/10 bg-paper-warm space-y-3 sm:space-y-4 pb-[calc(1rem+env(safe-area-inset-bottom))]">
+                <div className="p-4 sm:p-6 border-t border-text-wood/10 bg-paper-warm space-y-3 pb-[calc(1rem+env(safe-area-inset-bottom))]">
                   <div className="flex justify-between items-center">
-                    <span className="text-xs sm:text-sm font-semibold text-text-wood/80">Tổng tiền:</span>
+                    <span className="text-xs sm:text-sm font-semibold text-text-wood/80">
+                      Tổng tiền ({totalItemCount} sản phẩm):
+                    </span>
                     <span className="font-price text-2xl sm:text-3xl font-bold text-brand-red">
-                      {totalPrice.toLocaleString("vi-VN")}₫
+                      {totalPrice.toLocaleString("vi-VN")} đ
                     </span>
                   </div>
 
                   <Button
                     variant="primary"
                     size="lg"
+                    disabled={cartEntries.length === 0}
                     onClick={() => setStep("checkout")}
-                    className="w-full h-12 bg-brand-red hover:bg-brand-red-hover text-brand-gold shadow-lg flex items-center justify-center gap-2"
+                    className="w-full h-12 bg-brand-red hover:bg-brand-red-hover text-brand-gold shadow-lg flex items-center justify-center gap-2 disabled:opacity-50"
                   >
                     <span>Tiếp Tục Đặt Hàng COD</span>
                   </Button>
@@ -253,19 +401,29 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               </>
             )}
 
-            {/* STEP 2: CHECKOUT COD FORM WITH STRICT VALIDATION */}
+            {/* STEP 2: CHECKOUT COD FORM */}
             {step === "checkout" && (
-              <form onSubmit={handleOrderSubmit} className="flex-1 flex flex-col justify-between">
+              <form onSubmit={handleOrderSubmit} className="flex-1 flex flex-col justify-between overflow-hidden">
                 <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4">
-                  {/* Order item recap */}
-                  <div className="bg-paper-warm rounded-xl p-3 border border-text-wood/10 text-xs flex justify-between items-center">
-                    <div>
-                      <p className="font-serif font-bold text-brand-red">{products[selectedProduct].label}</p>
-                      <p className="text-text-wood/60">Số lượng: {quantity}</p>
+                  {/* Order items recap */}
+                  <div className="bg-paper-warm rounded-xl p-3 border border-text-wood/10 text-xs space-y-2">
+                    <p className="font-bold text-text-wood uppercase tracking-wider border-b border-text-wood/10 pb-1.5">
+                      Danh sách đặt mua ({totalItemCount} sản phẩm):
+                    </p>
+                    {cartEntries.map((key) => {
+                      const p = PRODUCTS_CATALOG[key];
+                      const q = cartState[key];
+                      return (
+                        <div key={key} className="flex justify-between items-center text-text-wood/85">
+                          <span>- {p.label} x {q}</span>
+                          <span className="font-price font-bold">{(p.price * q).toLocaleString("vi-VN")} đ</span>
+                        </div>
+                      );
+                    })}
+                    <div className="flex justify-between items-center pt-2 border-t border-text-wood/10 font-bold text-brand-red">
+                      <span>Tổng tiền COD:</span>
+                      <span className="font-price text-base">{totalPrice.toLocaleString("vi-VN")} đ</span>
                     </div>
-                    <span className="font-price font-bold text-base text-brand-red">
-                      {totalPrice.toLocaleString("vi-VN")}₫
-                    </span>
                   </div>
 
                   {/* Input 1: Full Name */}
@@ -291,7 +449,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     )}
                   </div>
 
-                  {/* Input 2: Phone (Only digits, max 10) */}
+                  {/* Input 2: Phone */}
                   <div>
                     <label className="block text-xs font-bold text-text-wood uppercase tracking-wider mb-1">
                       Số điện thoại * <span className="text-text-wood/40 font-normal">({phone.length}/10)</span>
@@ -337,7 +495,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     )}
                   </div>
 
-                  {/* Input 4: Note (Optional) */}
+                  {/* Input 4: Note */}
                   <div>
                     <label className="block text-xs font-bold text-text-wood uppercase tracking-wider mb-1">
                       Ghi chú đơn hàng <span className="text-text-wood/40 font-normal">(Tùy chọn, {note.length}/200)</span>
@@ -367,14 +525,14 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     size="lg"
                     className="w-full h-12 bg-brand-red hover:bg-brand-red-hover text-brand-gold shadow-lg"
                   >
-                    Xác Nhận Đặt Hàng COD ({totalPrice.toLocaleString("vi-VN")}đ)
+                    Xác Nhận Đặt Hàng COD ({totalPrice.toLocaleString("vi-VN")} đ)
                   </Button>
                   <button
                     type="button"
                     onClick={() => setStep("cart")}
-                    className="w-full h-10 text-xs font-semibold text-text-wood/70 hover:text-brand-red transition-colors"
+                    className="w-full h-10 text-xs font-semibold text-text-wood/70 hover:text-brand-red transition-colors cursor-pointer"
                   >
-                    ← Quay lại giỏ hàng
+                    &lt;- Quay lại giỏ hàng
                   </button>
                 </div>
               </form>
@@ -396,13 +554,17 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 </p>
 
                 <div className="w-full bg-paper-warm rounded-2xl p-4 border border-text-wood/10 text-xs text-left space-y-2">
-                  <div className="flex justify-between border-b border-text-wood/10 pb-2">
-                    <span className="text-text-wood/60">Sản phẩm:</span>
-                    <span className="font-bold text-brand-red">{products[selectedProduct].label} x {quantity}</span>
+                  <div className="border-b border-text-wood/10 pb-2">
+                    <span className="text-text-wood/60 block mb-1">Sản phẩm đặt mua:</span>
+                    {cartEntries.map((k) => (
+                      <p key={k} className="font-semibold text-brand-red">
+                        - {PRODUCTS_CATALOG[k].label} x {cartState[k]}
+                      </p>
+                    ))}
                   </div>
                   <div className="flex justify-between border-b border-text-wood/10 pb-2">
                     <span className="text-text-wood/60">Tổng tiền COD:</span>
-                    <span className="font-price font-bold text-base text-brand-red">{totalPrice.toLocaleString("vi-VN")}₫</span>
+                    <span className="font-price font-bold text-base text-brand-red">{totalPrice.toLocaleString("vi-VN")} đ</span>
                   </div>
                   <div className="flex justify-between border-b border-text-wood/10 pb-2">
                     <span className="text-text-wood/60">Số điện thoại:</span>
