@@ -88,7 +88,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
   const notifyCartUpdated = () => {
     if (typeof window !== "undefined") {
-      window.dispatchEvent(new Event("cart_updated"));
+      setTimeout(() => {
+        window.dispatchEvent(new Event("cart_updated"));
+      }, 0);
     }
   };
 
@@ -118,9 +120,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
         } catch {
           // ignore
         }
-        notifyCartUpdated();
         return nextState;
       });
+      notifyCartUpdated();
     }
   }, [isOpen, initialProductKey]);
 
@@ -149,9 +151,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
       } catch {
         // ignore
       }
-      notifyCartUpdated();
       return nextState;
     });
+    notifyCartUpdated();
   };
 
   const addItemToCart = (key: ProductKey) => {
@@ -386,7 +388,6 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                               onClick={() => addItemToCart(key)}
                               className="px-4 py-2 bg-white border border-brand-red/30 hover:border-brand-red text-brand-red font-bold text-xs sm:text-sm rounded-xl shadow-sm transition-all flex items-center gap-1.5 flex-shrink-0 cursor-pointer hover:bg-brand-red/5"
                             >
-                              <Plus size={15} />
                               <span>{inCart ? "+ Thêm" : "+ Chọn thêm"}</span>
                             </button>
                           </div>
