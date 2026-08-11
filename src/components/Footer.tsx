@@ -40,7 +40,7 @@ export const Footer: React.FC = () => {
           {/* Social Links — min 44px touch */}
           <div className="pt-1 sm:pt-2 flex flex-wrap items-center gap-3 sm:gap-4">
             <a
-              href="https://www.facebook.com/profile.php?id=61579146942830"
+              href="https://www.facebook.com/profile.php?id=61592690401391"
               target="_blank"
               rel="noopener noreferrer"
               className="w-11 h-11 rounded-full bg-paper-ivory/10 hover:bg-brand-red text-paper-ivory transition-colors flex items-center justify-center"
