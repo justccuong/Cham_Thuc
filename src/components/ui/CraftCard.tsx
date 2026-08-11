@@ -17,7 +17,7 @@ export const CraftCard: React.FC<CraftCardProps> = ({ item, onSelect }) => {
       whileHover={{ y: -8 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
       onClick={() => onSelect(item)}
-      className="group bg-[#EFE9DE] rounded-2xl overflow-hidden cursor-pointer border border-[#9A1B1F]/15 shadow-[0_10px_25px_-5px_rgba(58,38,24,0.08)] hover:shadow-[0_18px_35px_-5px_rgba(58,38,24,0.16)] transition-all duration-500"
+      className="group bg-white rounded-2xl overflow-hidden cursor-pointer border border-[#9A1B1F]/15 shadow-[0_10px_30px_rgba(58,38,24,0.06)] hover:shadow-[0_18px_35px_rgba(58,38,24,0.14)] transition-all duration-500"
     >
       {/* Product Image */}
       <div className="relative w-full aspect-[4/3] overflow-hidden rounded-t-2xl">
