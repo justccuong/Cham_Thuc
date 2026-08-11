@@ -105,7 +105,7 @@ export const B2BSection: React.FC = () => {
             whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-brand-red mb-3 sm:mb-4 tracking-tight"
+            className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-brand-red mb-3 sm:mb-4 tracking-tight"
           >
             Giải Pháp Quà Tặng B2B
           </motion.h2>

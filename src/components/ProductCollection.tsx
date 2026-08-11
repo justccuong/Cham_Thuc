@@ -90,11 +90,11 @@ export const ProductCollection: React.FC = () => {
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="text-center mb-12 sm:mb-16 md:mb-20"
         >
-          <span className="inline-block font-sans text-[11px] sm:text-xs font-bold uppercase tracking-widest text-brand-red/70 mb-4 sm:mb-5">
+          <span className="inline-block font-sans text-xs sm:text-sm font-extrabold uppercase tracking-widest text-brand-red bg-brand-red/8 px-4 py-1.5 rounded-full border border-brand-red/15 mb-4 sm:mb-5">
             Hộp Khám Phá Văn Hóa
           </span>
 
-          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-brand-red mb-3 sm:mb-4 tracking-tight">
+          <h2 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-brand-red mb-3 sm:mb-4 tracking-tight">
             Bộ Kit Trải Nghiệm DIY
           </h2>
 

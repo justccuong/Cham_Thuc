@@ -188,16 +188,16 @@ export const ProductDrawer: React.FC<ProductDrawerProps> = ({ item, onClose, onO
               <div className="space-y-4">
                 {/* Village Tag + Title */}
                 <div>
-                  <span className="font-sans text-xs font-bold uppercase tracking-wider text-bamboo-green mb-1 block">
+                  <span className="font-sans text-xs sm:text-sm font-extrabold uppercase tracking-wider text-bamboo-green mb-1 block">
                     {item.village}
                   </span>
-                  <h3 className="font-serif text-2xl sm:text-3xl font-semibold text-brand-red mb-1.5 leading-tight">
+                  <h3 className="font-serif text-3xl sm:text-4xl font-black text-brand-red mb-2 leading-tight">
                     {item.name}
                   </h3>
-                  <p className="font-price text-2xl sm:text-3xl font-bold text-brand-red mb-3">
-                    {priceDisplay}<span className="text-base font-medium ml-1">₫</span>
+                  <p className="font-price text-3xl sm:text-4xl font-extrabold text-brand-red mb-3">
+                    {priceDisplay}<span className="text-lg font-bold ml-1">₫</span>
                   </p>
-                  <p className="font-sans text-sm text-text-wood/80 leading-relaxed bg-brand-red/5 p-3 rounded-xl border border-brand-red/10">
+                  <p className="font-sans text-sm text-text-wood/85 leading-relaxed bg-brand-red/5 p-3 rounded-xl border border-brand-red/10 font-medium">
                     ✨ Mỗi hộp chắc chắn gồm bộ dụng cụ làm thủ công, kèm <strong>NGẪU NHIÊN 1 trong các bộ mẫu con giống/phụ kiện</strong> ở hình bên.
                   </p>
                 </div>

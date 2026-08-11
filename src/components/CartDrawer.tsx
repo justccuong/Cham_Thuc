@@ -165,8 +165,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                               : "bg-paper-warm border-text-wood/10 hover:border-text-wood/30 text-text-wood"
                           }`}
                         >
-                          <span className="font-medium">{products[key].label}</span>
-                          <span className="font-price text-base font-bold text-brand-red">
+                          <span className="font-bold text-text-wood">{products[key].label}</span>
+                          <span className="font-price text-lg font-extrabold text-brand-red">
                             {products[key].price.toLocaleString("vi-VN")}₫
                           </span>
                         </button>
@@ -177,7 +177,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   {/* Summary */}
                   <div className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 border border-text-wood/10 shadow-sm space-y-3 sm:space-y-4">
                     <div>
-                      <h4 className="font-serif font-bold text-base sm:text-lg text-brand-red mb-1">
+                      <h4 className="font-serif font-black text-lg sm:text-xl text-brand-red mb-1">
                         {products[selectedProduct].label}
                       </h4>
                       <p className="text-xs text-clay-terracotta font-semibold">

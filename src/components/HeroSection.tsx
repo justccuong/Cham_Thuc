@@ -70,7 +70,7 @@ export const HeroSection: React.FC = () => {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.45, ease: "easeOut" }}
-          className="font-serif text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.1] text-paper-ivory mb-4 sm:mb-6 tracking-tight"
+          className="font-serif text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-[1.1] text-paper-ivory mb-4 sm:mb-6 tracking-tight drop-shadow-md"
         >
           Chạm tinh hoa
           <br />

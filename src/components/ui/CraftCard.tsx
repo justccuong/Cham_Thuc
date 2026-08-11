@@ -32,21 +32,21 @@ export const CraftCard: React.FC<CraftCardProps> = ({ item, onSelect }) => {
 
       {/* Card body */}
       <div className="p-5 sm:p-6">
-        <span className="font-sans text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-bamboo-green mb-2 block">
+        <span className="font-sans text-xs sm:text-sm font-extrabold uppercase tracking-widest text-bamboo-green mb-2 block">
           {item.tag}
         </span>
 
-        <h3 className="font-serif text-xl sm:text-2xl font-bold text-brand-red mb-2 leading-snug">
+        <h3 className="font-serif text-2xl sm:text-3xl font-extrabold text-brand-red mb-2 leading-snug">
           {item.name}
         </h3>
 
-        <p className="font-sans text-sm text-text-wood/70 leading-relaxed mb-4 font-normal">
+        <p className="font-sans text-sm text-text-wood/80 leading-relaxed mb-4 font-medium">
           {item.description}
         </p>
 
         {/* Price */}
-        <p className="font-price text-xl sm:text-2xl font-bold text-brand-red mb-4">
-          {new Intl.NumberFormat('vi-VN').format(item.price)}<span className="text-sm font-medium ml-1">₫</span>
+        <p className="font-price text-2xl sm:text-3xl font-extrabold text-brand-red mb-4">
+          {new Intl.NumberFormat('vi-VN').format(item.price)}<span className="text-base font-semibold ml-1">₫</span>
         </p>
 
         <span className="inline-flex items-center gap-1.5 font-sans text-sm font-semibold text-brand-red group-hover:gap-2.5 transition-all duration-300">
