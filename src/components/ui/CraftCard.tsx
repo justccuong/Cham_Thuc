@@ -5,12 +5,15 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { CraftItem } from "@/types";
 
+import { useLanguage } from "@/lib/i18n";
+
 interface CraftCardProps {
   item: CraftItem;
   onSelect: (item: CraftItem) => void;
 }
 
 export const CraftCard: React.FC<CraftCardProps> = ({ item, onSelect }) => {
+  const { t } = useLanguage();
   const priceDisplay = new Intl.NumberFormat("vi-VN").format(item.price);
 
   return (
@@ -60,11 +63,11 @@ export const CraftCard: React.FC<CraftCardProps> = ({ item, onSelect }) => {
         {/* Bottom Action Area */}
         <div className="mt-auto pt-3 flex items-center justify-between border-t border-[#9A1B1F]/10">
           <p className="font-price text-xl font-bold text-[#9A1B1F]">
-            {priceDisplay} đ
+            {priceDisplay} {t.products.priceSuffix}
           </p>
 
           <span className="inline-flex items-center gap-1 font-sans text-sm font-semibold text-[#9A1B1F] group-hover:gap-2 transition-all duration-300">
-            Xem chi tiết -&gt;
+            {t.products.viewDetails}
           </span>
         </div>
       </div>

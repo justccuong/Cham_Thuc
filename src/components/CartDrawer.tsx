@@ -306,9 +306,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               <div className="flex items-center gap-2.5">
                 <ShoppingBag className="text-brand-red" size={22} />
                 <h3 className="font-serif text-xl sm:text-2xl font-bold text-brand-red">
-                  {step === "cart" && `Giỏ Hàng (${totalItemCount} sản phẩm)`}
-                  {step === "checkout" && "Thông Tin Đặt Hàng COD"}
-                  {step === "success" && "Đặt Hàng Thành Công"}
+                  {step === "cart" && `${t.cart.title} (${totalItemCount} ${t.cart.itemCountSuffix})`}
+                  {step === "checkout" && t.cart.formTitle}
+                  {step === "success" && t.cart.orderSuccessTitle}
                 </h3>
               </div>
               <button
@@ -327,16 +327,16 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     <div className="text-center py-12 space-y-3">
                       <ShoppingBag size={56} className="mx-auto text-text-wood/30" />
                       <p className="font-sans text-base text-text-wood/70 font-semibold">
-                        Giỏ hàng của bạn đang trống.
+                        {t.cart.emptyTitle}
                       </p>
                       <p className="font-sans text-xs sm:text-sm text-text-wood/50">
-                        Chọn thêm các Hộp DIY bên dưới để đặt mua chung một đơn hàng!
+                        {t.cart.emptySubtitle}
                       </p>
                     </div>
                   ) : (
                     <div className="space-y-3.5">
                       <label className="block text-xs sm:text-sm font-extrabold text-text-wood uppercase tracking-wider mb-2">
-                        SẢN PHẨM ĐÃ CHỌN:
+                        {t.cart.selectedProducts}
                       </label>
                       {cartEntries.map((key) => {
                         const product = PRODUCTS_CATALOG[key];
@@ -404,7 +404,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   {/* Add More Products Section */}
                   <div className="pt-4 border-t border-text-wood/10">
                     <label className="block text-xs sm:text-sm font-extrabold text-text-wood uppercase tracking-wider mb-3">
-                      THÊM HỘP KHÁC VỀ CÙNG CHUYẾN:
+                      {t.cart.addMore}
                     </label>
                     <div className="space-y-2.5">
                       {(Object.keys(PRODUCTS_CATALOG) as ProductKey[]).map((key) => {
@@ -422,7 +422,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                               <div className="truncate">
                                 <p className="font-serif font-bold text-sm sm:text-base text-text-wood truncate">{product.label}</p>
                                 <p className="font-price text-xs sm:text-sm font-extrabold text-brand-red">
-                                  {product.price.toLocaleString("vi-VN")} đ
+                                  {product.price.toLocaleString("vi-VN")} {t.products.priceSuffix}
                                 </p>
                               </div>
                             </div>
@@ -431,7 +431,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                               onClick={() => addItemToCart(key)}
                               className="px-4 py-2 bg-white border border-brand-red/30 hover:border-brand-red text-brand-red font-bold text-xs sm:text-sm rounded-xl shadow-sm transition-all flex items-center gap-1.5 flex-shrink-0 cursor-pointer hover:bg-brand-red/5"
                             >
-                              <span>{inCart ? "+ Thêm" : "+ Chọn thêm"}</span>
+                              <span>{inCart ? "+ 1" : "+"}</span>
                             </button>
                           </div>
                         );
@@ -450,10 +450,10 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 <div className="p-5 sm:p-7 border-t border-text-wood/10 bg-paper-warm space-y-4 pb-[calc(1.25rem+env(safe-area-inset-bottom))]">
                   <div className="flex justify-between items-center">
                     <span className="text-sm sm:text-base font-bold text-text-wood/80">
-                      Tổng tiền ({totalItemCount} sản phẩm):
+                      {t.cart.totalCOD}
                     </span>
                     <span className="font-price text-2xl sm:text-3xl font-extrabold text-brand-red">
-                      {totalPrice.toLocaleString("vi-VN")} đ
+                      {totalPrice.toLocaleString("vi-VN")} {t.products.priceSuffix}
                     </span>
                   </div>
 
@@ -464,7 +464,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     onClick={() => setStep("checkout")}
                     className="w-full h-13 sm:h-14 bg-brand-red hover:bg-brand-red-hover text-brand-gold shadow-lg flex items-center justify-center gap-2 text-base sm:text-lg font-bold uppercase tracking-wider rounded-2xl disabled:opacity-50"
                   >
-                    <span>TIẾP TỤC ĐẶT HÀNG COD</span>
+                    <span>{t.cart.checkoutBtn}</span>
                   </Button>
                 </div>
               </>
@@ -498,12 +498,12 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   {/* Input 1: Full Name */}
                   <div>
                     <label className="block text-xs sm:text-sm font-bold text-text-wood uppercase tracking-wider mb-1.5">
-                      Họ và tên nhận hàng * <span className="text-text-wood/40 font-normal">({fullName.length}/50)</span>
+                      {t.cart.fullNameLabel} * <span className="text-text-wood/40 font-normal">({fullName.length}/50)</span>
                     </label>
                     <input
                       type="text"
                       maxLength={50}
-                      placeholder="Ví dụ: Nguyễn Văn An"
+                      placeholder={t.cart.fullNamePlaceholder}
                       value={fullName}
                       onChange={handleFullNameChange}
                       className={`w-full bg-white border ${
@@ -521,12 +521,12 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   {/* Input 2: Phone */}
                   <div>
                     <label className="block text-xs sm:text-sm font-bold text-text-wood uppercase tracking-wider mb-1.5">
-                      Số điện thoại * <span className="text-text-wood/40 font-normal">({phone.length}/10)</span>
+                      {t.cart.phoneLabel} * <span className="text-text-wood/40 font-normal">({phone.length}/10)</span>
                     </label>
                     <input
                       type="tel"
                       maxLength={10}
-                      placeholder="0987123456"
+                      placeholder={t.cart.phonePlaceholder}
                       value={phone}
                       onChange={handlePhoneChange}
                       className={`w-full bg-white border ${
@@ -544,12 +544,12 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   {/* Input 3: Delivery Address */}
                   <div>
                     <label className="block text-xs sm:text-sm font-bold text-text-wood uppercase tracking-wider mb-1.5">
-                      Địa chỉ giao hàng chi tiết * <span className="text-text-wood/40 font-normal">({address.length}/150)</span>
+                      {t.cart.addressLabel} * <span className="text-text-wood/40 font-normal">({address.length}/150)</span>
                     </label>
                     <input
                       type="text"
                       maxLength={150}
-                      placeholder="Số nhà, tên đường, phường/xã, quận/huyện..."
+                      placeholder={t.cart.addressPlaceholder}
                       value={address}
                       onChange={handleAddressChange}
                       className={`w-full bg-white border ${
@@ -567,12 +567,12 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   {/* Input 4: Note */}
                   <div>
                     <label className="block text-xs sm:text-sm font-bold text-text-wood uppercase tracking-wider mb-1.5">
-                      Ghi chú đơn hàng <span className="text-text-wood/40 font-normal">(Tùy chọn, {note.length}/200)</span>
+                      {t.cart.notesLabel} <span className="text-text-wood/40 font-normal">({note.length}/200)</span>
                     </label>
                     <input
                       type="text"
                       maxLength={200}
-                      placeholder="Giao giờ hành chính, gọi trước khi giao..."
+                      placeholder={t.cart.notesPlaceholder}
                       value={note}
                       onChange={(e) => setNote(e.target.value.slice(0, 200))}
                       className="w-full bg-white border border-text-wood/15 rounded-xl px-4 h-12 text-sm text-text-wood focus:outline-none focus:border-brand-red transition-colors"
@@ -594,14 +594,14 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     size="lg"
                     className="w-full h-13 sm:h-14 bg-brand-red hover:bg-brand-red-hover text-brand-gold shadow-lg rounded-2xl text-base sm:text-lg font-bold uppercase tracking-wider"
                   >
-                    XÁC NHẬN ĐẶT HÀNG COD ({totalPrice.toLocaleString("vi-VN")} đ)
+                    {t.cart.confirmOrderBtn} ({totalPrice.toLocaleString("vi-VN")} {t.products.priceSuffix})
                   </Button>
                   <button
                     type="button"
                     onClick={() => setStep("cart")}
                     className="w-full h-10 text-xs sm:text-sm font-semibold text-text-wood/70 hover:text-brand-red transition-colors cursor-pointer"
                   >
-                    &lt;- Quay lại giỏ hàng
+                    &lt;- {t.cart.title}
                   </button>
                 </div>
               </form>
@@ -615,20 +615,20 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 </div>
 
                 <h4 className="font-serif text-2xl sm:text-3xl font-bold text-brand-red">
-                  Đặt Hàng Thành Công!
+                  {t.cart.orderSuccessTitle}
                 </h4>
 
                 <p className="font-sans text-sm sm:text-base text-text-wood/75 leading-relaxed max-w-sm">
-                  Cảm ơn bạn <strong className="font-semibold text-brand-red">{fullName}</strong> đã đồng hành cùng <strong className="font-semibold text-brand-red">Chạm Thức</strong>.
+                  {t.cart.orderSuccessThanks}
                 </p>
 
                 <div className="w-full bg-paper-warm rounded-2xl p-4 sm:p-5 border border-text-wood/10 text-xs sm:text-sm text-left space-y-2.5">
                   <div className="flex justify-between border-b border-text-wood/10 pb-2">
-                    <span className="text-text-wood/60 font-medium">Mã đơn hàng:</span>
+                    <span className="text-text-wood/60 font-medium">{t.cart.orderCodeLabel}</span>
                     <span className="font-price font-extrabold text-brand-red tracking-wider">{orderCode}</span>
                   </div>
                   <div className="border-b border-text-wood/10 pb-2">
-                    <span className="text-text-wood/60 block mb-1">Sản phẩm đặt mua:</span>
+                    <span className="text-text-wood/60 block mb-1">{t.cart.selectedProducts}</span>
                     {cartEntries.map((k) => (
                       <p key={k} className="font-semibold text-brand-red">
                         - {PRODUCTS_CATALOG[k].label} x {cartState[k]}
@@ -636,30 +636,30 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     ))}
                   </div>
                   <div className="flex justify-between border-b border-text-wood/10 pb-2">
-                    <span className="text-text-wood/60">Tổng tiền COD:</span>
-                    <span className="font-price font-bold text-base sm:text-lg text-brand-red">{totalPrice.toLocaleString("vi-VN")} đ</span>
+                    <span className="text-text-wood/60">{t.cart.totalCOD}</span>
+                    <span className="font-price font-bold text-base sm:text-lg text-brand-red">{totalPrice.toLocaleString("vi-VN")} {t.products.priceSuffix}</span>
                   </div>
                   <div className="flex justify-between border-b border-text-wood/10 pb-2">
-                    <span className="text-text-wood/60">Số điện thoại:</span>
+                    <span className="text-text-wood/60">{t.cart.phoneLabel}:</span>
                     <span className="font-semibold text-text-wood">{phone}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-text-wood/60">Địa chỉ giao:</span>
+                    <span className="text-text-wood/60">{t.cart.addressLabel}:</span>
                     <span className="font-semibold text-text-wood text-right max-w-[200px]">{address}</span>
                   </div>
                 </div>
 
                 <p className="text-xs sm:text-sm text-bamboo-green italic font-medium">
-                  Đội ngũ Chạm Thức sẽ gọi điện xác nhận đơn hàng trước khi giao!
+                  {t.cart.callConfirmNote}
                 </p>
 
                 <Button
                   variant="primary"
                   size="lg"
                   onClick={resetDrawer}
-                  className="w-full h-12 sm:h-13 bg-brand-red hover:bg-brand-red-hover text-brand-gold shadow-md mt-4 rounded-2xl"
+                  className="w-full h-12 bg-brand-red hover:bg-brand-red-hover text-brand-gold font-bold uppercase tracking-wider rounded-2xl cursor-pointer"
                 >
-                  Hoàn Tất
+                  {t.cart.finishBtn}
                 </Button>
               </div>
             )}

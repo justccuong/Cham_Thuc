@@ -126,7 +126,10 @@ const getBlindBoxVariants = (item: CraftItem): BlindBoxVariant[] => {
   ];
 };
 
+import { useLanguage } from "@/lib/i18n";
+
 export const ProductModal: React.FC<ProductModalProps> = ({ item, onClose, onOrder }) => {
+  const { t } = useLanguage();
   const [activeIdx, setActiveIdx] = useState(0);
   const [mounted, setMounted] = useState(false);
 
@@ -183,7 +186,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ item, onClose, onOrd
             <button
               onClick={onClose}
               className="absolute top-3 right-3 z-30 w-10 h-10 rounded-full bg-white/80 hover:bg-white text-[#3A2618]/70 hover:text-[#9A1B1F] flex items-center justify-center shadow-md backdrop-blur-sm transition-all cursor-pointer"
-              aria-label="Đóng"
+              aria-label={t.modal.close}
             >
               <X size={20} />
             </button>
@@ -226,7 +229,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ item, onClose, onOrd
               {/* Thumbnails Section */}
               <div>
                 <p className="text-[11px] font-bold text-[#3A2618]/60 uppercase tracking-widest mb-2">
-                  1 TRONG CÁC PHỤ KIỆN TẶNG KÈM NGẪU NHIÊN:
+                  {t.modal.giftHeader}
                 </p>
                 <div className="grid grid-cols-4 gap-2 sm:gap-3">
                   {variants.map((v, idx) => {
@@ -270,14 +273,14 @@ export const ProductModal: React.FC<ProductModalProps> = ({ item, onClose, onOrd
                     {item.name}
                   </h3>
                   <p className="font-price text-3xl font-extrabold text-[#9A1B1F] mb-3">
-                    {priceDisplay} đ
+                    {priceDisplay} {t.products.priceSuffix}
                   </p>
                 </div>
 
                 {/* Component List with Plain Text Bullets */}
                 <div>
                   <h4 className="font-sans text-xs font-bold uppercase tracking-wider text-[#3A2618]/80 mb-2">
-                    Thành phần trong hộp:
+                    {t.modal.materialsHeader}
                   </h4>
                   <div className="space-y-1.5 font-sans text-sm text-[#3A2618]/85 pl-1 font-normal">
                     {item.materials.map((mat, idx) => (
@@ -292,10 +295,10 @@ export const ProductModal: React.FC<ProductModalProps> = ({ item, onClose, onOrd
                 {/* Highlight Box for Random Gift Note */}
                 <div className="bg-[#9A1B1F]/5 border border-[#9A1B1F]/20 p-4 rounded-xl space-y-1">
                   <p className="font-sans text-xs font-bold uppercase tracking-wider text-[#9A1B1F]">
-                    Ghi chú phần quà ngẫu nhiên
+                    {t.modal.giftNoteTitle}
                   </p>
                   <p className="font-sans text-xs sm:text-sm text-[#3A2618]/80 leading-relaxed font-normal">
-                    Mỗi hộp chắc chắn gồm bộ dụng cụ làm thủ công đầy đủ, đi kèm 1 phụ kiện hoặc chi tiết trang trí ngẫu nhiên trong các mẫu hiển thị ở gallery bên trái.
+                    {t.modal.giftNoteDesc}
                   </p>
                 </div>
               </div>
@@ -313,7 +316,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ item, onClose, onOrd
                   className="w-full h-12 sm:h-13 bg-[#9A1B1F] hover:bg-[#7A1518] text-[#F4E8C1] shadow-lg flex items-center justify-center gap-2 rounded-xl text-base font-bold uppercase tracking-wider cursor-pointer"
                 >
                   <ShoppingBag size={18} />
-                  <span>CHỌN HỘP NÀY - {priceDisplay} đ</span>
+                  <span>{t.modal.selectBoxBtn}{priceDisplay} {t.products.priceSuffix}</span>
                 </Button>
               </div>
             </div>

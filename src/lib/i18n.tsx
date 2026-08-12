@@ -4,7 +4,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 
 export type Language = "vi" | "en";
 
-interface Translations {
+export interface Translations {
   nav: {
     home: string;
     products: string;
@@ -28,18 +28,27 @@ interface Translations {
     viewDetails: string;
     addToCart: string;
     priceSuffix: string;
+    items: {
+      nonLa: { name: string; village: string; subtitle: string; desc: string; tag: string };
+      toHe: { name: string; village: string; subtitle: string; desc: string; tag: string };
+      chuonChuon: { name: string; village: string; subtitle: string; desc: string; tag: string };
+    };
   };
   modal: {
-    secretItem: string;
-    materials: string;
-    artisanStory: string;
-    blindBoxTag: string;
-    addToCart: string;
-    orderNow: string;
+    materialsHeader: string;
+    giftHeader: string;
+    giftNoteTitle: string;
+    giftNoteDesc: string;
+    selectBoxBtn: string;
+    close: string;
+    secretTag: string;
+    baseTag: string;
+    gift1Tag: string;
+    gift2Tag: string;
   };
   cart: {
     title: string;
-    itemCount: string;
+    itemCountSuffix: string;
     emptyTitle: string;
     emptySubtitle: string;
     selectedProducts: string;
@@ -47,19 +56,27 @@ interface Translations {
     totalCOD: string;
     checkoutBtn: string;
     formTitle: string;
-    fullName: string;
-    phone: string;
-    address: string;
-    notes: string;
-    confirmOrder: string;
-    orderSuccess: string;
-    orderCode: string;
-    finish: string;
+    fullNameLabel: string;
+    fullNamePlaceholder: string;
+    phoneLabel: string;
+    phonePlaceholder: string;
+    addressLabel: string;
+    addressPlaceholder: string;
+    notesLabel: string;
+    notesPlaceholder: string;
+    confirmOrderBtn: string;
+    orderSuccessTitle: string;
+    orderSuccessThanks: string;
+    orderCodeLabel: string;
+    callConfirmNote: string;
+    finishBtn: string;
   };
   storySection: {
     badge: string;
     title: string;
     subtitle: string;
+    artisanTitle: string;
+    artisanDesc: string;
     statVillages: string;
     statArtisans: string;
     statHandmade: string;
@@ -68,13 +85,22 @@ interface Translations {
     badge: string;
     title: string;
     subtitle: string;
-    feature1Title: string;
-    feature1Desc: string;
-    feature2Title: string;
-    feature2Desc: string;
-    feature3Title: string;
-    feature3Desc: string;
-    cta: string;
+    pillar1Title: string;
+    pillar1Desc: string;
+    pillar2Title: string;
+    pillar2Desc: string;
+    pillar3Title: string;
+    pillar3Desc: string;
+    formTitle: string;
+    companyLabel: string;
+    companyPlaceholder: string;
+    phoneLabel: string;
+    phonePlaceholder: string;
+    emailLabel: string;
+    emailPlaceholder: string;
+    submitBtn: string;
+    successTitle: string;
+    successDesc: string;
   };
   footer: {
     tagline: string;
@@ -103,63 +129,109 @@ export const translations: Record<Language, Translations> = {
       ctaBlindBox: "MỞ HỘP NGẪU NHIÊN",
     },
     products: {
-      badge: "BỘ BỘT LÀNG NGHỀ THỦ CÔNG",
-      title: "BỘ KIT DIY HỘP GIAO THỜI",
-      subtitle:
-        "Mỗi bộ kit bao gồm đầy đủ nguyên liệu tự nhiên, dụng cụ chế tác thủ công và câu chuyện di sản làng nghề độc bản.",
-      viewDetails: "Xem Chi Tiết",
+      badge: "BỘ KHÁM PHÁ VĂN HÓA",
+      title: "Bộ Kit Trải Nghiệm DIY",
+      subtitle: "Chọn hộp bạn yêu thích — mỗi hộp ẩn chứa phụ kiện ngẫu nhiên.",
+      viewDetails: "Xem chi tiết ->",
       addToCart: "Thêm Vào Giỏ",
       priceSuffix: "đ",
+      items: {
+        nonLa: {
+          name: "Bộ DIY Nón Lá Mini",
+          village: "Làng Nón Chuông — Hà Nội",
+          subtitle: "Trang trí nón lá thủ công",
+          desc: "Bộ kit tự làm nón lá mini kèm quà tặng ngẫu nhiên.",
+          tag: "LÀNG NÓN CHUÔNG",
+        },
+        toHe: {
+          name: "Bộ DIY Tò He Dân Gian",
+          village: "Làng Tò He Xuân La — Hà Nội",
+          subtitle: "Nặn tò he truyền thống",
+          desc: "Nặn tò he bằng bột màu tự nhiên kèm khuôn con giống bí ẩn.",
+          tag: "LÀNG TÒ HE XUÂN LA",
+        },
+        chuonChuon: {
+          name: "Bộ DIY Chuồn Chuồn Tre",
+          village: "Làng Tre Thạch Xá — Hà Nội",
+          subtitle: "Tô màu chuồn chuồn thăng bằng",
+          desc: "Tô màu chuồn chuồn tre thăng bằng kèm chân đế ngẫu nhiên.",
+          tag: "LÀNG TRE THẠCH XÁ",
+        },
+      },
     },
     modal: {
-      secretItem: "Vật phẩm bí mật",
-      materials: "Nguyên liệu tự nhiên",
-      artisanStory: "Hành trình di sản nghệ nhân",
-      blindBoxTag: "Hộp Quà Ngẫu Nhiên",
-      addToCart: "THÊM VÀO GIỎ HÀNG",
-      orderNow: "ĐẶT MUA NGAY",
+      materialsHeader: "Thành phần trong hộp:",
+      giftHeader: "1 TRONG CÁC PHỤ KIỆN TẶNG KÈM NGẪU NHIÊN:",
+      giftNoteTitle: "Ghi chú phần quà ngẫu nhiên",
+      giftNoteDesc:
+        "Mỗi hộp chắc chắn gồm bộ dụng cụ làm thủ công đầy đủ, đi kèm 1 phụ kiện hoặc chi tiết trang trí ngẫu nhiên trong các mẫu hiển thị ở gallery bên trái.",
+      selectBoxBtn: "CHỌN HỘP NÀY - ",
+      close: "Đóng",
+      secretTag: "Hiếm",
+      baseTag: "Gốc",
+      gift1Tag: "Mẫu 01",
+      gift2Tag: "Mẫu 02",
     },
     cart: {
       title: "Giỏ Hàng",
-      itemCount: "sản phẩm",
+      itemCountSuffix: "sản phẩm",
       emptyTitle: "Giỏ hàng của bạn đang trống.",
       emptySubtitle: "Chọn thêm các Hộp DIY bên dưới để đặt mua chung một đơn hàng!",
       selectedProducts: "SẢN PHẨM ĐÃ CHỌN:",
       addMore: "THÊM HỘP KHÁC VỀ CÙNG CHUYẾN:",
-      totalCOD: "Tổng tiền thanh toán (COD):",
+      totalCOD: "Tổng tiền COD:",
       checkoutBtn: "TIẾP TỤC ĐẶT HÀNG COD",
       formTitle: "Thông Tin Đặt Hàng COD",
-      fullName: "Họ và tên người nhận",
-      phone: "Số điện thoại nhận hàng",
-      address: "Địa chỉ nhận hàng chi tiết",
-      notes: "Ghi chú cho đơn hàng (không bắt buộc)",
-      confirmOrder: "XÁC NHẬN ĐẶT HÀNG COD",
-      orderSuccess: "Đặt Hàng Thành Công!",
-      orderCode: "Mã đơn hàng:",
-      finish: "HOÀN TẤT",
+      fullNameLabel: "Họ và tên người nhận",
+      fullNamePlaceholder: "Nhập đầy đủ họ và tên",
+      phoneLabel: "Số điện thoại nhận hàng",
+      phonePlaceholder: "Nhập số điện thoại (10 chữ số)",
+      addressLabel: "Địa chỉ giao hàng chi tiết",
+      addressPlaceholder: "Số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành",
+      notesLabel: "Ghi chú giao hàng (Không bắt buộc)",
+      notesPlaceholder: "Ví dụ: Giao giờ hành chính, gọi trước khi giao...",
+      confirmOrderBtn: "XÁC NHẬN ĐẶT HÀNG",
+      orderSuccessTitle: "Đặt Hàng Thành Công!",
+      orderSuccessThanks: "Cảm ơn bạn đã đồng hành cùng Chạm Thức.",
+      orderCodeLabel: "Mã đơn hàng:",
+      callConfirmNote: "Đội ngũ Chạm Thức sẽ gọi điện xác nhận đơn hàng trước khi giao!",
+      finishBtn: "HOÀN TẤT",
     },
     storySection: {
-      badge: "TRẠM VĂN HÓA DI SẢN",
-      title: "CÂU CHUYỆN LÀNG NGHỀ",
+      badge: "TRẠM KỂ CHUYỆN",
+      title: "Làng Nghề Truyền Thống",
       subtitle: "Hành trình bảo tồn và trao truyền giá trị di sản thủ công Việt qua từng thế hệ nghệ nhân.",
+      artisanTitle: "Nghệ Nhân Làng Nghề Việt",
+      artisanDesc:
+        "Từng ngón tay nghệ nhân gửi gắm cả cuộc đời gìn giữ di sản dân tộc. Chạm Thức đồng hành trao truyền nét đẹp thủ công đến thế hệ trẻ.",
       statVillages: "Làng nghề di sản",
       statArtisans: "Nghệ nhân kỳ cựu",
       statHandmade: "Thủ công 100%",
     },
     b2b: {
-      badge: "GIẢI PHÁP QUÀ TẶNG DOANH NGHIỆP ESG",
-      title: "ĐỒNG HÀNH CÙNG DI SẢN VIỆT",
-      subtitle: "Mang văn hóa di sản thủ công Việt Nam vào quà tặng doanh nghiệp sang trọng và bền vững.",
-      feature1Title: "Đột phá ESG",
-      feature1Desc: "Tạo tác động xã hội hỗ trợ trực tiếp thu nhập nghệ nhân làng nghề.",
-      feature2Title: "Độc Bản Thương Hiệu",
-      feature2Desc: "Khắc logo thương hiệu riêng trên các hộp quà chất liệu mây tre tự nhiên.",
-      feature3Title: "Trải Nghiệm Văn Hóa",
-      feature3Desc: "Tổ chức Workshop thủ công trải nghiệm trực tiếp cho nhân sự và đối tác.",
-      cta: "LIÊN HỆ HỢP TÁC DOANH NGHIỆP",
+      badge: "Doanh Nghiệp & ESG",
+      title: "Giải Pháp Quà Tặng B2B",
+      subtitle: "Nâng tầm quà tặng đối tác bằng mô hình Hộp Khám Phá di sản cá nhân hóa.",
+      pillar1Title: "Bảo Tồn Di Sản",
+      pillar1Desc: "Đóng góp trực tiếp vào quỹ bảo tồn các giá trị di sản văn hóa phi vật thể và làng nghề thủ công Việt Nam.",
+      pillar2Title: "Sinh Kế Nghệ Nhân",
+      pillar2Desc: "Tạo nguồn thu nhập ổn định và cải thiện chất lượng cuộc sống cho đội ngũ nghệ nhân làng nghề truyền thống.",
+      pillar3Title: "Bao Bì Xanh",
+      pillar3Desc: "Sử dụng 100% vật liệu tre nứa và bao bì tự nhiên phân hủy sinh học theo định hướng ESG.",
+      formTitle: "ĐĂNG KÝ TƯ VẤN QUÀ TẶNG B2B",
+      companyLabel: "Tên đơn vị / Doanh nghiệp *",
+      companyPlaceholder: "Nhập tên công ty hoặc tổ chức",
+      phoneLabel: "Số điện thoại liên hệ *",
+      phonePlaceholder: "Nhập số điện thoại (10 chữ số)",
+      emailLabel: "Email doanh nghiệp *",
+      emailPlaceholder: "example@company.com",
+      submitBtn: "GỬI YÊU CẦU TƯ VẤN B2B",
+      successTitle: "Gửi Yêu Cầu Thành Công!",
+      successDesc: "Chạm Thức sẽ liên hệ trực tiếp với bạn trong vòng 24 giờ làm việc.",
     },
     footer: {
-      tagline: "Nền tảng thương mại trải nghiệm di sản và bộ kit DIY làng nghề truyền thống Việt Nam.",
+      tagline:
+        "Chạm Thức là dự án phát triển các hộp trải nghiệm văn hóa Việt Nam theo chủ đề làng nghề truyền thống.",
       copyright: "Chạm Thức. Tất cả quyền được bảo lưu.",
       rights: "Tôn vinh nghệ nhân dân gian Việt Nam.",
     },
@@ -183,63 +255,109 @@ export const translations: Record<Language, Translations> = {
       ctaBlindBox: "MYSTERY BOX",
     },
     products: {
-      badge: "HERITAGE HANDCRAFTED COLLECTION",
-      title: "DIY EXPERIENCE KITS",
-      subtitle:
-        "Each kit includes natural raw materials, traditional craft tools, and unique artisan heritage stories.",
-      viewDetails: "View Details",
+      badge: "CULTURAL DISCOVERY KITS",
+      title: "DIY Experience Kits",
+      subtitle: "Choose your favorite box — each box contains mystery random accessories.",
+      viewDetails: "View Details ->",
       addToCart: "Add to Cart",
       priceSuffix: "VND",
+      items: {
+        nonLa: {
+          name: "Mini Conical Hat DIY Kit",
+          village: "Chuong Village — Hanoi",
+          subtitle: "Handcrafted Conical Hat Painting",
+          desc: "DIY mini conical hat kit with mystery random accessories.",
+          tag: "CHUONG VILLAGE",
+        },
+        toHe: {
+          name: "Folk Toy Dough (To He) Kit",
+          village: "Xuan La Village — Hanoi",
+          subtitle: "Traditional Dough Figurines",
+          desc: "Mold traditional figurines with natural rice dough & mystery molds.",
+          tag: "XUAN LA VILLAGE",
+        },
+        chuonChuon: {
+          name: "Bamboo Dragonfly DIY Kit",
+          village: "Thach Xa Village — Hanoi",
+          subtitle: "Balancing Bamboo Dragonfly",
+          desc: "Paint balancing bamboo dragonflies with mystery display stands.",
+          tag: "THACH XA VILLAGE",
+        },
+      },
     },
     modal: {
-      secretItem: "Secret Item",
-      materials: "Natural Materials",
-      artisanStory: "Artisan Heritage Journey",
-      blindBoxTag: "Mystery Gift Box",
-      addToCart: "ADD TO SHOPPING CART",
-      orderNow: "ORDER NOW",
+      materialsHeader: "Box Component Kit:",
+      giftHeader: "1 OF RANDOM BONUS ACCESSORIES:",
+      giftNoteTitle: "Mystery Gift Note",
+      giftNoteDesc:
+        "Each kit comes with full DIY tools plus 1 random accessory or decoration item from the left gallery variants.",
+      selectBoxBtn: "CHOOSE THIS KIT - ",
+      close: "Close",
+      secretTag: "Secret",
+      baseTag: "Base",
+      gift1Tag: "Item 01",
+      gift2Tag: "Item 02",
     },
     cart: {
       title: "Shopping Cart",
-      itemCount: "items",
+      itemCountSuffix: "items",
       emptyTitle: "Your shopping cart is currently empty.",
-      emptySubtitle: "Add DIY Experience Kits below to combine them into one order!",
+      emptySubtitle: "Select DIY Experience Kits below to combine them into one order!",
       selectedProducts: "SELECTED PRODUCTS:",
       addMore: "ADD MORE KITS TO THIS SHIPMENT:",
-      totalCOD: "Total COD Payment:",
+      totalCOD: "Total COD Amount:",
       checkoutBtn: "PROCEED TO COD CHECKOUT",
       formTitle: "COD Shipping Information",
-      fullName: "Full Name",
-      phone: "Phone Number",
-      address: "Detailed Shipping Address",
-      notes: "Order Notes (Optional)",
-      confirmOrder: "CONFIRM COD ORDER",
-      orderSuccess: "Order Placed Successfully!",
-      orderCode: "Order Code:",
-      finish: "FINISH",
+      fullNameLabel: "Full Recipient Name",
+      fullNamePlaceholder: "Enter your full name",
+      phoneLabel: "Contact Phone Number",
+      phonePlaceholder: "Enter 10-digit phone number",
+      addressLabel: "Detailed Shipping Address",
+      addressPlaceholder: "House number, street name, district, city",
+      notesLabel: "Delivery Notes (Optional)",
+      notesPlaceholder: "e.g. Deliver during office hours, call before arrival...",
+      confirmOrderBtn: "CONFIRM COD ORDER",
+      orderSuccessTitle: "Order Placed Successfully!",
+      orderSuccessThanks: "Thank you for supporting Vietnamese craft village heritage with Cham Thuc.",
+      orderCodeLabel: "Order Code:",
+      callConfirmNote: "Our Cham Thuc team will phone you to confirm the order before shipping!",
+      finishBtn: "FINISH",
     },
     storySection: {
-      badge: "HERITAGE CULTURAL STATION",
-      title: "CRAFT VILLAGE STORIES",
-      subtitle: "Preserving and passing down Vietnamese handcraft heritage values across generations.",
+      badge: "STORY STATION",
+      title: "Traditional Craft Villages",
+      subtitle: "Preserving and passing down Vietnamese handcraft heritage values across generations of master artisans.",
+      artisanTitle: "Vietnamese Heritage Master Artisans",
+      artisanDesc:
+        "Every artisan dedicates a lifetime to preserving national culture. Cham Thuc accompanies them in sharing handicraft beauty with younger generations.",
       statVillages: "Heritage Villages",
       statArtisans: "Master Artisans",
       statHandmade: "100% Handcrafted",
     },
     b2b: {
-      badge: "CORPORATE ESG GIFTING SOLUTIONS",
-      title: "PARTNER WITH VIETNAMESE HERITAGE",
-      subtitle: "Elevate your corporate gifting with authentic, sustainable Vietnamese craft heritage.",
-      feature1Title: "ESG Social Impact",
-      feature1Desc: "Directly support artisan livelihoods and local craft village economies.",
-      feature2Title: "Custom Branding",
-      feature2Desc: "Engrave your custom corporate logo on premium bamboo and rattan gift boxes.",
-      feature3Title: "Cultural Workshops",
-      feature3Desc: "Organize hands-on traditional craft workshops for clients and team events.",
-      cta: "CONTACT FOR CORPORATE B2B",
+      badge: "Corporate & ESG",
+      title: "B2B Gifting Solutions",
+      subtitle: "Elevate partner gifts with personalized cultural heritage discovery boxes.",
+      pillar1Title: "Heritage Conservation",
+      pillar1Desc: "Direct contribution to intangible cultural heritage & Vietnamese traditional craft village funds.",
+      pillar2Title: "Artisan Livelihood",
+      pillar2Desc: "Provide stable income and improve quality of life for traditional village master artisans.",
+      pillar3Title: "Green Eco Packaging",
+      pillar3Desc: "Use 100% natural bamboo & biodegradable eco-friendly packaging aligned with corporate ESG.",
+      formTitle: "REGISTER FOR B2B GIFT CONSULTATION",
+      companyLabel: "Company / Organization Name *",
+      companyPlaceholder: "Enter your company or organization name",
+      phoneLabel: "Contact Phone Number *",
+      phonePlaceholder: "Enter 10-digit phone number",
+      emailLabel: "Corporate Email *",
+      emailPlaceholder: "example@company.com",
+      submitBtn: "SUBMIT B2B CONSULTATION REQUEST",
+      successTitle: "Inquiry Submitted Successfully!",
+      successDesc: "Our Cham Thuc team will contact you within 24 business hours.",
     },
     footer: {
-      tagline: "Experience platform for Vietnamese traditional craft village DIY kits and cultural heritage.",
+      tagline:
+        "Cham Thuc is a project developing Vietnamese cultural heritage experience boxes themed around traditional craft villages.",
       copyright: "Cham Thuc. All rights reserved.",
       rights: "Honoring Vietnamese folk master artisans.",
     },
