@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShoppingBag, X, CheckCircle2, Plus, Minus, Truck, AlertCircle, Trash2 } from "lucide-react";
+import { ShoppingBag, X, CheckCircle2, Plus, Minus, Truck, AlertCircle, Trash2, CreditCard, MessageCircle, Banknote } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { generateOrderCode } from "@/lib/utils";
 
@@ -87,6 +87,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   const [address, setAddress] = useState("");
   const [note, setNote] = useState("");
   const [orderCode, setOrderCode] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState<"VIETQR" | "COD">("VIETQR");
+  const [finalAmount, setFinalAmount] = useState(0);
 
   // Validation Errors State
   const [errors, setErrors] = useState<{ fullName?: string; phone?: string; address?: string }>({});
@@ -243,7 +245,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
           address,
           productName: productNames,
           price: totalPrice,
-          paymentMethod: "Ship COD",
+          paymentMethod,
           notes: note,
         }),
       });
@@ -251,14 +253,17 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
       const data = await res.json();
       if (data.success && data.orderCode) {
         setOrderCode(data.orderCode);
+        setFinalAmount(data.finalAmount || totalPrice);
         setStep("success");
       } else {
         setOrderCode(generateOrderCode());
+        setFinalAmount(totalPrice);
         setStep("success");
       }
     } catch (err) {
       console.error("Order submit API error:", err);
       setOrderCode(generateOrderCode());
+      setFinalAmount(totalPrice);
       setStep("success");
     } finally {
       setSubmitting(false);
@@ -272,6 +277,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     setAddress("");
     setNote("");
     setOrderCode("");
+    setPaymentMethod("VIETQR");
+    setFinalAmount(0);
     setErrors({});
     onClose();
   };
@@ -439,18 +446,14 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     </div>
                   </div>
 
-                  {/* COD Note */}
-                  <div className="bg-brand-red/5 border border-brand-red/15 rounded-2xl p-3.5 text-xs sm:text-sm text-brand-red flex items-center gap-2.5 font-medium">
-                    <Truck size={18} className="flex-shrink-0" />
-                    <span>Thanh toán COD khi nhận hàng — Kiểm tra hàng thoải mái!</span>
-                  </div>
+
                 </div>
 
                 {/* Footer CTA */}
                 <div className="p-5 sm:p-7 border-t border-text-wood/10 bg-paper-warm space-y-4 pb-[calc(1.25rem+env(safe-area-inset-bottom))]">
                   <div className="flex justify-between items-center">
                     <span className="text-sm sm:text-base font-bold text-text-wood/80">
-                      {t.cart.totalCOD}
+                      {t.cart.totalLabel}
                     </span>
                     <span className="font-price text-2xl sm:text-3xl font-extrabold text-brand-red">
                       {totalPrice.toLocaleString("vi-VN")} {t.products.priceSuffix}
@@ -470,14 +473,14 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               </>
             )}
 
-            {/* STEP 2: CHECKOUT COD FORM */}
+            {/* STEP 2: CHECKOUT FORM */}
             {step === "checkout" && (
               <form onSubmit={handleOrderSubmit} className="flex-1 flex flex-col justify-between overflow-hidden">
                 <div className="flex-1 overflow-y-auto p-5 sm:p-7 space-y-5">
                   {/* Order items recap */}
                   <div className="bg-paper-warm rounded-2xl p-4 border border-text-wood/10 text-xs sm:text-sm space-y-2.5">
                     <p className="font-bold text-text-wood uppercase tracking-wider border-b border-text-wood/10 pb-2">
-                      Danh sách đặt mua ({totalItemCount} sản phẩm):
+                      {t.cart.orderListTitle} ({totalItemCount} {t.cart.itemCountSuffix}):
                     </p>
                     {cartEntries.map((key) => {
                       const p = PRODUCTS_CATALOG[key];
@@ -485,13 +488,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                       return (
                         <div key={key} className="flex justify-between items-center text-text-wood/85">
                           <span>- {p.label} x {q}</span>
-                          <span className="font-price font-bold">{(p.price * q).toLocaleString("vi-VN")} đ</span>
+                          <span className="font-price font-bold">{(p.price * q).toLocaleString("vi-VN")} {t.products.priceSuffix}</span>
                         </div>
                       );
                     })}
                     <div className="flex justify-between items-center pt-2.5 border-t border-text-wood/10 font-bold text-brand-red">
-                      <span>Tổng tiền COD:</span>
-                      <span className="font-price text-lg">{totalPrice.toLocaleString("vi-VN")} đ</span>
+                      <span>{t.cart.totalLabel}</span>
+                      <span className="font-price text-lg">{totalPrice.toLocaleString("vi-VN")} {t.products.priceSuffix}</span>
                     </div>
                   </div>
 
@@ -579,10 +582,66 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     />
                   </div>
 
-                  {/* COD Payment Badge */}
-                  <div className="bg-bamboo-green/10 border border-bamboo-green/20 rounded-2xl p-3.5 text-xs sm:text-sm text-bamboo-green flex items-center gap-2 font-medium">
-                    <Truck size={18} className="flex-shrink-0" />
-                    <span>Hình thức: Ship COD (Thanh toán tiền mặt khi nhận hàng)</span>
+                  {/* Payment Method Selection */}
+                  <div>
+                    <label className="block text-xs sm:text-sm font-bold text-text-wood uppercase tracking-wider mb-3">
+                      {t.cart.paymentMethodLabel}
+                    </label>
+                    <div className="space-y-2.5">
+                      {/* VietQR Option */}
+                      <label
+                        className={`flex items-center gap-3 p-3.5 rounded-xl border-2 cursor-pointer transition-all ${
+                          paymentMethod === "VIETQR"
+                            ? "border-brand-red bg-brand-red/5 shadow-sm"
+                            : "border-text-wood/15 bg-white hover:border-text-wood/30"
+                        }`}
+                      >
+                        <input
+                          type="radio"
+                          name="paymentMethod"
+                          value="VIETQR"
+                          checked={paymentMethod === "VIETQR"}
+                          onChange={() => setPaymentMethod("VIETQR")}
+                          className="sr-only"
+                        />
+                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
+                          paymentMethod === "VIETQR" ? "border-brand-red" : "border-text-wood/30"
+                        }`}>
+                          {paymentMethod === "VIETQR" && <div className="w-2.5 h-2.5 rounded-full bg-brand-red" />}
+                        </div>
+                        <CreditCard size={18} className={paymentMethod === "VIETQR" ? "text-brand-red" : "text-text-wood/50"} />
+                        <span className={`text-sm font-semibold ${paymentMethod === "VIETQR" ? "text-brand-red" : "text-text-wood/70"}`}>
+                          {t.cart.paymentVietQR}
+                        </span>
+                      </label>
+
+                      {/* COD Option */}
+                      <label
+                        className={`flex items-center gap-3 p-3.5 rounded-xl border-2 cursor-pointer transition-all ${
+                          paymentMethod === "COD"
+                            ? "border-brand-red bg-brand-red/5 shadow-sm"
+                            : "border-text-wood/15 bg-white hover:border-text-wood/30"
+                        }`}
+                      >
+                        <input
+                          type="radio"
+                          name="paymentMethod"
+                          value="COD"
+                          checked={paymentMethod === "COD"}
+                          onChange={() => setPaymentMethod("COD")}
+                          className="sr-only"
+                        />
+                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
+                          paymentMethod === "COD" ? "border-brand-red" : "border-text-wood/30"
+                        }`}>
+                          {paymentMethod === "COD" && <div className="w-2.5 h-2.5 rounded-full bg-brand-red" />}
+                        </div>
+                        <Banknote size={18} className={paymentMethod === "COD" ? "text-brand-red" : "text-text-wood/50"} />
+                        <span className={`text-sm font-semibold ${paymentMethod === "COD" ? "text-brand-red" : "text-text-wood/70"}`}>
+                          {t.cart.paymentCOD}
+                        </span>
+                      </label>
+                    </div>
                   </div>
                 </div>
 
@@ -592,77 +651,144 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     type="submit"
                     variant="primary"
                     size="lg"
-                    className="w-full h-13 sm:h-14 bg-brand-red hover:bg-brand-red-hover text-brand-gold shadow-lg rounded-2xl text-base sm:text-lg font-bold uppercase tracking-wider"
+                    disabled={submitting}
+                    className="w-full h-13 sm:h-14 bg-brand-red hover:bg-brand-red-hover text-brand-gold shadow-lg rounded-2xl text-base sm:text-lg font-bold uppercase tracking-wider disabled:opacity-60"
                   >
-                    {t.cart.confirmOrderBtn} ({totalPrice.toLocaleString("vi-VN")} {t.products.priceSuffix})
+                    {submitting ? "..." : `${t.cart.confirmOrderBtn} (${totalPrice.toLocaleString("vi-VN")} ${t.products.priceSuffix})`}
                   </Button>
                   <button
                     type="button"
                     onClick={() => setStep("cart")}
                     className="w-full h-10 text-xs sm:text-sm font-semibold text-text-wood/70 hover:text-brand-red transition-colors cursor-pointer"
                   >
-                    &lt;- {t.cart.title}
+                    &lt;- {t.cart.backToCart}
                   </button>
                 </div>
               </form>
             )}
 
-            {/* STEP 3: ORDER SUCCESS CONFIRMATION */}
-            {step === "success" && (
-              <div className="flex-1 overflow-y-auto p-6 sm:p-8 flex flex-col justify-center items-center text-center space-y-4">
-                <div className="w-18 h-18 sm:w-20 sm:h-20 rounded-full bg-bamboo-green/10 border border-bamboo-green/20 flex items-center justify-center text-bamboo-green mb-2">
-                  <CheckCircle2 size={42} />
-                </div>
+            {/* STEP 3: ORDER SUCCESS & PAYMENT BRANCHING */}
+            {step === "success" && (() => {
+              const fbPageId = process.env.NEXT_PUBLIC_FB_PAGE_ID || "61592690401391";
+              const bankId = process.env.NEXT_PUBLIC_BANK_ID || "MB";
+              const bankAccountNo = process.env.NEXT_PUBLIC_BANK_ACCOUNT_NO || "";
+              const bankAccountName = process.env.NEXT_PUBLIC_BANK_ACCOUNT_NAME || "";
+              const messengerText = encodeURIComponent(`Toi muon xac nhan don hang ma ${orderCode}`);
+              const messengerLink = `https://m.me/${fbPageId}?text=${messengerText}`;
+              const vietqrUrl = bankAccountNo
+                ? `https://img.vietqr.io/image/${bankId}-${bankAccountNo}-compact.png?amount=${finalAmount}&addInfo=${encodeURIComponent(orderCode)}&accountName=${encodeURIComponent(bankAccountName)}`
+                : "";
 
-                <h4 className="font-serif text-2xl sm:text-3xl font-bold text-brand-red">
-                  {t.cart.orderSuccessTitle}
-                </h4>
-
-                <p className="font-sans text-sm sm:text-base text-text-wood/75 leading-relaxed max-w-sm">
-                  {t.cart.orderSuccessThanks}
-                </p>
-
-                <div className="w-full bg-paper-warm rounded-2xl p-4 sm:p-5 border border-text-wood/10 text-xs sm:text-sm text-left space-y-2.5">
-                  <div className="flex justify-between border-b border-text-wood/10 pb-2">
-                    <span className="text-text-wood/60 font-medium">{t.cart.orderCodeLabel}</span>
-                    <span className="font-price font-extrabold text-brand-red tracking-wider">{orderCode}</span>
+              return (
+                <div className="flex-1 overflow-y-auto p-6 sm:p-8 flex flex-col items-center text-center space-y-5">
+                  {/* Success Icon */}
+                  <div className="w-18 h-18 sm:w-20 sm:h-20 rounded-full bg-bamboo-green/10 border border-bamboo-green/20 flex items-center justify-center text-bamboo-green">
+                    <CheckCircle2 size={42} />
                   </div>
-                  <div className="border-b border-text-wood/10 pb-2">
-                    <span className="text-text-wood/60 block mb-1">{t.cart.selectedProducts}</span>
-                    {cartEntries.map((k) => (
-                      <p key={k} className="font-semibold text-brand-red">
-                        - {PRODUCTS_CATALOG[k].label} x {cartState[k]}
+
+                  <h4 className="font-serif text-2xl sm:text-3xl font-bold text-brand-red">
+                    {t.cart.orderSuccessTitle}
+                  </h4>
+
+                  <p className="font-sans text-sm sm:text-base text-text-wood/75 leading-relaxed max-w-sm">
+                    {t.cart.orderSuccessThanks}
+                  </p>
+
+                  {/* Order Summary Card */}
+                  <div className="w-full bg-paper-warm rounded-2xl p-4 sm:p-5 border border-text-wood/10 text-xs sm:text-sm text-left space-y-2.5">
+                    <div className="flex justify-between border-b border-text-wood/10 pb-2">
+                      <span className="text-text-wood/60 font-medium">{t.cart.orderCodeLabel}</span>
+                      <span className="font-price font-extrabold text-brand-red tracking-wider">{orderCode}</span>
+                    </div>
+                    <div className="border-b border-text-wood/10 pb-2">
+                      <span className="text-text-wood/60 block mb-1">{t.cart.selectedProducts}</span>
+                      {cartEntries.map((k) => (
+                        <p key={k} className="font-semibold text-brand-red">
+                          - {PRODUCTS_CATALOG[k].label} x {cartState[k]}
+                        </p>
+                      ))}
+                    </div>
+                    <div className="flex justify-between border-b border-text-wood/10 pb-2">
+                      <span className="text-text-wood/60">{t.cart.totalAmount}</span>
+                      <span className="font-price font-bold text-base sm:text-lg text-brand-red">
+                        {finalAmount.toLocaleString("vi-VN")} {t.products.priceSuffix}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-text-wood/60">{t.cart.paymentMethodLabel.replace(":", "")}</span>
+                      <span className="font-semibold text-text-wood">
+                        {paymentMethod === "VIETQR" ? t.cart.paymentVietQR : t.cart.paymentCOD}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Payment Branch: VietQR */}
+                  {paymentMethod === "VIETQR" && vietqrUrl && (
+                    <div className="w-full bg-white rounded-2xl p-5 border border-brand-red/15 space-y-4">
+                      <p className="text-sm font-bold text-brand-red uppercase tracking-wider">
+                        {t.cart.vietqrScanGuide}
                       </p>
-                    ))}
-                  </div>
-                  <div className="flex justify-between border-b border-text-wood/10 pb-2">
-                    <span className="text-text-wood/60">{t.cart.totalCOD}</span>
-                    <span className="font-price font-bold text-base sm:text-lg text-brand-red">{totalPrice.toLocaleString("vi-VN")} {t.products.priceSuffix}</span>
-                  </div>
-                  <div className="flex justify-between border-b border-text-wood/10 pb-2">
-                    <span className="text-text-wood/60">{t.cart.phoneLabel}:</span>
-                    <span className="font-semibold text-text-wood">{phone}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-text-wood/60">{t.cart.addressLabel}:</span>
-                    <span className="font-semibold text-text-wood text-right max-w-[200px]">{address}</span>
-                  </div>
+                      <div className="flex justify-center">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={vietqrUrl}
+                          alt="VietQR Payment"
+                          className="w-56 h-56 sm:w-64 sm:h-64 rounded-xl border border-text-wood/10 shadow-sm"
+                        />
+                      </div>
+                      <div className="text-xs sm:text-sm text-text-wood/70 space-y-1">
+                        <p>
+                          <span className="font-semibold text-text-wood">{t.cart.vietqrBankAccount}</span>{" "}
+                          {bankAccountNo} - {bankAccountName} ({bankId})
+                        </p>
+                        <p>
+                          <span className="font-semibold text-text-wood">{t.cart.totalAmount}</span>{" "}
+                          <span className="font-price font-bold text-brand-red">{finalAmount.toLocaleString("vi-VN")} {t.products.priceSuffix}</span>
+                        </p>
+                        <p>
+                          <span className="font-semibold text-text-wood">{t.cart.vietqrTransferContent}</span>{" "}
+                          <span className="font-price font-bold text-brand-red">{orderCode}</span>
+                        </p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Payment Branch: COD */}
+                  {paymentMethod === "COD" && (
+                    <div className="w-full bg-bamboo-green/5 rounded-2xl p-5 border border-bamboo-green/20 flex items-start gap-3">
+                      <Truck size={22} className="text-bamboo-green flex-shrink-0 mt-0.5" />
+                      <p className="text-sm text-text-wood/80 leading-relaxed text-left">
+                        {t.cart.codConfirmMsg}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Messenger Confirm Button */}
+                  <a
+                    href={messengerLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full flex items-center justify-center gap-2.5 h-12 sm:h-13 bg-[#0084FF] hover:bg-[#006FDB] text-white font-bold text-sm sm:text-base uppercase tracking-wider rounded-2xl shadow-lg transition-colors cursor-pointer"
+                  >
+                    <MessageCircle size={20} />
+                    <span>{t.cart.messengerConfirmBtn}</span>
+                  </a>
+
+                  <p className="text-xs text-text-wood/50 italic">
+                    {t.cart.callConfirmNote}
+                  </p>
+
+                  <Button
+                    variant="primary"
+                    size="lg"
+                    onClick={resetDrawer}
+                    className="w-full h-12 bg-brand-red hover:bg-brand-red-hover text-brand-gold font-bold uppercase tracking-wider rounded-2xl cursor-pointer"
+                  >
+                    {t.cart.finishBtn}
+                  </Button>
                 </div>
-
-                <p className="text-xs sm:text-sm text-bamboo-green italic font-medium">
-                  {t.cart.callConfirmNote}
-                </p>
-
-                <Button
-                  variant="primary"
-                  size="lg"
-                  onClick={resetDrawer}
-                  className="w-full h-12 bg-brand-red hover:bg-brand-red-hover text-brand-gold font-bold uppercase tracking-wider rounded-2xl cursor-pointer"
-                >
-                  {t.cart.finishBtn}
-                </Button>
-              </div>
-            )}
+              );
+            })()}
           </motion.div>
         </div>
       )}

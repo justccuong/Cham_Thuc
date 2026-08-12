@@ -53,7 +53,7 @@ export interface Translations {
     emptySubtitle: string;
     selectedProducts: string;
     addMore: string;
-    totalCOD: string;
+    totalLabel: string;
     checkoutBtn: string;
     formTitle: string;
     fullNameLabel: string;
@@ -64,10 +64,22 @@ export interface Translations {
     addressPlaceholder: string;
     notesLabel: string;
     notesPlaceholder: string;
+    paymentMethodLabel: string;
+    paymentVietQR: string;
+    paymentCOD: string;
+    codBadge: string;
     confirmOrderBtn: string;
+    backToCart: string;
+    orderListTitle: string;
     orderSuccessTitle: string;
     orderSuccessThanks: string;
     orderCodeLabel: string;
+    totalAmount: string;
+    vietqrScanGuide: string;
+    vietqrTransferContent: string;
+    vietqrBankAccount: string;
+    codConfirmMsg: string;
+    messengerConfirmBtn: string;
     callConfirmNote: string;
     finishBtn: string;
   };
@@ -179,9 +191,9 @@ export const translations: Record<Language, Translations> = {
       emptySubtitle: "Chọn thêm các Hộp DIY bên dưới để đặt mua chung một đơn hàng!",
       selectedProducts: "SẢN PHẨM ĐÃ CHỌN:",
       addMore: "THÊM HỘP KHÁC VỀ CÙNG CHUYẾN:",
-      totalCOD: "Tổng tiền COD:",
-      checkoutBtn: "TIẾP TỤC ĐẶT HÀNG COD",
-      formTitle: "Thông Tin Đặt Hàng COD",
+      totalLabel: "Tổng tiền:",
+      checkoutBtn: "TIẾP TỤC ĐẶT HÀNG",
+      formTitle: "Thông Tin Đặt Hàng",
       fullNameLabel: "Họ và tên người nhận",
       fullNamePlaceholder: "Nhập đầy đủ họ và tên",
       phoneLabel: "Số điện thoại nhận hàng",
@@ -190,10 +202,22 @@ export const translations: Record<Language, Translations> = {
       addressPlaceholder: "Số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành",
       notesLabel: "Ghi chú giao hàng (Không bắt buộc)",
       notesPlaceholder: "Ví dụ: Giao giờ hành chính, gọi trước khi giao...",
+      paymentMethodLabel: "PHƯƠNG THỨC THANH TOÁN:",
+      paymentVietQR: "Chuyển khoản Ngân hàng (VietQR)",
+      paymentCOD: "Thanh toán khi nhận hàng (COD)",
+      codBadge: "Hình thức: Ship COD (Thanh toán tiền mặt khi nhận hàng)",
       confirmOrderBtn: "XÁC NHẬN ĐẶT HÀNG",
+      backToCart: "Quay lại giỏ hàng",
+      orderListTitle: "Danh sách đặt mua",
       orderSuccessTitle: "Đặt Hàng Thành Công!",
       orderSuccessThanks: "Cảm ơn bạn đã đồng hành cùng Chạm Thức.",
       orderCodeLabel: "Mã đơn hàng:",
+      totalAmount: "Tổng tiền:",
+      vietqrScanGuide: "Quét mã QR để chuyển khoản nhanh",
+      vietqrTransferContent: "Nội dung chuyển khoản:",
+      vietqrBankAccount: "Tài khoản ngân hàng:",
+      codConfirmMsg: "Bạn đã chọn Thanh toán khi nhận hàng. Shop sẽ xác nhận đơn và giao tới bạn sớm nhất!",
+      messengerConfirmBtn: "Xác nhận đơn qua Messenger",
       callConfirmNote: "Đội ngũ Chạm Thức sẽ gọi điện xác nhận đơn hàng trước khi giao!",
       finishBtn: "HOÀN TẤT",
     },
@@ -305,9 +329,9 @@ export const translations: Record<Language, Translations> = {
       emptySubtitle: "Select DIY Experience Kits below to combine them into one order!",
       selectedProducts: "SELECTED PRODUCTS:",
       addMore: "ADD MORE KITS TO THIS SHIPMENT:",
-      totalCOD: "Total COD Amount:",
-      checkoutBtn: "PROCEED TO COD CHECKOUT",
-      formTitle: "COD Shipping Information",
+      totalLabel: "Total:",
+      checkoutBtn: "PROCEED TO CHECKOUT",
+      formTitle: "Order Information",
       fullNameLabel: "Full Recipient Name",
       fullNamePlaceholder: "Enter your full name",
       phoneLabel: "Contact Phone Number",
@@ -316,10 +340,22 @@ export const translations: Record<Language, Translations> = {
       addressPlaceholder: "House number, street name, district, city",
       notesLabel: "Delivery Notes (Optional)",
       notesPlaceholder: "e.g. Deliver during office hours, call before arrival...",
-      confirmOrderBtn: "CONFIRM COD ORDER",
+      paymentMethodLabel: "PAYMENT METHOD:",
+      paymentVietQR: "Bank Transfer (VietQR)",
+      paymentCOD: "Cash on Delivery (COD)",
+      codBadge: "Payment: Ship COD (Cash on Delivery)",
+      confirmOrderBtn: "CONFIRM ORDER",
+      backToCart: "Back to cart",
+      orderListTitle: "Order items",
       orderSuccessTitle: "Order Placed Successfully!",
       orderSuccessThanks: "Thank you for supporting Vietnamese craft village heritage with Cham Thuc.",
       orderCodeLabel: "Order Code:",
+      totalAmount: "Total:",
+      vietqrScanGuide: "Scan the QR code for instant bank transfer",
+      vietqrTransferContent: "Transfer description:",
+      vietqrBankAccount: "Bank account:",
+      codConfirmMsg: "You selected Cash on Delivery. We will confirm your order and deliver it to you as soon as possible!",
+      messengerConfirmBtn: "Confirm order via Messenger",
       callConfirmNote: "Our Cham Thuc team will phone you to confirm the order before shipping!",
       finishBtn: "FINISH",
     },

@@ -14,6 +14,9 @@ export async function POST(request: Request) {
       );
     }
 
+    const resolvedPaymentMethod = paymentMethod === "VIETQR" ? "VIETQR" : "COD";
+    const finalAmount = typeof price === "number" ? price : 0;
+
     // Collision-check retry loop (maximum 5 attempts)
     let orderCode = "";
     let isUnique = false;
@@ -49,8 +52,8 @@ export async function POST(request: Request) {
         customer_phone: phone,
         customer_address: address,
         product_name: productName,
-        product_price: price,
-        payment_method: paymentMethod || "COD",
+        product_price: finalAmount,
+        payment_method: resolvedPaymentMethod,
         notes: notes || "",
         payment_status: "PENDING",
         order_status: "PROCESSING",
@@ -65,17 +68,23 @@ export async function POST(request: Request) {
       );
     }
 
-    // Format summary plain text message
+    // Format detailed notification message for admin
+    const paymentLabel = resolvedPaymentMethod === "VIETQR"
+      ? "Chuyen khoan VietQR"
+      : "Thanh toan khi nhan hang (COD)";
+
     const formattedMessage = [
-      "DON HANG MOI TRAT CHAM THUC",
-      `MA DON HANG: ${orderCode}`,
-      `Nguoi nhan: ${name}`,
-      `So dien thoai: ${phone}`,
+      "CO DON HANG MOI TU CHAM THUC!",
+      "----------------------------------",
+      `Ma don: ${orderCode}`,
+      `Khach: ${name} (${phone})`,
       `Dia chi: ${address}`,
-      `San pham: ${productName} - ${price}`,
-      `Phuong thuc: ${paymentMethod || "COD"}`,
-      `Ghi chu: ${notes || ""}`,
-    ].join("\n");
+      "----------------------------------",
+      `San pham: ${productName}`,
+      `Tong tien: ${finalAmount.toLocaleString("vi-VN")}d`,
+      `Thanh toan: ${paymentLabel}`,
+      notes ? `Ghi chu: ${notes}` : "",
+    ].filter(Boolean).join("\n");
 
     // Send order notification directly to Facebook Messenger via Graph API
     const fbPageAccessToken = process.env.FB_PAGE_ACCESS_TOKEN;
@@ -101,7 +110,12 @@ export async function POST(request: Request) {
       }
     }
 
-    return NextResponse.json({ success: true, orderCode });
+    return NextResponse.json({
+      success: true,
+      orderCode,
+      finalAmount,
+      paymentMethod: resolvedPaymentMethod,
+    });
   } catch (err: any) {
     console.error("Checkout API error:", err);
     return NextResponse.json(
