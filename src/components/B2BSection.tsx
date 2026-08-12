@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Send, CheckCircle, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { CloudPatternOverlay } from "@/components/CloudPatternOverlay";
+import { useLanguage } from "@/lib/i18n";
 
 interface ImpactPillar {
   title: string;
@@ -30,6 +31,7 @@ const pillars: ImpactPillar[] = [
 ];
 
 export const B2BSection: React.FC = () => {
+  const { t } = useLanguage();
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", phone: "" });
   const [errors, setErrors] = useState<{ name?: string; email?: string; phone?: string }>({});
@@ -58,21 +60,19 @@ export const B2BSection: React.FC = () => {
     if (!form.name.trim()) {
       newErrors.name = "Vui lòng nhập tên đơn vị / tổ chức.";
     } else if (form.name.trim().length < 3) {
-      newErrors.name = "Tên đơn vị quá ngắn (tối thiểu 3 ký tự).";
+      newErrors.name = "Tên đơn vị phải có ít nhất 3 ký tự.";
     }
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!form.email.trim()) {
-      newErrors.email = "Vui lòng nhập địa chỉ email liên hệ.";
-    } else if (!emailRegex.test(form.email.trim())) {
-      newErrors.email = "Địa chỉ email không đúng định dạng (ví dụ: contact@company.com).";
-    }
-
-    const phoneRegex = /^0(3|5|7|8|9)\d{8}$/;
-    if (!form.phone) {
+    if (!form.phone.trim()) {
       newErrors.phone = "Vui lòng nhập số điện thoại liên hệ.";
-    } else if (!phoneRegex.test(form.phone)) {
-      newErrors.phone = "Số điện thoại không hợp lệ (10 chữ số, bắt đầu bằng 03, 05, 07, 08, 09).";
+    } else if (!/^(0[3|5|7|8|9])[0-9]{8}$/.test(form.phone.trim())) {
+      newErrors.phone = "Số điện thoại không hợp lệ (10 chữ số).";
+    }
+
+    if (!form.email.trim()) {
+      newErrors.email = "Vui lòng nhập email doanh nghiệp.";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
+      newErrors.email = "Định dạng email không hợp lệ.";
     }
 
     setErrors(newErrors);
@@ -99,7 +99,7 @@ export const B2BSection: React.FC = () => {
           className="text-center max-w-3xl mx-auto mb-10 sm:mb-16 md:mb-20"
         >
           <span className="inline-block font-sans text-[11px] sm:text-xs font-bold uppercase tracking-widest text-brand-red bg-brand-red/8 px-3 sm:px-4 py-1.5 rounded-full border border-brand-red/15 mb-4 sm:mb-5">
-            Doanh Nghiệp & ESG
+            {t.b2b.badge}
           </span>
 
           <motion.h2
@@ -109,11 +109,11 @@ export const B2BSection: React.FC = () => {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-brand-red mb-3 sm:mb-4 tracking-tight"
           >
-            Giải Pháp Quà Tặng B2B
+            {t.b2b.title}
           </motion.h2>
 
           <p className="font-sans text-sm sm:text-base text-text-wood/65 font-light max-w-lg mx-auto leading-relaxed">
-            Nâng tầm quà tặng đối tác bằng mô hình Hộp Khám Phá di sản cá nhân hóa.
+            {t.b2b.subtitle}
           </p>
         </motion.div>
 

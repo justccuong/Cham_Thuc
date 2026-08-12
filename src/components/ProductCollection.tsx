@@ -70,24 +70,26 @@ const collectionItems: CraftItem[] = [
   },
 ];
 
+import { useLanguage } from "@/lib/i18n";
+
 export const ProductCollection: React.FC = () => {
+  const { t } = useLanguage();
   const [selectedItem, setSelectedItem] = useState<CraftItem | null>(null);
   const [cartOpen, setCartOpen] = useState(false);
   const [cartProductKey, setCartProductKey] = useState<ProductKey | undefined>(undefined);
 
-  const handleOrder = (key: ProductKey) => {
-    setCartProductKey(key);
+  const handleOrder = (productKey?: ProductKey) => {
+    setSelectedItem(null);
+    setCartProductKey(productKey);
     setCartOpen(true);
   };
 
   return (
-    <section
-      id="products"
-      className="py-14 sm:py-20 md:py-28 lg:py-32 bg-[#F8F5F0] border-y border-[#9A1B1F]/10 relative z-10 overflow-hidden"
-    >
+    <section id="products" className="relative py-16 sm:py-24 md:py-32 bg-[#F8F5F0] text-[#2A1B12] overflow-hidden">
       <CloudPatternOverlay variant="light" />
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Section header */}
+
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -96,11 +98,11 @@ export const ProductCollection: React.FC = () => {
           className="text-center mb-12 sm:mb-16 md:mb-20"
         >
           <span className="inline-block font-sans text-xs sm:text-sm font-extrabold uppercase tracking-widest text-[#9A1B1F] bg-[#9A1B1F]/8 px-4 py-1.5 rounded-full border border-[#9A1B1F]/15 mb-4 sm:mb-5">
-            HỘP KHÁM PHÁ VĂN HÓA
+            {t.products.badge}
           </span>
 
           <h2 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-[#9A1B1F] mb-3 sm:mb-4 tracking-tight">
-            Bộ Kit Trải Nghiệm DIY
+            {t.products.title}
           </h2>
 
           {/* Section Divider */}
@@ -112,7 +114,7 @@ export const ProductCollection: React.FC = () => {
           </div>
 
           <p className="font-sans text-sm sm:text-base text-[#3A2618]/65 max-w-md mx-auto font-light leading-relaxed">
-            Chọn hộp bạn yêu thích — mỗi hộp ẩn chứa phụ kiện ngẫu nhiên.
+            {t.products.subtitle}
           </p>
         </motion.div>
 

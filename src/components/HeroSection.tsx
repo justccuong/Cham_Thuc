@@ -5,7 +5,11 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowDown } from "lucide-react";
 
+import { useLanguage } from "@/lib/i18n";
+
 export const HeroSection: React.FC = () => {
+  const { t } = useLanguage();
+
   return (
     <section
       id="hero"
@@ -62,7 +66,7 @@ export const HeroSection: React.FC = () => {
           transition={{ duration: 0.4, delay: 0.35 }}
           className="inline-block font-sans text-[11px] sm:text-xs font-semibold tracking-[0.2em] sm:tracking-[0.3em] uppercase text-paper-ivory/90 bg-paper-ivory/10 backdrop-blur-sm px-3 sm:px-4 py-1.5 rounded-full border border-paper-ivory/20 mb-4 sm:mb-6"
         >
-          Trải nghiệm văn hóa Việt
+          {t.hero.badge}
         </motion.span>
 
         {/* Headline */}
@@ -72,9 +76,9 @@ export const HeroSection: React.FC = () => {
           transition={{ duration: 0.5, delay: 0.45, ease: "easeOut" }}
           className="font-serif text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-[1.1] text-paper-ivory mb-4 sm:mb-6 tracking-tight drop-shadow-md"
         >
-          Chạm tinh hoa
+          {t.hero.titleLine1}
           <br />
-          <span className="text-brand-gold">Mở văn hóa</span>
+          <span className="text-brand-gold">{t.hero.titleLine2}</span>
         </motion.h1>
 
         {/* Subtitle */}
@@ -84,7 +88,7 @@ export const HeroSection: React.FC = () => {
           transition={{ duration: 0.4, delay: 0.55 }}
           className="font-sans text-sm sm:text-base md:text-lg text-paper-ivory/80 max-w-sm sm:max-w-md font-light leading-relaxed"
         >
-          Mỗi chiếc hộp là một hành trình nhỏ về làng nghề — nơi bạn tự tay chạm vào di sản.
+          {t.hero.subtitle}
         </motion.p>
       </motion.div>
 
@@ -101,7 +105,7 @@ export const HeroSection: React.FC = () => {
         className="relative z-10 mb-10 sm:mb-14 flex flex-col items-center gap-2 cursor-pointer group"
       >
         <span className="font-sans text-xs sm:text-sm text-paper-ivory/70 tracking-widest uppercase group-hover:text-paper-ivory transition-colors duration-300">
-          Khám phá ngay
+          {t.hero.ctaExplore}
         </span>
         <ArrowDown size={16} className="text-paper-ivory/50 animate-bounce group-hover:text-paper-ivory transition-colors duration-300" />
       </motion.a>

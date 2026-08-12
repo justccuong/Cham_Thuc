@@ -69,13 +69,16 @@ export function getCartTotalCount(): number {
   return 0;
 }
 
+import { useLanguage } from "@/lib/i18n";
+
 export const CartDrawer: React.FC<CartDrawerProps> = ({
   isOpen,
   onClose,
   initialProductKey,
 }) => {
-  const [mounted, setMounted] = useState(false);
+  const { t } = useLanguage();
   const [cartState, setCartState] = useState<Record<string, number>>({});
+  const [mounted, setMounted] = useState(false);
   const [step, setStep] = useState<"cart" | "checkout" | "success">("cart");
 
   // Form State

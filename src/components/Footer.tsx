@@ -1,10 +1,15 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Video, Heart, ShieldCheck } from "lucide-react";
 import { CloudPatternOverlay } from "@/components/CloudPatternOverlay";
+import { useLanguage } from "@/lib/i18n";
 
 export const Footer: React.FC = () => {
+  const { t } = useLanguage();
+
   return (
     <footer
       id="footer"
@@ -28,13 +33,11 @@ export const Footer: React.FC = () => {
           </Link>
 
           <h3 className="font-serif text-lg sm:text-xl text-paper-ivory font-bold tracking-wide">
-            Chạm Tinh Hoa — Mở Văn Hóa
+            {t.hero.titleLine1} — {t.hero.titleLine2}
           </h3>
 
           <p className="text-xs sm:text-sm text-paper-ivory/80 leading-relaxed font-light max-w-md">
-            Chạm Thức là dự án phát triển các hộp trải nghiệm văn hóa Việt Nam
-            theo chủ đề làng nghề truyền thống bởi nhóm{" "}
-            <strong className="font-semibold text-white">Ngũ Sắc</strong>.
+            {t.footer.tagline}
           </p>
 
           {/* Social Links — min 44px touch */}

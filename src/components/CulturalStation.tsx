@@ -6,7 +6,11 @@ import { motion } from "framer-motion";
 import { QrCode, Play } from "lucide-react";
 import { CloudPatternOverlay } from "@/components/CloudPatternOverlay";
 
+import { useLanguage } from "@/lib/i18n";
+
 export const CulturalStation: React.FC = () => {
+  const { t } = useLanguage();
+
   return (
     <section
       id="story"
@@ -23,10 +27,10 @@ export const CulturalStation: React.FC = () => {
           className="text-center mb-10 sm:mb-16 md:mb-20"
         >
           <span className="inline-block font-sans text-[11px] sm:text-xs font-bold uppercase tracking-widest text-brand-gold bg-brand-gold/10 px-3 sm:px-4 py-1.5 rounded-full border border-brand-gold/20 mb-4 sm:mb-5">
-            Trạm Kể Chuyện
+            {t.storySection.badge}
           </span>
           <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-brand-gold tracking-tight">
-            Làng Nghề Truyền Thống
+            {t.storySection.title}
           </h2>
 
           {/* Editorial Heritage Divider */}

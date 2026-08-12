@@ -76,6 +76,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { LanguageProvider } from "@/lib/i18n";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -87,8 +89,10 @@ export default function RootLayout({
       className={`${cormorant.variable} ${beVietnamPro.variable} ${spaceGrotesk.variable} scroll-smooth`}
     >
       <body className="min-h-screen flex flex-col bg-paper-ivory text-text-wood font-sans antialiased">
-        {children}
-        <MessengerChat />
+        <LanguageProvider>
+          {children}
+          <MessengerChat />
+        </LanguageProvider>
       </body>
     </html>
   );
