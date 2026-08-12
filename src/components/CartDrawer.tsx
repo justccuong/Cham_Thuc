@@ -373,7 +373,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                                 {product.label}
                               </h4>
                               <p className="font-price font-extrabold text-base sm:text-lg text-brand-red mt-1">
-                                {itemSubtotal.toLocaleString("vi-VN")} đ
+                                {itemSubtotal.toLocaleString("vi-VN")} {t.products.priceSuffix}
                               </p>
                             </div>
 
@@ -723,33 +723,41 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   </div>
 
                   {/* Payment Branch: VietQR */}
-                  {paymentMethod === "VIETQR" && vietqrUrl && (
+                  {paymentMethod === "VIETQR" && (
                     <div className="w-full bg-white rounded-2xl p-5 border border-brand-red/15 space-y-4">
                       <p className="text-sm font-bold text-brand-red uppercase tracking-wider">
                         {t.cart.vietqrScanGuide}
                       </p>
-                      <div className="flex justify-center">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={vietqrUrl}
-                          alt="VietQR Payment"
-                          className="w-56 h-56 sm:w-64 sm:h-64 rounded-xl border border-text-wood/10 shadow-sm"
-                        />
-                      </div>
-                      <div className="text-xs sm:text-sm text-text-wood/70 space-y-1">
-                        <p>
-                          <span className="font-semibold text-text-wood">{t.cart.vietqrBankAccount}</span>{" "}
-                          {bankAccountNo} - {bankAccountName} ({bankId})
-                        </p>
-                        <p>
-                          <span className="font-semibold text-text-wood">{t.cart.totalAmount}</span>{" "}
-                          <span className="font-price font-bold text-brand-red">{finalAmount.toLocaleString("vi-VN")} {t.products.priceSuffix}</span>
-                        </p>
-                        <p>
-                          <span className="font-semibold text-text-wood">{t.cart.vietqrTransferContent}</span>{" "}
-                          <span className="font-price font-bold text-brand-red">{orderCode}</span>
-                        </p>
-                      </div>
+                      {vietqrUrl ? (
+                        <div className="flex justify-center">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={vietqrUrl}
+                            alt="VietQR Payment"
+                            className="w-56 h-56 sm:w-64 sm:h-64 rounded-xl border border-text-wood/10 shadow-sm"
+                          />
+                        </div>
+                      ) : (
+                        <div className="text-center py-4 text-text-wood/50 text-sm italic">
+                          {t.cart.messengerConfirmBtn}
+                        </div>
+                      )}
+                      {bankAccountNo && (
+                        <div className="text-xs sm:text-sm text-text-wood/70 space-y-1">
+                          <p>
+                            <span className="font-semibold text-text-wood">{t.cart.vietqrBankAccount}</span>{" "}
+                            {bankAccountNo} - {bankAccountName} ({bankId})
+                          </p>
+                          <p>
+                            <span className="font-semibold text-text-wood">{t.cart.totalAmount}</span>{" "}
+                            <span className="font-price font-bold text-brand-red">{finalAmount.toLocaleString("vi-VN")} {t.products.priceSuffix}</span>
+                          </p>
+                          <p>
+                            <span className="font-semibold text-text-wood">{t.cart.vietqrTransferContent}</span>{" "}
+                            <span className="font-price font-bold text-brand-red">{orderCode}</span>
+                          </p>
+                        </div>
+                      )}
                     </div>
                   )}
 
