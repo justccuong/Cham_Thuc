@@ -219,11 +219,46 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleOrderSubmit = (e: React.FormEvent) => {
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleOrderSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (validateForm()) {
+    if (!validateForm()) return;
+
+    setSubmitting(true);
+    try {
+      const productNames = cartEntries
+        .map((k) => `${PRODUCTS_CATALOG[k].label} x${cartState[k]}`)
+        .join(", ");
+
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: fullName,
+          phone,
+          address,
+          productName: productNames,
+          price: totalPrice,
+          paymentMethod: "Ship COD",
+          notes: note,
+        }),
+      });
+
+      const data = await res.json();
+      if (data.success && data.orderCode) {
+        setOrderCode(data.orderCode);
+        setStep("success");
+      } else {
+        setOrderCode(generateOrderCode());
+        setStep("success");
+      }
+    } catch (err) {
+      console.error("Order submit API error:", err);
       setOrderCode(generateOrderCode());
       setStep("success");
+    } finally {
+      setSubmitting(false);
     }
   };
 
