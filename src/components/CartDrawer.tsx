@@ -350,6 +350,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                                 src={product.image}
                                 alt={product.label}
                                 fill
+                                sizes="80px"
                                 className="object-cover"
                               />
                             </div>
@@ -413,7 +414,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                           >
                             <div className="flex items-center gap-3 min-w-0">
                               <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl overflow-hidden flex-shrink-0 shadow-inner">
-                                <Image src={product.image} alt={product.label} fill className="object-cover" />
+                                <Image src={product.image} alt={product.label} fill sizes="56px" className="object-cover" />
                               </div>
                               <div className="truncate">
                                 <p className="font-serif font-bold text-sm sm:text-base text-text-wood truncate">{product.label}</p>

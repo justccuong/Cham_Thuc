@@ -1,14 +1,29 @@
 import { createClient, SupabaseClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+function sanitizeUrl(rawUrl: string | undefined): string {
+  if (!rawUrl) return "https://placeholder-url.supabase.co";
+  let cleaned = rawUrl.trim().replace(/^["']|["']$/g, "");
+  // Strip trailing slashes to prevent PostgREST PGRST125 URL path error
+  cleaned = cleaned.replace(/\/+$/, "");
+  return cleaned;
+}
+
+function sanitizeKey(rawKey: string | undefined): string {
+  if (!rawKey) return "placeholder-service-role-key";
+  return rawKey.trim().replace(/^["']|["']$/g, "");
+}
+
+const rawUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const rawServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+const supabaseUrl = sanitizeUrl(rawUrl);
+const supabaseServiceRoleKey = sanitizeKey(rawServiceKey);
 
 /**
  * Creates and returns a Supabase server-side client using Service Role Key.
- * Throws an error if required environment variables are missing.
  */
 export function getSupabaseServerClient(): SupabaseClient {
-  if (!supabaseUrl || !supabaseServiceRoleKey) {
+  if (!rawUrl || !rawServiceKey) {
     throw new Error(
       "Missing required Supabase environment variables: NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY."
     );
@@ -22,11 +37,10 @@ export function getSupabaseServerClient(): SupabaseClient {
 }
 
 /**
- * Exported default Supabase client instance.
- * Gracefully handles missing environment variables with a warning during build / client init.
+ * Exported default Supabase client instance with auto-cleaned URL & Key.
  */
 export const supabase: SupabaseClient = (() => {
-  if (!supabaseUrl || !supabaseServiceRoleKey) {
+  if (!rawUrl || !rawServiceKey) {
     if (process.env.NODE_ENV !== "production") {
       console.warn(
         "Warning: Supabase client initialized without NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY environment variables."
@@ -34,15 +48,11 @@ export const supabase: SupabaseClient = (() => {
     }
   }
 
-  return createClient(
-    supabaseUrl || "https://placeholder-url.supabase.co",
-    supabaseServiceRoleKey || "placeholder-service-role-key",
-    {
-      auth: {
-        persistSession: false,
-      },
-    }
-  );
+  return createClient(supabaseUrl, supabaseServiceRoleKey, {
+    auth: {
+      persistSession: false,
+    },
+  });
 })();
 
 export default supabase;
