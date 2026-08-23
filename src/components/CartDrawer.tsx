@@ -1,84 +1,64 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShoppingBag, X, CheckCircle2, Plus, Minus, Truck, AlertCircle, Trash2, CreditCard, MessageCircle, Banknote } from "lucide-react";
+import {
+  ShoppingBag,
+  X,
+  CheckCircle2,
+  Plus,
+  Minus,
+  Truck,
+  AlertCircle,
+  Trash2,
+  CreditCard,
+  MessageCircle,
+  Banknote,
+  Loader2,
+} from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { generateOrderCode } from "@/lib/utils";
+import { useLanguage } from "@/lib/i18n";
+import { useCart, ProductKey, PRODUCTS_CATALOG } from "@/lib/cart";
+
+export type { ProductKey, ProductInfo } from "@/lib/cart";
+export { PRODUCTS_CATALOG } from "@/lib/cart";
+
+const emptySubscribe = () => () => {};
+function useIsClient() {
+  return useSyncExternalStore(emptySubscribe, () => true, () => false);
+}
 
 interface CartDrawerProps {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen?: boolean;
+  onClose?: () => void;
   initialProductKey?: ProductKey;
 }
 
-export type ProductKey = "non-la" | "to-he" | "chuon-chuon";
-
-export interface ProductInfo {
-  key: ProductKey;
-  label: string;
-  village: string;
-  price: number;
-  image: string;
-}
-
-export const PRODUCTS_CATALOG: Record<ProductKey, ProductInfo> = {
-  "non-la": {
-    key: "non-la",
-    label: "Hộp DIY Nón Lá Mini",
-    village: "Làng Nón Chuông",
-    price: 299000,
-    image: "/products/non-chuong.jpg",
-  },
-  "to-he": {
-    key: "to-he",
-    label: "Hộp DIY Tò He Dân Gian",
-    village: "Làng Tò He Xuân La",
-    price: 299000,
-    image: "/products/to-he.jpg",
-  },
-  "chuon-chuon": {
-    key: "chuon-chuon",
-    label: "Hộp DIY Chuồn Chuồn Tre",
-    village: "Làng Tre Thạch Xá",
-    price: 299000,
-    image: "/products/chuon-chuon-tre.jpg",
-  },
-};
-
-const STORAGE_KEY = "cham_thuc_multi_cart";
-
-export function getCartTotalCount(): number {
-  if (typeof window === "undefined") return 0;
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      if (typeof parsed === "object" && parsed !== null) {
-        return Object.values(parsed).reduce(
-          (sum: number, qty: any) => sum + (typeof qty === "number" ? qty : 0),
-          0
-        );
-      }
-    }
-  } catch {
-    // ignore
-  }
-  return 0;
-}
-
-import { useLanguage } from "@/lib/i18n";
-
 export const CartDrawer: React.FC<CartDrawerProps> = ({
-  isOpen,
-  onClose,
-  initialProductKey,
+  isOpen: propIsOpen,
+  onClose: propOnClose,
 }) => {
   const { t } = useLanguage();
-  const [cartState, setCartState] = useState<Record<string, number>>({});
-  const [mounted, setMounted] = useState(false);
+  const {
+    cartState,
+    totalCount,
+    totalPrice,
+    cartEntries,
+    isCartOpen: contextIsOpen,
+    closeCart,
+    addItem,
+    updateQuantity,
+    removeItem,
+    clearCart,
+  } = useCart();
+
+  const isMounted = useIsClient();
+  const isOpen = propIsOpen !== undefined ? propIsOpen : contextIsOpen;
+  const handleCloseDrawer = propOnClose || closeCart;
+
   const [step, setStep] = useState<"cart" | "checkout" | "success">("cart");
 
   // Form State
@@ -89,49 +69,15 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   const [orderCode, setOrderCode] = useState("");
   const [paymentMethod, setPaymentMethod] = useState<"VIETQR" | "COD">("VIETQR");
   const [finalAmount, setFinalAmount] = useState(0);
+  const [submitting, setSubmitting] = useState(false);
 
   // Validation Errors State
-  const [errors, setErrors] = useState<{ fullName?: string; phone?: string; address?: string }>({});
-
-  const notifyCartUpdated = () => {
-    if (typeof window !== "undefined") {
-      setTimeout(() => {
-        window.dispatchEvent(new Event("cart_updated"));
-      }, 0);
-    }
-  };
-
-  useEffect(() => {
-    setMounted(true);
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (typeof parsed === "object" && parsed !== null) {
-          setCartState(parsed);
-        }
-      }
-    } catch {
-      // ignore
-    }
-  }, []);
-
-  // Update cart state when initialProductKey is passed on open
-  useEffect(() => {
-    if (isOpen && initialProductKey) {
-      setCartState((prev) => {
-        const currentQty = prev[initialProductKey] || 0;
-        const nextState = { ...prev, [initialProductKey]: Math.max(1, currentQty) };
-        try {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(nextState));
-        } catch {
-          // ignore
-        }
-        return nextState;
-      });
-      notifyCartUpdated();
-    }
-  }, [isOpen, initialProductKey]);
+  const [errors, setErrors] = useState<{
+    fullName?: string;
+    phone?: string;
+    address?: string;
+    general?: string;
+  }>({});
 
   // Lock body scroll when drawer is open
   useEffect(() => {
@@ -144,40 +90,6 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
       document.body.style.overflow = "";
     };
   }, [isOpen]);
-
-  const updateQuantity = (key: ProductKey, qty: number) => {
-    setCartState((prev) => {
-      const nextState = { ...prev };
-      if (qty <= 0) {
-        delete nextState[key];
-      } else {
-        nextState[key] = Math.min(99, qty);
-      }
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(nextState));
-      } catch {
-        // ignore
-      }
-      return nextState;
-    });
-    notifyCartUpdated();
-  };
-
-  const addItemToCart = (key: ProductKey) => {
-    updateQuantity(key, (cartState[key] || 0) + 1);
-  };
-
-  const removeItemFromCart = (key: ProductKey) => {
-    updateQuantity(key, 0);
-  };
-
-  // Calculate totals
-  const cartEntries = (Object.keys(cartState) as ProductKey[]).filter((k) => (cartState[k] || 0) > 0);
-  const totalItemCount = cartEntries.reduce((sum, k) => sum + (cartState[k] || 0), 0);
-  const totalPrice = cartEntries.reduce(
-    (sum, k) => sum + PRODUCTS_CATALOG[k].price * (cartState[k] || 0),
-    0
-  );
 
   // Form input handlers
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -224,13 +136,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     return Object.keys(newErrors).length === 0;
   };
 
-  const [submitting, setSubmitting] = useState(false);
-
   const handleOrderSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
 
     setSubmitting(true);
+    setErrors({});
+
     try {
       const productNames = cartEntries
         .map((k) => `${PRODUCTS_CATALOG[k].label} x${cartState[k]}`)
@@ -254,16 +166,17 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
       if (data.success && data.orderCode) {
         setOrderCode(data.orderCode);
         setFinalAmount(data.finalAmount || totalPrice);
+        clearCart();
         setStep("success");
       } else {
-        setOrderCode(generateOrderCode());
-        setFinalAmount(totalPrice);
-        setStep("success");
+        setErrors({ general: data.error || "Đặt hàng không thành công. Vui lòng thử lại." });
       }
     } catch (err) {
       console.error("Order submit API error:", err);
+      // Fallback
       setOrderCode(generateOrderCode());
       setFinalAmount(totalPrice);
+      clearCart();
       setStep("success");
     } finally {
       setSubmitting(false);
@@ -280,15 +193,18 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     setPaymentMethod("VIETQR");
     setFinalAmount(0);
     setErrors({});
-    onClose();
+    handleCloseDrawer();
   };
 
-  if (!mounted) return null;
+  if (!isMounted) return null;
 
   return createPortal(
     <AnimatePresence>
       {isOpen && (
-        <div key="cart-drawer-wrapper" className="fixed inset-0 z-[100] flex justify-end sm:items-center sm:justify-center p-0 sm:p-4 sm:py-6 overflow-hidden">
+        <div
+          key="cart-drawer-wrapper"
+          className="fixed inset-0 z-[100] flex justify-end sm:items-center sm:justify-center p-0 sm:p-4 sm:py-6 overflow-hidden"
+        >
           {/* Backdrop */}
           <motion.div
             key="cart-backdrop"
@@ -299,7 +215,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[90] cursor-pointer"
           />
 
-          {/* Sheet Container — Generous Widescreen Width & Comfort Spacing */}
+          {/* Sheet Container */}
           <motion.div
             key="cart-sheet"
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -313,7 +229,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               <div className="flex items-center gap-2.5">
                 <ShoppingBag className="text-brand-red" size={22} />
                 <h3 className="font-serif text-xl sm:text-2xl font-bold text-brand-red">
-                  {step === "cart" && `${t.cart.title} (${totalItemCount} ${t.cart.itemCountSuffix})`}
+                  {step === "cart" &&
+                    `${t.cart.title} (${totalCount} ${t.cart.itemCountSuffix})`}
                   {step === "checkout" && t.cart.formTitle}
                   {step === "success" && t.cart.orderSuccessTitle}
                 </h3>
@@ -321,6 +238,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               <button
                 onClick={resetDrawer}
                 className="w-10 h-10 flex items-center justify-center text-text-wood/60 hover:text-brand-red transition-colors rounded-full hover:bg-black/5 cursor-pointer"
+                aria-label={t.modal.close}
               >
                 <X size={22} />
               </button>
@@ -373,7 +291,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                                 {product.label}
                               </h4>
                               <p className="font-price font-extrabold text-base sm:text-lg text-brand-red mt-1">
-                                {itemSubtotal.toLocaleString("vi-VN")} {t.products.priceSuffix}
+                                {itemSubtotal.toLocaleString("vi-VN")}{" "}
+                                {t.products.priceSuffix}
                               </p>
                             </div>
 
@@ -381,24 +300,26 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                               <button
                                 onClick={() => updateQuantity(key, qty - 1)}
                                 className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-text-wood/70 hover:text-brand-red transition-colors cursor-pointer"
-                                aria-label="Giảm"
+                                aria-label="Giảm số lượng"
                               >
                                 <Minus size={16} />
                               </button>
-                              <span className="font-price font-bold text-sm sm:text-base w-7 text-center">{qty}</span>
+                              <span className="font-price font-bold text-sm sm:text-base w-7 text-center">
+                                {qty}
+                              </span>
                               <button
-                                onClick={() => updateQuantity(key, qty + 1)}
+                                onClick={() => addItem(key)}
                                 className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-text-wood/70 hover:text-brand-red transition-colors cursor-pointer"
-                                aria-label="Tăng"
+                                aria-label="Tăng số lượng"
                               >
                                 <Plus size={16} />
                               </button>
                             </div>
 
                             <button
-                              onClick={() => removeItemFromCart(key)}
+                              onClick={() => removeItem(key)}
                               className="w-9 h-9 flex items-center justify-center text-text-wood/40 hover:text-red-600 transition-colors rounded-xl hover:bg-red-50 cursor-pointer"
-                              aria-label="Xóa"
+                              aria-label="Xóa sản phẩm"
                             >
                               <Trash2 size={18} />
                             </button>
@@ -424,18 +345,27 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                           >
                             <div className="flex items-center gap-3 min-w-0">
                               <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-xl overflow-hidden flex-shrink-0 shadow-inner">
-                                <Image src={product.image} alt={product.label} fill sizes="56px" className="object-cover" />
+                                <Image
+                                  src={product.image}
+                                  alt={product.label}
+                                  fill
+                                  sizes="56px"
+                                  className="object-cover"
+                                />
                               </div>
                               <div className="truncate">
-                                <p className="font-serif font-bold text-sm sm:text-base text-text-wood truncate">{product.label}</p>
+                                <p className="font-serif font-bold text-sm sm:text-base text-text-wood truncate">
+                                  {product.label}
+                                </p>
                                 <p className="font-price text-xs sm:text-sm font-extrabold text-brand-red">
-                                  {product.price.toLocaleString("vi-VN")} {t.products.priceSuffix}
+                                  {product.price.toLocaleString("vi-VN")}{" "}
+                                  {t.products.priceSuffix}
                                 </p>
                               </div>
                             </div>
 
                             <button
-                              onClick={() => addItemToCart(key)}
+                              onClick={() => addItem(key)}
                               className="px-4 py-2 bg-white border border-brand-red/30 hover:border-brand-red text-brand-red font-bold text-xs sm:text-sm rounded-xl shadow-sm transition-all flex items-center gap-1.5 flex-shrink-0 cursor-pointer hover:bg-brand-red/5"
                             >
                               <span>{inCart ? "+ 1" : "+"}</span>
@@ -445,8 +375,6 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                       })}
                     </div>
                   </div>
-
-
                 </div>
 
                 {/* Footer CTA */}
@@ -465,7 +393,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     size="lg"
                     disabled={cartEntries.length === 0}
                     onClick={() => setStep("checkout")}
-                    className="w-full h-13 sm:h-14 bg-brand-red hover:bg-brand-red-hover text-brand-gold shadow-lg flex items-center justify-center gap-2 text-base sm:text-lg font-bold uppercase tracking-wider rounded-2xl disabled:opacity-50"
+                    className="w-full h-13 sm:h-14 bg-brand-red hover:bg-brand-red-hover text-brand-gold shadow-lg flex items-center justify-center gap-2 text-base sm:text-lg font-bold uppercase tracking-wider rounded-2xl disabled:opacity-50 cursor-pointer"
                   >
                     <span>{t.cart.checkoutBtn}</span>
                   </Button>
@@ -475,33 +403,58 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
             {/* STEP 2: CHECKOUT FORM */}
             {step === "checkout" && (
-              <form onSubmit={handleOrderSubmit} className="flex-1 flex flex-col justify-between overflow-hidden">
+              <form
+                onSubmit={handleOrderSubmit}
+                className="flex-1 flex flex-col justify-between overflow-hidden"
+              >
                 <div className="flex-1 overflow-y-auto p-5 sm:p-7 space-y-5">
                   {/* Order items recap */}
                   <div className="bg-paper-warm rounded-2xl p-4 border border-text-wood/10 text-xs sm:text-sm space-y-2.5">
                     <p className="font-bold text-text-wood uppercase tracking-wider border-b border-text-wood/10 pb-2">
-                      {t.cart.orderListTitle} ({totalItemCount} {t.cart.itemCountSuffix}):
+                      {t.cart.orderListTitle} ({totalCount}{" "}
+                      {t.cart.itemCountSuffix}):
                     </p>
                     {cartEntries.map((key) => {
                       const p = PRODUCTS_CATALOG[key];
                       const q = cartState[key];
                       return (
-                        <div key={key} className="flex justify-between items-center text-text-wood/85">
-                          <span>- {p.label} x {q}</span>
-                          <span className="font-price font-bold">{(p.price * q).toLocaleString("vi-VN")} {t.products.priceSuffix}</span>
+                        <div
+                          key={key}
+                          className="flex justify-between items-center text-text-wood/85"
+                        >
+                          <span>
+                            - {p.label} x {q}
+                          </span>
+                          <span className="font-price font-bold">
+                            {(p.price * q).toLocaleString("vi-VN")}{" "}
+                            {t.products.priceSuffix}
+                          </span>
                         </div>
                       );
                     })}
                     <div className="flex justify-between items-center pt-2.5 border-t border-text-wood/10 font-bold text-brand-red">
                       <span>{t.cart.totalLabel}</span>
-                      <span className="font-price text-lg">{totalPrice.toLocaleString("vi-VN")} {t.products.priceSuffix}</span>
+                      <span className="font-price text-lg">
+                        {totalPrice.toLocaleString("vi-VN")}{" "}
+                        {t.products.priceSuffix}
+                      </span>
                     </div>
                   </div>
+
+                  {errors.general && (
+                    <div className="bg-red-50 border border-red-200 text-red-700 p-3 rounded-xl text-xs flex items-center gap-2">
+                      <AlertCircle size={16} className="flex-shrink-0" />
+                      <span>{errors.general}</span>
+                    </div>
+                  )}
 
                   {/* Input 1: Full Name */}
                   <div>
                     <label className="block text-xs sm:text-sm font-bold text-text-wood uppercase tracking-wider mb-1.5">
-                      {t.cart.fullNameLabel} * <span className="text-text-wood/40 font-normal">({fullName.length}/50)</span>
+                      {t.cart.fullNameLabel} *{" "}
+                      <span className="text-text-wood/40 font-normal">
+                        ({fullName.length}/50)
+                      </span>
                     </label>
                     <input
                       type="text"
@@ -510,7 +463,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                       value={fullName}
                       onChange={handleFullNameChange}
                       className={`w-full bg-white border ${
-                        errors.fullName ? "border-red-500 bg-red-50/30" : "border-text-wood/15"
+                        errors.fullName
+                          ? "border-red-500 bg-red-50/30"
+                          : "border-text-wood/15"
                       } rounded-xl px-4 h-12 text-sm text-text-wood focus:outline-none focus:border-brand-red transition-colors`}
                     />
                     {errors.fullName && (
@@ -524,7 +479,10 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   {/* Input 2: Phone */}
                   <div>
                     <label className="block text-xs sm:text-sm font-bold text-text-wood uppercase tracking-wider mb-1.5">
-                      {t.cart.phoneLabel} * <span className="text-text-wood/40 font-normal">({phone.length}/10)</span>
+                      {t.cart.phoneLabel} *{" "}
+                      <span className="text-text-wood/40 font-normal">
+                        ({phone.length}/10)
+                      </span>
                     </label>
                     <input
                       type="tel"
@@ -533,7 +491,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                       value={phone}
                       onChange={handlePhoneChange}
                       className={`w-full bg-white border ${
-                        errors.phone ? "border-red-500 bg-red-50/30" : "border-text-wood/15"
+                        errors.phone
+                          ? "border-red-500 bg-red-50/30"
+                          : "border-text-wood/15"
                       } rounded-xl px-4 h-12 text-sm text-text-wood focus:outline-none focus:border-brand-red transition-colors`}
                     />
                     {errors.phone && (
@@ -547,7 +507,10 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   {/* Input 3: Delivery Address */}
                   <div>
                     <label className="block text-xs sm:text-sm font-bold text-text-wood uppercase tracking-wider mb-1.5">
-                      {t.cart.addressLabel} * <span className="text-text-wood/40 font-normal">({address.length}/150)</span>
+                      {t.cart.addressLabel} *{" "}
+                      <span className="text-text-wood/40 font-normal">
+                        ({address.length}/150)
+                      </span>
                     </label>
                     <input
                       type="text"
@@ -556,7 +519,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                       value={address}
                       onChange={handleAddressChange}
                       className={`w-full bg-white border ${
-                        errors.address ? "border-red-500 bg-red-50/30" : "border-text-wood/15"
+                        errors.address
+                          ? "border-red-500 bg-red-50/30"
+                          : "border-text-wood/15"
                       } rounded-xl px-4 h-12 text-sm text-text-wood focus:outline-none focus:border-brand-red transition-colors`}
                     />
                     {errors.address && (
@@ -570,7 +535,10 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   {/* Input 4: Note */}
                   <div>
                     <label className="block text-xs sm:text-sm font-bold text-text-wood uppercase tracking-wider mb-1.5">
-                      {t.cart.notesLabel} <span className="text-text-wood/40 font-normal">({note.length}/200)</span>
+                      {t.cart.notesLabel}{" "}
+                      <span className="text-text-wood/40 font-normal">
+                        ({note.length}/200)
+                      </span>
                     </label>
                     <input
                       type="text"
@@ -604,13 +572,32 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                           onChange={() => setPaymentMethod("VIETQR")}
                           className="sr-only"
                         />
-                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
-                          paymentMethod === "VIETQR" ? "border-brand-red" : "border-text-wood/30"
-                        }`}>
-                          {paymentMethod === "VIETQR" && <div className="w-2.5 h-2.5 rounded-full bg-brand-red" />}
+                        <div
+                          className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
+                            paymentMethod === "VIETQR"
+                              ? "border-brand-red"
+                              : "border-text-wood/30"
+                          }`}
+                        >
+                          {paymentMethod === "VIETQR" && (
+                            <div className="w-2.5 h-2.5 rounded-full bg-brand-red" />
+                          )}
                         </div>
-                        <CreditCard size={18} className={paymentMethod === "VIETQR" ? "text-brand-red" : "text-text-wood/50"} />
-                        <span className={`text-sm font-semibold ${paymentMethod === "VIETQR" ? "text-brand-red" : "text-text-wood/70"}`}>
+                        <CreditCard
+                          size={18}
+                          className={
+                            paymentMethod === "VIETQR"
+                              ? "text-brand-red"
+                              : "text-text-wood/50"
+                          }
+                        />
+                        <span
+                          className={`text-sm font-semibold ${
+                            paymentMethod === "VIETQR"
+                              ? "text-brand-red"
+                              : "text-text-wood/70"
+                          }`}
+                        >
                           {t.cart.paymentVietQR}
                         </span>
                       </label>
@@ -631,13 +618,32 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                           onChange={() => setPaymentMethod("COD")}
                           className="sr-only"
                         />
-                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
-                          paymentMethod === "COD" ? "border-brand-red" : "border-text-wood/30"
-                        }`}>
-                          {paymentMethod === "COD" && <div className="w-2.5 h-2.5 rounded-full bg-brand-red" />}
+                        <div
+                          className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
+                            paymentMethod === "COD"
+                              ? "border-brand-red"
+                              : "border-text-wood/30"
+                          }`}
+                        >
+                          {paymentMethod === "COD" && (
+                            <div className="w-2.5 h-2.5 rounded-full bg-brand-red" />
+                          )}
                         </div>
-                        <Banknote size={18} className={paymentMethod === "COD" ? "text-brand-red" : "text-text-wood/50"} />
-                        <span className={`text-sm font-semibold ${paymentMethod === "COD" ? "text-brand-red" : "text-text-wood/70"}`}>
+                        <Banknote
+                          size={18}
+                          className={
+                            paymentMethod === "COD"
+                              ? "text-brand-red"
+                              : "text-text-wood/50"
+                          }
+                        />
+                        <span
+                          className={`text-sm font-semibold ${
+                            paymentMethod === "COD"
+                              ? "text-brand-red"
+                              : "text-text-wood/70"
+                          }`}
+                        >
                           {t.cart.paymentCOD}
                         </span>
                       </label>
@@ -652,9 +658,16 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     variant="primary"
                     size="lg"
                     disabled={submitting}
-                    className="w-full h-13 sm:h-14 bg-brand-red hover:bg-brand-red-hover text-brand-gold shadow-lg rounded-2xl text-base sm:text-lg font-bold uppercase tracking-wider disabled:opacity-60"
+                    className="w-full h-13 sm:h-14 bg-brand-red hover:bg-brand-red-hover text-brand-gold shadow-lg rounded-2xl text-base sm:text-lg font-bold uppercase tracking-wider disabled:opacity-60 cursor-pointer flex items-center justify-center gap-2"
                   >
-                    {submitting ? "..." : `${t.cart.confirmOrderBtn} (${totalPrice.toLocaleString("vi-VN")} ${t.products.priceSuffix})`}
+                    {submitting ? (
+                      <>
+                        <Loader2 size={20} className="animate-spin" />
+                        <span>ĐANG XỬ LÝ...</span>
+                      </>
+                    ) : (
+                      `${t.cart.confirmOrderBtn} (${totalPrice.toLocaleString("vi-VN")} ${t.products.priceSuffix})`
+                    )}
                   </Button>
                   <button
                     type="button"
@@ -676,7 +689,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               const messengerText = encodeURIComponent(`Toi muon xac nhan don hang ma ${orderCode}`);
               const messengerLink = `https://m.me/${fbPageId}?text=${messengerText}`;
               const vietqrUrl = bankAccountNo
-                ? `https://img.vietqr.io/image/${bankId}-${bankAccountNo}-compact.png?amount=${finalAmount}&addInfo=${encodeURIComponent(orderCode)}&accountName=${encodeURIComponent(bankAccountName)}`
+                ? `https://img.vietqr.io/image/${bankId}-${bankAccountNo}-compact.png?amount=${finalAmount}&addInfo=${encodeURIComponent(
+                    orderCode
+                  )}&accountName=${encodeURIComponent(bankAccountName)}`
                 : "";
 
               return (
@@ -697,27 +712,36 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   {/* Order Summary Card */}
                   <div className="w-full bg-paper-warm rounded-2xl p-4 sm:p-5 border border-text-wood/10 text-xs sm:text-sm text-left space-y-2.5">
                     <div className="flex justify-between border-b border-text-wood/10 pb-2">
-                      <span className="text-text-wood/60 font-medium">{t.cart.orderCodeLabel}</span>
-                      <span className="font-price font-extrabold text-brand-red tracking-wider">{orderCode}</span>
+                      <span className="text-text-wood/60 font-medium">
+                        {t.cart.orderCodeLabel}
+                      </span>
+                      <span className="font-price font-extrabold text-brand-red tracking-wider">
+                        {orderCode}
+                      </span>
                     </div>
                     <div className="border-b border-text-wood/10 pb-2">
-                      <span className="text-text-wood/60 block mb-1">{t.cart.selectedProducts}</span>
-                      {cartEntries.map((k) => (
-                        <p key={k} className="font-semibold text-brand-red">
-                          - {PRODUCTS_CATALOG[k].label} x {cartState[k]}
-                        </p>
-                      ))}
+                      <span className="text-text-wood/60 block mb-1">
+                        {t.cart.selectedProducts}
+                      </span>
+                      <p className="font-semibold text-brand-red">
+                        Đơn hàng #{orderCode}
+                      </p>
                     </div>
                     <div className="flex justify-between border-b border-text-wood/10 pb-2">
                       <span className="text-text-wood/60">{t.cart.totalAmount}</span>
                       <span className="font-price font-bold text-base sm:text-lg text-brand-red">
-                        {finalAmount.toLocaleString("vi-VN")} {t.products.priceSuffix}
+                        {finalAmount.toLocaleString("vi-VN")}{" "}
+                        {t.products.priceSuffix}
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-text-wood/60">{t.cart.paymentMethodLabel.replace(":", "")}</span>
+                      <span className="text-text-wood/60">
+                        {t.cart.paymentMethodLabel.replace(":", "")}
+                      </span>
                       <span className="font-semibold text-text-wood">
-                        {paymentMethod === "VIETQR" ? t.cart.paymentVietQR : t.cart.paymentCOD}
+                        {paymentMethod === "VIETQR"
+                          ? t.cart.paymentVietQR
+                          : t.cart.paymentCOD}
                       </span>
                     </div>
                   </div>
@@ -745,16 +769,27 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                       {bankAccountNo && (
                         <div className="text-xs sm:text-sm text-text-wood/70 space-y-1">
                           <p>
-                            <span className="font-semibold text-text-wood">{t.cart.vietqrBankAccount}</span>{" "}
+                            <span className="font-semibold text-text-wood">
+                              {t.cart.vietqrBankAccount}
+                            </span>{" "}
                             {bankAccountNo} - {bankAccountName} ({bankId})
                           </p>
                           <p>
-                            <span className="font-semibold text-text-wood">{t.cart.totalAmount}</span>{" "}
-                            <span className="font-price font-bold text-brand-red">{finalAmount.toLocaleString("vi-VN")} {t.products.priceSuffix}</span>
+                            <span className="font-semibold text-text-wood">
+                              {t.cart.totalAmount}
+                            </span>{" "}
+                            <span className="font-price font-bold text-brand-red">
+                              {finalAmount.toLocaleString("vi-VN")}{" "}
+                              {t.products.priceSuffix}
+                            </span>
                           </p>
                           <p>
-                            <span className="font-semibold text-text-wood">{t.cart.vietqrTransferContent}</span>{" "}
-                            <span className="font-price font-bold text-brand-red">{orderCode}</span>
+                            <span className="font-semibold text-text-wood">
+                              {t.cart.vietqrTransferContent}
+                            </span>{" "}
+                            <span className="font-price font-bold text-brand-red">
+                              {orderCode}
+                            </span>
                           </p>
                         </div>
                       )}
@@ -764,7 +799,10 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   {/* Payment Branch: COD */}
                   {paymentMethod === "COD" && (
                     <div className="w-full bg-bamboo-green/5 rounded-2xl p-5 border border-bamboo-green/20 flex items-start gap-3">
-                      <Truck size={22} className="text-bamboo-green flex-shrink-0 mt-0.5" />
+                      <Truck
+                        size={22}
+                        className="text-bamboo-green flex-shrink-0 mt-0.5"
+                      />
                       <p className="text-sm text-text-wood/80 leading-relaxed text-left">
                         {t.cart.codConfirmMsg}
                       </p>

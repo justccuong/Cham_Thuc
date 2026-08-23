@@ -1,13 +1,14 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ShoppingBag } from "lucide-react";
 import { CraftItem } from "@/types";
-import { ProductKey } from "@/components/CartDrawer";
+import { ProductKey } from "@/lib/cart";
 import { Button } from "./ui/Button";
+import { useLanguage } from "@/lib/i18n";
 
 interface ProductModalProps {
   item: CraftItem | null;
@@ -32,29 +33,7 @@ const getBlindBoxVariants = (item: CraftItem): BlindBoxVariant[] => {
         tag: "Gốc",
         name: "Bộ Kit DIY Tò He Gốc",
         image: "/products/to-he.jpg",
-        subtext: "Bộ Kit DIY đầy đủ gồm phôi, màu vẽ và cọ.",
-      },
-      {
-        id: "gift1",
-        tag: "Mẫu 01",
-        name: "Khuôn Con Giống Dân Gian",
-        image: "/products/to-he.png",
-        subtext: "Cơ hội nhận ngẫu nhiên: Bộ quai lụa tơ tằm và tua rua dân gian.",
-      },
-      {
-        id: "gift2",
-        tag: "Mẫu 02",
-        name: "Màu Vẽ & Phụ Kiện Độc Bản",
-        image: "/products/tranh-dong-ho.jpg",
-        subtext: "Cơ hội nhận ngẫu nhiên: Bộ hạt ngọc và hoa văn đơm thủ công.",
-      },
-      {
-        id: "secret",
-        tag: "Hiếm",
-        name: "Con Giống Sơn Mếp Dát Vàng",
-        image: "/products/lua-van-phuc.jpg",
-        subtext: "Mẫu độc bản bí ẩn: Chi tiết trang trí đặc biệt giới hạn 5%.",
-        isSecret: true,
+        subtext: "Bộ Kit DIY đầy đủ gồm bột nặn, que gỗ và dụng cụ tạo hình.",
       },
     ];
   }
@@ -126,20 +105,22 @@ const getBlindBoxVariants = (item: CraftItem): BlindBoxVariant[] => {
   ];
 };
 
-import { useLanguage } from "@/lib/i18n";
+const emptySubscribe = () => () => {};
+function useIsClient() {
+  return useSyncExternalStore(emptySubscribe, () => true, () => false);
+}
 
 export const ProductModal: React.FC<ProductModalProps> = ({ item, onClose, onOrder }) => {
   const { t } = useLanguage();
+  const isMounted = useIsClient();
   const [activeIdx, setActiveIdx] = useState(0);
-  const [mounted, setMounted] = useState(false);
+  const [prevItemId, setPrevItemId] = useState<string | undefined>(item?.id);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
+  // Reset activeIdx during render when item changes
+  if (item?.id !== prevItemId) {
+    setPrevItemId(item?.id);
     setActiveIdx(0);
-  }, [item?.id]);
+  }
 
   // Prevent background page scrolling when modal is open
   useEffect(() => {
@@ -153,7 +134,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ item, onClose, onOrd
     };
   }, [item]);
 
-  if (!mounted) return null;
+  if (!isMounted) return null;
 
   const variants = item ? getBlindBoxVariants(item) : [];
   const activeVariant = variants[activeIdx] || variants[0];
@@ -226,7 +207,8 @@ export const ProductModal: React.FC<ProductModalProps> = ({ item, onClose, onOrd
                 {activeVariant.subtext}
               </p>
 
-              {/* Thumbnails Section */}
+              {/* Thumbnails Section — only shown for products with blind box variants */}
+              {variants.length > 1 && (
               <div>
                 <p className="text-[11px] font-bold text-[#3A2618]/60 uppercase tracking-widest mb-2">
                   {t.modal.giftHeader}
@@ -259,6 +241,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ item, onClose, onOrd
                   })}
                 </div>
               </div>
+              )}
             </div>
 
             {/* Right Column: Information & CTA */}
@@ -292,7 +275,8 @@ export const ProductModal: React.FC<ProductModalProps> = ({ item, onClose, onOrd
                   </div>
                 </div>
 
-                {/* Highlight Box for Random Gift Note */}
+                {/* Highlight Box for Random Gift Note — hidden when no random gift */}
+                {item.secretItem && (
                 <div className="bg-[#9A1B1F]/5 border border-[#9A1B1F]/20 p-4 rounded-xl space-y-1">
                   <p className="font-sans text-xs font-bold uppercase tracking-wider text-[#9A1B1F]">
                     {t.modal.giftNoteTitle}
@@ -301,6 +285,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ item, onClose, onOrd
                     {t.modal.giftNoteDesc}
                   </p>
                 </div>
+                )}
               </div>
 
               {/* Bottom Primary CTA */}
@@ -316,7 +301,10 @@ export const ProductModal: React.FC<ProductModalProps> = ({ item, onClose, onOrd
                   className="w-full h-12 sm:h-13 bg-[#9A1B1F] hover:bg-[#7A1518] text-[#F4E8C1] shadow-lg flex items-center justify-center gap-2 rounded-xl text-base font-bold uppercase tracking-wider cursor-pointer"
                 >
                   <ShoppingBag size={18} />
-                  <span>{t.modal.selectBoxBtn}{priceDisplay} {t.products.priceSuffix}</span>
+                  <span>
+                    {t.modal.selectBoxBtn}
+                    {priceDisplay} {t.products.priceSuffix}
+                  </span>
                 </Button>
               </div>
             </div>

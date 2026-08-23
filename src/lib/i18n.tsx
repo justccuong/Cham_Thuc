@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useCallback } from "react";
 
 export type Language = "vi" | "en";
 
@@ -132,18 +132,18 @@ export const translations: Record<Language, Translations> = {
       exploreBox: "Khám phá Hộp",
     },
     hero: {
-      badge: "BỘ KIT DIY THỦ CÔNG DI SẢN VIỆT NAM",
+      badge: "BỘ KIT DIY SẢN PHẨM THỦ CÔNG LÀNG NGHỀ VIỆT NAM",
       titleLine1: "CHẠM TINH HOA",
       titleLine2: "MỞ VĂN HÓA",
       subtitle:
-        "Mang tinh hoa làng nghề truyền thống Việt Nam về ngôi nhà của bạn qua từng chiếc Hộp DIY thủ công độc bản.",
-      ctaExplore: "KHÁM PHÁ BỘ KIT",
+        "Đánh thức giác quan, trải nghiệm văn hóa Việt qua từng hộp khám phá.",
+      ctaExplore: "KHÁM PHÁ SẢN PHẨM",
       ctaBlindBox: "MỞ HỘP NGẪU NHIÊN",
     },
     products: {
-      badge: "BỘ KHÁM PHÁ VĂN HÓA",
-      title: "Bộ Kit Trải Nghiệm DIY",
-      subtitle: "Chọn hộp bạn yêu thích — mỗi hộp ẩn chứa phụ kiện ngẫu nhiên.",
+      badge: "KHÁM PHÁ LÀNG NGHỀ VIỆT NAM",
+      title: "BỘ KIT DIY Sản Phẩm Thủ Công Làng Nghề Việt Nam",
+      subtitle: "Biết chủ đề – Bất ngờ phiên bản. Chọn làng nghề bạn yêu thích, tự tay hoàn thiện sản phẩm và khám phá những câu chuyện văn hóa được gìn giữ qua nhiều thế hệ.",
       viewDetails: "Xem chi tiết ->",
       addToCart: "Thêm Vào Giỏ",
       priceSuffix: "đ",
@@ -236,10 +236,10 @@ export const translations: Record<Language, Translations> = {
       badge: "Doanh Nghiệp & ESG",
       title: "Giải Pháp Quà Tặng B2B",
       subtitle: "Nâng tầm quà tặng đối tác bằng mô hình Hộp Khám Phá di sản cá nhân hóa.",
-      pillar1Title: "Bảo Tồn Di Sản",
-      pillar1Desc: "Đóng góp trực tiếp vào quỹ bảo tồn các giá trị di sản văn hóa phi vật thể và làng nghề thủ công Việt Nam.",
-      pillar2Title: "Sinh Kế Nghệ Nhân",
-      pillar2Desc: "Tạo nguồn thu nhập ổn định và cải thiện chất lượng cuộc sống cho đội ngũ nghệ nhân làng nghề truyền thống.",
+      pillar1Title: "Kết Nối Nghệ Nhân Và Làng Nghề",
+      pillar1Desc: "Góp phần đưa sản phẩm và giá trị của làng nghề đến gần hơn với khách hàng, đối tác và cộng đồng thông qua một hình thức trải nghiệm hiện đại.",
+      pillar2Title: "Đồng Hành Cùng ESG",
+      pillar2Desc: "Kết hợp giá trị văn hóa, cộng đồng và tiêu dùng có trách nhiệm trong các chương trình quà tặng doanh nghiệp, góp phần tạo thêm giá trị xã hội từ mỗi sản phẩm.",
       pillar3Title: "Bao Bì Xanh",
       pillar3Desc: "Sử dụng 100% vật liệu tre nứa và bao bì tự nhiên phân hủy sinh học theo định hướng ESG.",
       formTitle: "ĐĂNG KÝ TƯ VẤN QUÀ TẶNG B2B",
@@ -270,18 +270,18 @@ export const translations: Record<Language, Translations> = {
       exploreBox: "Explore Kits",
     },
     hero: {
-      badge: "VIETNAMESE HERITAGE HANDCRAFTED DIY KITS",
+      badge: "HANDCRAFTED DIY KITS — VIETNAMESE CRAFT VILLAGES",
       titleLine1: "TOUCH ESSENCE",
       titleLine2: "UNLOCK CULTURE",
       subtitle:
-        "Bring the essence of traditional Vietnamese craft villages into your home through unique DIY experience boxes.",
-      ctaExplore: "EXPLORE DIY KITS",
+        "Awaken your senses, experience Vietnamese culture through each discovery box.",
+      ctaExplore: "EXPLORE PRODUCTS",
       ctaBlindBox: "MYSTERY BOX",
     },
     products: {
-      badge: "CULTURAL DISCOVERY KITS",
-      title: "DIY Experience Kits",
-      subtitle: "Choose your favorite box — each box contains mystery random accessories.",
+      badge: "EXPLORE VIETNAMESE CRAFT VILLAGES",
+      title: "Handcrafted DIY Kits — Vietnamese Craft Villages",
+      subtitle: "Know the theme — Surprise the edition. Pick your favorite craft village, handcraft the product, and discover cultural stories preserved across generations.",
       viewDetails: "View Details ->",
       addToCart: "Add to Cart",
       priceSuffix: "VND",
@@ -374,10 +374,10 @@ export const translations: Record<Language, Translations> = {
       badge: "Corporate & ESG",
       title: "B2B Gifting Solutions",
       subtitle: "Elevate partner gifts with personalized cultural heritage discovery boxes.",
-      pillar1Title: "Heritage Conservation",
-      pillar1Desc: "Direct contribution to intangible cultural heritage & Vietnamese traditional craft village funds.",
-      pillar2Title: "Artisan Livelihood",
-      pillar2Desc: "Provide stable income and improve quality of life for traditional village master artisans.",
+      pillar1Title: "Connecting Artisans & Craft Villages",
+      pillar1Desc: "Bringing craft village products and cultural values closer to customers, partners, and communities through modern experiential formats.",
+      pillar2Title: "ESG Partnership",
+      pillar2Desc: "Combining cultural values, community engagement, and responsible consumption in corporate gifting programs, adding social value to every product.",
       pillar3Title: "Green Eco Packaging",
       pillar3Desc: "Use 100% natural bamboo & biodegradable eco-friendly packaging aligned with corporate ESG.",
       formTitle: "REGISTER FOR B2B GIFT CONSULTATION",
@@ -409,27 +409,29 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [lang, setLangState] = useState<Language>("vi");
-
-  useEffect(() => {
+  const [lang, setLangState] = useState<Language>(() => {
+    if (typeof window === "undefined") return "vi";
     try {
       const saved = localStorage.getItem("cham_thuc_lang") as Language;
       if (saved === "vi" || saved === "en") {
-        setLangState(saved);
+        return saved;
       }
     } catch {
       // ignore
     }
-  }, []);
+    return "vi";
+  });
 
-  const setLang = (newLang: Language) => {
+  const setLang = useCallback((newLang: Language) => {
     setLangState(newLang);
-    try {
-      localStorage.setItem("cham_thuc_lang", newLang);
-    } catch {
-      // ignore
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.setItem("cham_thuc_lang", newLang);
+      } catch {
+        // ignore
+      }
     }
-  };
+  }, []);
 
   const t = translations[lang];
 

@@ -1,8 +1,17 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { isAuthenticatedAdmin } from "@/lib/auth";
+import { getSupabaseServerClient } from "@/lib/supabase";
 
 export async function POST(request: Request) {
   try {
+    const isAuthed = await isAuthenticatedAdmin(request);
+    if (!isAuthed) {
+      return NextResponse.json(
+        { success: false, error: "Yêu cầu quyền quản trị viên (Unauthorized)." },
+        { status: 401 }
+      );
+    }
+
     const body = await request.json();
     const { orderId, field, value } = body;
 
@@ -24,7 +33,26 @@ export async function POST(request: Request) {
       );
     }
 
+    // Validate allowed status values
+    const allowedPaymentStatuses = ["PENDING", "PAID", "CANCELLED"];
+    const allowedOrderStatuses = ["PROCESSING", "SHIPPING", "DELIVERED"];
+
+    if (field === "payment_status" && !allowedPaymentStatuses.includes(value)) {
+      return NextResponse.json(
+        { success: false, error: "Invalid payment_status value." },
+        { status: 400 }
+      );
+    }
+
+    if (field === "order_status" && !allowedOrderStatuses.includes(value)) {
+      return NextResponse.json(
+        { success: false, error: "Invalid order_status value." },
+        { status: 400 }
+      );
+    }
+
     // Update record in Supabase orders table matching id = orderId
+    const supabase = getSupabaseServerClient();
     const { error: dbError } = await supabase
       .from("orders")
       .update({ [field]: value })
@@ -39,10 +67,11 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ success: true });
-  } catch (err: any) {
+  } catch (err: unknown) {
+    const message = err instanceof Error ? err.message : "Internal server error.";
     console.error("Admin update order API error:", err);
     return NextResponse.json(
-      { success: false, error: err?.message || "Internal server error." },
+      { success: false, error: message },
       { status: 500 }
     );
   }

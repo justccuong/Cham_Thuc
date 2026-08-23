@@ -42,3 +42,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Private internal tools (Do NOT public)
+/tools/
+tools/
+

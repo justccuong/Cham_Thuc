@@ -14,14 +14,14 @@ interface ImpactPillar {
 
 const pillars: ImpactPillar[] = [
   {
-    title: "Bảo Tồn Di Sản",
+    title: "Kết Nối Nghệ Nhân Và Làng Nghề",
     description:
-      "Đóng góp trực tiếp vào quỹ bảo tồn các giá trị di sản văn hóa phi vật thể và làng nghề thủ công Việt Nam.",
+      "Góp phần đưa sản phẩm và giá trị của làng nghề đến gần hơn với khách hàng, đối tác và cộng đồng thông qua một hình thức trải nghiệm hiện đại.",
   },
   {
-    title: "Sinh Kế Nghệ Nhân",
+    title: "Đồng Hành Cùng ESG",
     description:
-      "Tạo nguồn thu nhập ổn định và cải thiện chất lượng cuộc sống cho đội ngũ nghệ nhân làng nghề truyền thống.",
+      "Kết hợp giá trị văn hóa, cộng đồng và tiêu dùng có trách nhiệm trong các chương trình quà tặng doanh nghiệp, góp phần tạo thêm giá trị xã hội từ mỗi sản phẩm.",
   },
   {
     title: "Bao Bì Xanh",

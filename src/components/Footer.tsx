@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Video, Heart, ShieldCheck } from "lucide-react";
+import { Heart, ShieldCheck } from "lucide-react";
 import { CloudPatternOverlay } from "@/components/CloudPatternOverlay";
 import { useLanguage } from "@/lib/i18n";
 
@@ -55,14 +55,14 @@ export const Footer: React.FC = () => {
             </a>
 
             <a
-              href="https://www.tiktok.com"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="mailto:chamthuc2026@gmail.com"
               className="h-11 px-4 rounded-full bg-paper-ivory/10 hover:bg-bamboo-green text-paper-ivory text-xs font-semibold flex items-center gap-2 transition-colors"
-              aria-label="TikTok"
+              aria-label="Email"
             >
-              <Video size={16} />
-              <span>TikTok Chữa Lành</span>
+              <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+              </svg>
+              <span>chamthuc2026@gmail.com</span>
             </a>
           </div>
         </div>
@@ -105,8 +105,7 @@ export const Footer: React.FC = () => {
             </h4>
           </div>
           <p className="text-xs sm:text-sm text-paper-ivory/80 leading-relaxed font-light">
-            Mỗi hộp bán ra trực tiếp trích lợi nhuận hỗ trợ nghệ nhân giữ
-            nghề, thúc đẩy du lịch di sản và sử dụng 100% bao bì tự nhiên.
+            Gìn giữ giá trị làng nghề, kết nối văn hóa Việt với thế hệ trẻ.
           </p>
           <div className="pt-1 sm:pt-2 text-[10px] sm:text-[11px] text-paper-ivory/60 italic flex items-center gap-1.5">
             <ShieldCheck size={13} className="text-bamboo-green" />

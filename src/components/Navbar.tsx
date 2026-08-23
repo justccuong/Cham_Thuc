@@ -5,28 +5,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ShoppingBag } from "lucide-react";
-import CartDrawer, { getCartTotalCount } from "./CartDrawer";
-
-interface NavLink {
-  label: string;
-  href: string;
-}
-
-const navLinks: NavLink[] = [
-  { label: "Trang chủ", href: "#hero" },
-  { label: "Hộp Giao Thời", href: "#products" },
-  { label: "Làng Nghề", href: "#story" },
-  { label: "B2B", href: "#b2b" },
-];
-
+import CartDrawer from "./CartDrawer";
 import { useLanguage } from "@/lib/i18n";
+import { useCart } from "@/lib/cart";
 
 export const Navbar: React.FC = () => {
   const { lang, setLang, t } = useLanguage();
+  const { totalCount, openCart } = useCart();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [cartOpen, setCartOpen] = useState(false);
-  const [totalCartCount, setTotalCartCount] = useState(0);
 
   const navLinks = [
     { label: t.nav.home, href: "#hero" },
@@ -34,18 +21,6 @@ export const Navbar: React.FC = () => {
     { label: t.nav.story, href: "#story" },
     { label: t.nav.b2b, href: "#b2b" },
   ];
-
-  useEffect(() => {
-    const updateCount = () => setTotalCartCount(getCartTotalCount());
-    updateCount();
-
-    window.addEventListener("cart_updated", updateCount);
-    window.addEventListener("storage", updateCount);
-    return () => {
-      window.removeEventListener("cart_updated", updateCount);
-      window.removeEventListener("storage", updateCount);
-    };
-  }, [cartOpen]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 80);
@@ -60,7 +35,9 @@ export const Navbar: React.FC = () => {
     } else {
       document.body.style.overflow = "";
     }
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [mobileOpen]);
 
   return (
@@ -128,14 +105,14 @@ export const Navbar: React.FC = () => {
             </div>
 
             <button
-              onClick={() => setCartOpen(true)}
+              onClick={() => openCart()}
               className="relative inline-flex items-center gap-2.5 bg-brand-red text-brand-gold rounded-full px-5 py-2.5 text-xs font-bold uppercase tracking-wider hover:bg-brand-red-hover transition-all shadow-md hover:shadow-lg active:scale-95 cursor-pointer"
             >
               <ShoppingBag size={16} />
               <span>{t.nav.cart}</span>
-              {totalCartCount > 0 && (
+              {totalCount > 0 && (
                 <span className="w-5 h-5 rounded-full bg-brand-gold text-brand-red font-price text-xs font-extrabold flex items-center justify-center shadow-sm">
-                  {totalCartCount}
+                  {totalCount}
                 </span>
               )}
             </button>
@@ -167,14 +144,14 @@ export const Navbar: React.FC = () => {
             </div>
 
             <button
-              onClick={() => setCartOpen(true)}
+              onClick={() => openCart()}
               className="relative w-11 h-11 flex items-center justify-center text-brand-red rounded-xl hover:bg-text-wood/5 transition-colors cursor-pointer"
               aria-label="Giỏ hàng"
             >
               <ShoppingBag size={22} />
-              {totalCartCount > 0 && (
+              {totalCount > 0 && (
                 <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-brand-red text-brand-gold font-price text-[10px] font-bold flex items-center justify-center shadow-sm">
-                  {totalCartCount}
+                  {totalCount}
                 </span>
               )}
             </button>
@@ -240,7 +217,7 @@ export const Navbar: React.FC = () => {
                 <button
                   onClick={() => {
                     setMobileOpen(false);
-                    setCartOpen(true);
+                    openCart();
                   }}
                   className="w-full h-12 inline-flex items-center justify-center gap-2 bg-brand-red text-brand-gold rounded-full text-sm font-semibold uppercase tracking-widest shadow-md hover:bg-brand-red-hover transition-all cursor-pointer"
                 >
@@ -253,7 +230,7 @@ export const Navbar: React.FC = () => {
         )}
       </AnimatePresence>
 
-      <CartDrawer isOpen={cartOpen} onClose={() => setCartOpen(false)} />
+      <CartDrawer />
     </>
   );
 };

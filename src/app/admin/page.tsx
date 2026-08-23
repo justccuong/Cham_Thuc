@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/Button";
 
 interface OrderRecord {
@@ -22,39 +21,69 @@ interface OrderRecord {
 const AUTH_KEY = "cham_thuc_admin_auth";
 
 export default function AdminDashboardPage() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    try {
+      return sessionStorage.getItem(AUTH_KEY) === "true";
+    } catch {
+      return false;
+    }
+  });
+
   const [pinInput, setPinInput] = useState("");
   const [pinError, setPinError] = useState("");
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   const [orders, setOrders] = useState<OrderRecord[]>([]);
   const [loading, setLoading] = useState(false);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
 
-  const adminPin = process.env.NEXT_PUBLIC_ADMIN_PIN || "1234";
-
+  // Auto-fetch orders when authenticated
   useEffect(() => {
-    try {
-      const savedAuth = sessionStorage.getItem(AUTH_KEY);
-      if (savedAuth === "true") {
-        setIsAuthenticated(true);
-      }
-    } catch {
-      // ignore
-    }
-  }, []);
+    if (!isAuthenticated) return;
 
-  const fetchOrders = async () => {
+    let ignore = false;
+    fetch("/api/admin/orders")
+      .then((res) => {
+        if (res.status === 401) {
+          if (!ignore) {
+            setIsAuthenticated(false);
+            sessionStorage.removeItem(AUTH_KEY);
+            setPinError("Phiên đăng nhập đã hết hạn. Vui lòng nhập lại mã PIN.");
+          }
+          return null;
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (!ignore && data?.success && Array.isArray(data.orders)) {
+          setOrders(data.orders as OrderRecord[]);
+        }
+      })
+      .catch((err) => {
+        console.error("Fetch orders exception:", err);
+      });
+
+    return () => {
+      ignore = true;
+    };
+  }, [isAuthenticated]);
+
+  const handleManualRefresh = async () => {
     setLoading(true);
     try {
-      const { data, error } = await supabase
-        .from("orders")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (error) {
-        console.error("Fetch orders error:", error);
-      } else if (data) {
-        setOrders(data as OrderRecord[]);
+      const res = await fetch("/api/admin/orders");
+      if (res.status === 401) {
+        setIsAuthenticated(false);
+        sessionStorage.removeItem(AUTH_KEY);
+        setPinError("Phiên đăng nhập đã hết hạn. Vui lòng nhập lại mã PIN.");
+        return;
+      }
+      const data = await res.json();
+      if (data.success && Array.isArray(data.orders)) {
+        setOrders(data.orders as OrderRecord[]);
+      } else {
+        console.error("Fetch orders error:", data.error);
       }
     } catch (err) {
       console.error("Fetch orders exception:", err);
@@ -63,35 +92,53 @@ export default function AdminDashboardPage() {
     }
   };
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      fetchOrders();
-    }
-  }, [isAuthenticated]);
-
-  const handlePinSubmit = (e: React.FormEvent) => {
+  const handlePinSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (pinInput.trim() === adminPin) {
-      try {
-        sessionStorage.setItem(AUTH_KEY, "true");
-      } catch {
-        // ignore
+    if (!pinInput.trim()) {
+      setPinError("Vui lòng nhập mã PIN.");
+      return;
+    }
+
+    setIsLoggingIn(true);
+    setPinError("");
+
+    try {
+      const res = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pin: pinInput.trim() }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        try {
+          sessionStorage.setItem(AUTH_KEY, "true");
+        } catch {
+          // ignore
+        }
+        setIsAuthenticated(true);
+        setPinError("");
+      } else {
+        setPinError(data.error || "Mã PIN không chính xác.");
       }
-      setIsAuthenticated(true);
-      setPinError("");
-    } else {
-      setPinError("Mã PIN không chính xác. Vui lòng thử lại.");
+    } catch {
+      setPinError("Không thể kết nối đến máy chủ. Vui lòng thử lại.");
+    } finally {
+      setIsLoggingIn(false);
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     try {
+      await fetch("/api/admin/logout", { method: "POST" });
       sessionStorage.removeItem(AUTH_KEY);
     } catch {
       // ignore
     }
     setIsAuthenticated(false);
     setPinInput("");
+    setOrders([]);
   };
 
   const handleStatusChange = async (
@@ -114,11 +161,11 @@ export default function AdminDashboardPage() {
       const data = await res.json();
       if (!data.success) {
         console.error("Update status failed:", data.error);
-        fetchOrders();
+        void handleManualRefresh();
       }
     } catch (err) {
       console.error("Update status error:", err);
-      fetchOrders();
+      void handleManualRefresh();
     } finally {
       setUpdatingId(null);
     }
@@ -155,7 +202,9 @@ export default function AdminDashboardPage() {
                 placeholder="Nhập mã PIN"
                 value={pinInput}
                 onChange={(e) => setPinInput(e.target.value)}
-                className="w-full h-12 px-4 rounded-xl border border-text-wood/20 text-center font-price font-bold text-lg tracking-widest text-text-wood focus:outline-none focus:border-brand-red"
+                disabled={isLoggingIn}
+                className="w-full h-12 px-4 rounded-xl border border-text-wood/20 text-center font-price font-bold text-lg tracking-widest text-text-wood focus:outline-none focus:border-brand-red disabled:opacity-50"
+                autoFocus
               />
               {pinError && (
                 <p className="text-xs text-red-600 mt-2 text-center">{pinError}</p>
@@ -166,9 +215,10 @@ export default function AdminDashboardPage() {
               type="submit"
               variant="primary"
               size="lg"
-              className="w-full h-12 bg-brand-red text-brand-gold font-bold text-sm rounded-xl uppercase tracking-wider"
+              disabled={isLoggingIn}
+              className="w-full h-12 bg-brand-red text-brand-gold font-bold text-sm rounded-xl uppercase tracking-wider disabled:opacity-60 cursor-pointer"
             >
-              XÁC NHẬN MÃ PIN
+              {isLoggingIn ? "ĐANG XÁC THỰC..." : "XÁC NHẬN MÃ PIN"}
             </Button>
           </form>
         </div>
@@ -186,13 +236,13 @@ export default function AdminDashboardPage() {
             BẢNG QUẢN TRỊ ĐƠN HÀNG
           </h1>
           <p className="font-sans text-xs sm:text-sm text-text-wood/60 mt-1">
-            Hệ thống theo dõi và xử lý đơn hàng Chạm Thức
+            Hệ thống theo dõi và xử lý đơn hàng Chạm Thức (Bảo Mật Server-Side)
           </p>
         </div>
 
         <div className="flex items-center gap-3">
           <button
-            onClick={fetchOrders}
+            onClick={handleManualRefresh}
             disabled={loading}
             className="px-4 py-2 bg-paper-warm border border-text-wood/15 hover:border-brand-red text-text-wood font-bold text-xs rounded-xl transition-all cursor-pointer disabled:opacity-50"
           >

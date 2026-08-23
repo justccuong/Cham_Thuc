@@ -2,10 +2,14 @@
 
 import React, { useEffect } from "react";
 
+interface FacebookSDK {
+  init: (options: { xfbml: boolean; version: string }) => void;
+}
+
 declare global {
   interface Window {
     fbAsyncInit?: () => void;
-    FB?: any;
+    FB?: FacebookSDK;
   }
 }
 
@@ -24,7 +28,7 @@ export function MessengerChat() {
 
     // Initialize Facebook SDK callback
     window.fbAsyncInit = function () {
-      window.FB.init({
+      window.FB?.init({
         xfbml: true,
         version: "v18.0",
       });

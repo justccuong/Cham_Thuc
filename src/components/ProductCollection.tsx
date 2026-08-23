@@ -5,8 +5,9 @@ import { motion } from "framer-motion";
 import { CraftItem } from "@/types";
 import { CraftCard } from "@/components/ui/CraftCard";
 import { ProductModal } from "@/components/ProductModal";
-import { CartDrawer, ProductKey } from "@/components/CartDrawer";
 import { CloudPatternOverlay } from "@/components/CloudPatternOverlay";
+import { useLanguage } from "@/lib/i18n";
+import { useCart, ProductKey } from "@/lib/cart";
 
 const collectionItems: CraftItem[] = [
   {
@@ -18,14 +19,16 @@ const collectionItems: CraftItem[] = [
     description: "Bộ kit tự làm nón lá mini kèm quà tặng ngẫu nhiên.",
     image: "/products/non-chuong.jpg",
     gallery: ["/products/non-chuong.jpg", "/products/non-chuong.png"],
-    price: 299000,
+    price: 160000,
     materials: [
-      "Frame nón lá mini thủ công",
-      "Bộ màu vẽ Acrylic 6 màu",
-      "2 cọ vẽ chuyên dụng",
-      "Photocard Nghệ Nhân",
+      "Phôi nón lá trắng mini",
+      "Nón lụa mini",
+      "Bộ vỉ màu Acrylic kèm cọ",
+      "Keo dán charm",
+      "Charm/ Đá trang trí",
+      "HDSD",
     ],
-    secretItem: "Chi tiết trang trí ngẫu nhiên — mẫu màu tô đặc biệt hoặc phụ kiện độc bản",
+    secretItem: "Mỗi hộp chắc chắn gồm bộ dụng cụ đầy đủ, đi kèm 1 chiếc nón lụa mini màu ngẫu nhiên",
     tag: "LÀNG NÓN CHUÔNG",
     ctaLabel: "CHỌN HỘP NÓN LÁ",
   },
@@ -38,14 +41,13 @@ const collectionItems: CraftItem[] = [
     description: "Nặn tò he bằng bột màu tự nhiên kèm khuôn con giống bí ẩn.",
     image: "/products/to-he.jpg",
     gallery: ["/products/to-he.jpg", "/products/to-he.png"],
-    price: 299000,
+    price: 160000,
     materials: [
-      "Bột màu tự nhiên dẻo mịn",
-      "Que gỗ nặn truyền thống",
-      "Cọ vẽ chi tiết",
-      "Sách hướng dẫn tạo hình",
+      "Bột nặn tò he cao cấp không dính tay kèm que gỗ",
+      "Bộ dụng cụ tạo hình tò he cơ bản",
+      "HDSD",
     ],
-    secretItem: "Khuôn nặn con giống bí ẩn — mẫu ngẫu nhiên trong 6 con giống dân gian",
+    secretItem: "",
     tag: "LÀNG TÒ HE XUÂN LA",
     ctaLabel: "CHỌN HỘP TÒ HE",
   },
@@ -58,11 +60,12 @@ const collectionItems: CraftItem[] = [
     description: "Tô màu chuồn chuồn tre thăng bằng kèm chân đế ngẫu nhiên.",
     image: "/products/chuon-chuon-tre.jpg",
     gallery: ["/products/chuon-chuon-tre.jpg", "/products/chuon-chuon-tre.png"],
-    price: 299000,
+    price: 160000,
     materials: [
       "Mô hình tre đẽo gọt thủ công",
       "Bộ màu vẽ Acrylic cao cấp",
       "Cọ vẽ chuyên dụng",
+      "HDSD",
     ],
     secretItem: "Chân đế mây tre ngẫu nhiên — 1 trong 4 kiểu dáng thủ công độc bản",
     tag: "LÀNG TRE THẠCH XÁ",
@@ -70,18 +73,14 @@ const collectionItems: CraftItem[] = [
   },
 ];
 
-import { useLanguage } from "@/lib/i18n";
-
 export const ProductCollection: React.FC = () => {
   const { t } = useLanguage();
+  const { openCart } = useCart();
   const [selectedItem, setSelectedItem] = useState<CraftItem | null>(null);
-  const [cartOpen, setCartOpen] = useState(false);
-  const [cartProductKey, setCartProductKey] = useState<ProductKey | undefined>(undefined);
 
   const handleOrder = (productKey?: ProductKey) => {
     setSelectedItem(null);
-    setCartProductKey(productKey);
-    setCartOpen(true);
+    openCart(productKey);
   };
 
   return (
@@ -140,13 +139,6 @@ export const ProductCollection: React.FC = () => {
         item={selectedItem}
         onClose={() => setSelectedItem(null)}
         onOrder={handleOrder}
-      />
-
-      {/* Cart & COD Order Drawer */}
-      <CartDrawer
-        isOpen={cartOpen}
-        onClose={() => setCartOpen(false)}
-        initialProductKey={cartProductKey}
       />
     </section>
   );

@@ -29,29 +29,38 @@ export function sanitizeKey(rawKey: string | undefined): string {
   return rawKey.trim().replace(/^["']|["']$/g, "").trim();
 }
 
+let cachedServerClient: SupabaseClient | null = null;
+
 /**
- * Dynamically gets a clean Supabase server-side client instance.
+ * Gets or creates a singleton Supabase server-side client instance.
  */
 export function getSupabaseServerClient(): SupabaseClient {
+  if (cachedServerClient) {
+    return cachedServerClient;
+  }
+
   const url = sanitizeUrl(process.env.NEXT_PUBLIC_SUPABASE_URL);
   const key = sanitizeKey(
     process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
   );
 
-  return createClient(url, key, {
+  cachedServerClient = createClient(url, key, {
     auth: {
       persistSession: false,
+      autoRefreshToken: false,
     },
   });
+
+  return cachedServerClient;
 }
 
 /**
- * Default exported Supabase client instance.
+ * Proxy export for backward compatibility that delegates to the cached server client singleton.
  */
 export const supabase: SupabaseClient = new Proxy({} as SupabaseClient, {
   get(_target, prop) {
     const client = getSupabaseServerClient();
-    const value = (client as any)[prop];
+    const value = Reflect.get(client, prop);
     return typeof value === "function" ? value.bind(client) : value;
   },
 });
