@@ -78,29 +78,7 @@ const getBlindBoxVariants = (item: CraftItem): BlindBoxVariant[] => {
       tag: "Gốc",
       name: "Bộ Kit Chuồn Chuồn Tre Gốc",
       image: "/products/chuon-chuon-tre.jpg",
-      subtext: "Bộ Kit DIY đầy đủ gồm phôi, màu vẽ và cọ.",
-    },
-    {
-      id: "gift1",
-      tag: "Mẫu 01",
-      name: "Đế Mây Tre Đẽo Gọt",
-      image: "/products/chuon-chuon-tre.png",
-      subtext: "Cơ hội nhận ngẫu nhiên: Bộ quai lụa tơ tằm và tua rua dân gian.",
-    },
-    {
-      id: "gift2",
-      tag: "Mẫu 02",
-      name: "Hạt Ngọc & Chân Đế Khảm",
-      image: "/products/tranh-dong-ho.jpg",
-      subtext: "Cơ hội nhận ngẫu nhiên: Bộ hạt ngọc và hoa văn đơm thủ công.",
-    },
-    {
-      id: "secret",
-      tag: "Hiếm",
-      name: "Chuồn Chuồn Tre Phủ Sơn Mài Thêu Vàng",
-      image: "/products/lua-van-phuc.jpg",
-      subtext: "Mẫu độc bản bí ẩn: Chi tiết trang trí đặc biệt giới hạn 5%.",
-      isSecret: true,
+      subtext: "Bộ Kit DIY đầy đủ gồm chuồn chuồn tre mộc, màu vẽ, 2 cọ và chân đế.",
     },
   ];
 };
