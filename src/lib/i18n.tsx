@@ -125,7 +125,7 @@ export const translations: Record<Language, Translations> = {
   vi: {
     nav: {
       home: "Trang chủ",
-      products: "Hộp Giao Thời",
+      products: "BST Hương Sắc Giao Thời",
       story: "Làng Nghề",
       b2b: "B2B Doanh Nghiệp",
       cart: "Giỏ Hàng",

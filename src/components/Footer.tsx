@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Heart, ShieldCheck } from "lucide-react";
+import { Heart, ShieldCheck, Phone } from "lucide-react";
 import { CloudPatternOverlay } from "@/components/CloudPatternOverlay";
 import { useLanguage } from "@/lib/i18n";
 
@@ -40,7 +40,7 @@ export const Footer: React.FC = () => {
             {t.footer.tagline}
           </p>
 
-          {/* Social Links — min 44px touch */}
+          {/* Social & Contact Links — min 44px touch */}
           <div className="pt-1 sm:pt-2 flex flex-wrap items-center gap-3 sm:gap-4">
             <a
               href="https://www.facebook.com/profile.php?id=61592690401391"
@@ -52,6 +52,15 @@ export const Footer: React.FC = () => {
               <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
                 <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
               </svg>
+            </a>
+
+            <a
+              href="tel:0392193191"
+              className="h-11 px-4 rounded-full bg-paper-ivory/10 hover:bg-brand-red text-paper-ivory text-xs font-semibold flex items-center gap-2 transition-colors"
+              aria-label="Hotline"
+            >
+              <Phone size={15} />
+              <span>0392 193 191</span>
             </a>
 
             <a

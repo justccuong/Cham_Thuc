@@ -100,7 +100,7 @@ export const ProductCollection: React.FC = () => {
             {t.products.badge}
           </span>
 
-          <h2 className="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-[#9A1B1F] mb-3 sm:mb-4 tracking-tight">
+          <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-[#9A1B1F] mb-3 sm:mb-4 tracking-tight max-w-4xl mx-auto leading-tight">
             {t.products.title}
           </h2>
 
