@@ -146,3 +146,12 @@ create table public.orders (
 1. Đăng nhập [Vercel](https://vercel.com) và kết nối với kho chứa GitHub `Cham_Thuc`.
 2. Khai báo đầy đủ các biến môi trường trong mục **Settings -> Environment Variables**.
 3. Bấm **Deploy** để phát hành ứng dụng lên tên miền chính thức.
+
+---
+
+## 📜 Giấy Phép (License)
+
+Dự án được cấp phép theo [MIT License](LICENSE).
+- **Mã nguồn (Source Code)**: Tự do sử dụng, chỉnh sửa và học hỏi.
+- **Tài sản thương hiệu (Brand Assets & Media)**: Tên thương hiệu, logo *Chạm Thức* và toàn bộ hình ảnh/video tư liệu thuộc quyền sở hữu của team dự án.
+
