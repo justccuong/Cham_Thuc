@@ -55,12 +55,12 @@ export const Footer: React.FC = () => {
             </a>
 
             <a
-              href="tel:0392193191"
+              href="tel:0964470213"
               className="h-11 px-4 rounded-full bg-paper-ivory/10 hover:bg-brand-red text-paper-ivory text-xs font-semibold flex items-center gap-2 transition-colors"
               aria-label="Hotline"
             >
               <Phone size={15} />
-              <span>0392 193 191</span>
+              <span>0964 470 213</span>
             </a>
 
             <a
