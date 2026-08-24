@@ -49,7 +49,7 @@ const GUIDES_DATA: Record<ProductId, ProductGuide> = {
     coverImage: "/products/non-chuong.jpg",
     videoTitle: "Video Hướng Dẫn: Tự Tay Trang Trí Nón Lá Mini Nghệ Thuật",
     videoDuration: "08:45",
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ", // Replaceable with official video link
+    videoUrl: "https://www.youtube.com/embed/oi-J_56CwCc",
     materials: [
       { name: "Phôi nón lá trắng mini", desc: "Được chằm thủ công từ lá cọ phơi sương làng Chuông" },
       { name: "Nón lụa mini", desc: "Nón lụa trang trí màu sắc truyền thống" },
@@ -100,7 +100,7 @@ const GUIDES_DATA: Record<ProductId, ProductGuide> = {
     coverImage: "/products/to-he.jpg",
     videoTitle: "Video Hướng Dẫn: Kỹ Thuật Nặn Con Giống Tò He Truyền Thống",
     videoDuration: "10:15",
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    videoUrl: "https://www.youtube.com/embed/I5OfubRRNQg",
     materials: [
       { name: "Bột nặn tò he cao cấp", desc: "Bột mịn không dính tay, an toàn, phối màu tự nhiên rực rỡ" },
       { name: "Que tre nặn truyền thống", desc: "Thanh tre vót nhẵn làm trục giữ con giống" },
@@ -150,7 +150,7 @@ const GUIDES_DATA: Record<ProductId, ProductGuide> = {
     coverImage: "/products/chuon-chuon-tre.jpg",
     videoTitle: "Video Hướng Dẫn: Phối Màu & Cân Bằng Chuồn Chuồn Tre Thạch Xá",
     videoDuration: "07:30",
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    videoUrl: "https://www.youtube.com/embed/S6oV_RCgxuU",
     materials: [
       { name: "Chuồn chuồn tre mộc chưa sơn", desc: "Được vót tay chuẩn xác từ tre rừng Thạch Xá, tự thăng bằng trên đầu mỏ" },
       { name: "Bộ vỉ màu Acrylic kèm 2 cọ", desc: "1 cọ to quét nền và 1 cọ nét siêu mảnh vẽ hoa văn cánh" },
