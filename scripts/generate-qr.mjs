@@ -7,6 +7,11 @@ const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://cham-thuc.vercel.a
 
 const QR_ITEMS = [
   {
+    name: "qr-trang-chu",
+    url: `${BASE_URL}/`,
+    label: "QR Trang Chủ Chạm Thức (Landing Page)",
+  },
+  {
     name: "qr-hdsd-tong-hop",
     url: `${BASE_URL}/huong-dan`,
     label: "QR Hướng Dẫn Tổng Hợp (Tất cả sản phẩm)",
