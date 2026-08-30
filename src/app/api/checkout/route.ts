@@ -170,14 +170,14 @@ export async function POST(request: Request) {
       .filter(Boolean)
       .join("\n");
 
-    // Send order notification directly to Facebook Messenger via Graph API (fire and forget / async)
+    // Send order notification directly to Facebook Messenger via Graph API
     const fbPageAccessToken = process.env.FB_PAGE_ACCESS_TOKEN;
     const adminFbPsid = process.env.ADMIN_FB_PSID;
 
     if (fbPageAccessToken && adminFbPsid) {
       try {
-        fetch(
-          `https://graph.facebook.com/v18.0/me/messages?access_token=${fbPageAccessToken}`,
+        const fbRes = await fetch(
+          `https://graph.facebook.com/v18.0/me/messages?access_token=${encodeURIComponent(fbPageAccessToken)}`,
           {
             method: "POST",
             headers: {
@@ -185,15 +185,49 @@ export async function POST(request: Request) {
             },
             body: JSON.stringify({
               recipient: { id: adminFbPsid },
+              messaging_type: "MESSAGE_TAG",
+              tag: "CONFIRMED_ORDER_UPDATE",
               message: { text: formattedMessage },
             }),
           }
-        ).catch((fbErr) => {
-          console.error("Facebook Messenger notification background error:", fbErr);
-        });
+        );
+
+        const fbData = await fbRes.json().catch(() => null);
+
+        if (!fbRes.ok || fbData?.error) {
+          console.error("❌ [FB Messenger API Error]:", fbData?.error || fbRes.statusText);
+          
+          // Retry without MESSAGE_TAG in case the page hasn't enabled tags
+          fetch(
+            `https://graph.facebook.com/v18.0/me/messages?access_token=${encodeURIComponent(fbPageAccessToken)}`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                recipient: { id: adminFbPsid },
+                message: { text: formattedMessage },
+              }),
+            }
+          )
+            .then(async (retryRes) => {
+              const retryData = await retryRes.json().catch(() => null);
+              if (retryRes.ok) {
+                console.log("✅ [FB Messenger Retry] Message sent successfully!");
+              } else {
+                console.error("❌ [FB Messenger Retry Error]:", retryData?.error || retryRes.statusText);
+              }
+            })
+            .catch((retryErr) => {
+              console.error("❌ [FB Messenger Retry Exception]:", retryErr);
+            });
+        } else {
+          console.log("✅ [FB Messenger] Order notification sent successfully to admin!");
+        }
       } catch (fbError) {
-        console.error("Facebook Messenger notification dispatch error:", fbError);
+        console.error("❌ [FB Messenger Exception]:", fbError);
       }
+    } else {
+      console.warn("⚠️ FB_PAGE_ACCESS_TOKEN or ADMIN_FB_PSID is missing in environment variables.");
     }
 
     return NextResponse.json({
