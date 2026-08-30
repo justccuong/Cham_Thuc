@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { generateOrderCode } from "@/lib/utils";
 import { getSupabaseServerClient } from "@/lib/supabase";
+import { sendOrderEmailToAdmin } from "@/lib/email";
 
 // In-memory rate limiting map: IP -> array of timestamps
 const rateLimitMap = new Map<string, number[]>();
@@ -170,7 +171,21 @@ export async function POST(request: Request) {
       .filter(Boolean)
       .join("\n");
 
-    // Send order notification directly to Facebook Messenger via Graph API
+    // 1. Send order notification email via Gmail (100% reliable in Vietnam)
+    sendOrderEmailToAdmin({
+      orderCode,
+      customerName: name.trim(),
+      customerPhone: phoneClean,
+      customerAddress: address.trim(),
+      productName,
+      finalAmount,
+      paymentMethod: resolvedPaymentMethod,
+      notes: sanitizedNotes,
+    }).catch((emailErr) => {
+      console.error("❌ [Email Notification Exception]:", emailErr);
+    });
+
+    // 2. Send order notification directly to Facebook Messenger via Graph API (Optional channel)
     const fbPageAccessToken = process.env.FB_PAGE_ACCESS_TOKEN;
     const adminFbPsid = process.env.ADMIN_FB_PSID;
 
