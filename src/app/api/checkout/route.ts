@@ -175,53 +175,59 @@ export async function POST(request: Request) {
     const adminFbPsid = process.env.ADMIN_FB_PSID;
 
     if (fbPageAccessToken && adminFbPsid) {
-      try {
-        const fbRes = await fetch(
+      const sendFbMessage = async (tag?: string) => {
+        const bodyPayload: Record<string, unknown> = {
+          recipient: { id: adminFbPsid },
+          message: { text: formattedMessage },
+        };
+        if (tag) {
+          bodyPayload.messaging_type = "MESSAGE_TAG";
+          bodyPayload.tag = tag;
+        }
+
+        const res = await fetch(
           `https://graph.facebook.com/v18.0/me/messages?access_token=${encodeURIComponent(fbPageAccessToken)}`,
           {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              recipient: { id: adminFbPsid },
-              messaging_type: "MESSAGE_TAG",
-              tag: "CONFIRMED_ORDER_UPDATE",
-              message: { text: formattedMessage },
-            }),
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(bodyPayload),
           }
         );
+        const data = await res.json().catch(() => null);
+        return { ok: res.ok, status: res.status, data };
+      };
 
-        const fbData = await fbRes.json().catch(() => null);
-
-        if (!fbRes.ok || fbData?.error) {
-          console.error("❌ [FB Messenger API Error]:", fbData?.error || fbRes.statusText);
-          
-          // Retry without MESSAGE_TAG in case the page hasn't enabled tags
-          fetch(
-            `https://graph.facebook.com/v18.0/me/messages?access_token=${encodeURIComponent(fbPageAccessToken)}`,
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                recipient: { id: adminFbPsid },
-                message: { text: formattedMessage },
-              }),
-            }
-          )
-            .then(async (retryRes) => {
-              const retryData = await retryRes.json().catch(() => null);
-              if (retryRes.ok) {
-                console.log("✅ [FB Messenger Retry] Message sent successfully!");
-              } else {
-                console.error("❌ [FB Messenger Retry Error]:", retryData?.error || retryRes.statusText);
-              }
-            })
-            .catch((retryErr) => {
-              console.error("❌ [FB Messenger Retry Exception]:", retryErr);
-            });
+      try {
+        // Attempt 1: Try with POST_PURCHASE_UPDATE
+        let result = await sendFbMessage("POST_PURCHASE_UPDATE");
+        if (result.ok && !result.data?.error) {
+          console.log("✅ [FB Messenger] Sent successfully with POST_PURCHASE_UPDATE tag!");
         } else {
-          console.log("✅ [FB Messenger] Order notification sent successfully to admin!");
+          console.warn("⚠️ [FB Messenger] POST_PURCHASE_UPDATE failed, trying CONFIRMED_ORDER_UPDATE...", result.data?.error || result.status);
+          
+          // Attempt 2: Try with CONFIRMED_ORDER_UPDATE
+          result = await sendFbMessage("CONFIRMED_ORDER_UPDATE");
+          if (result.ok && !result.data?.error) {
+            console.log("✅ [FB Messenger] Sent successfully with CONFIRMED_ORDER_UPDATE tag!");
+          } else {
+            console.warn("⚠️ [FB Messenger] CONFIRMED_ORDER_UPDATE failed, trying ACCOUNT_UPDATE...", result.data?.error || result.status);
+            
+            // Attempt 3: Try with ACCOUNT_UPDATE
+            result = await sendFbMessage("ACCOUNT_UPDATE");
+            if (result.ok && !result.data?.error) {
+              console.log("✅ [FB Messenger] Sent successfully with ACCOUNT_UPDATE tag!");
+            } else {
+              console.warn("⚠️ [FB Messenger] ACCOUNT_UPDATE failed, trying standard message...", result.data?.error || result.status);
+              
+              // Attempt 4: Fallback to standard message (requires 24h window)
+              result = await sendFbMessage();
+              if (result.ok && !result.data?.error) {
+                console.log("✅ [FB Messenger] Sent successfully via standard messaging window!");
+              } else {
+                console.error("❌ [FB Messenger Final Error]:", result.data?.error || result.status);
+              }
+            }
+          }
         }
       } catch (fbError) {
         console.error("❌ [FB Messenger Exception]:", fbError);
