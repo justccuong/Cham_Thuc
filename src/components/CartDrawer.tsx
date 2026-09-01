@@ -81,6 +81,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   const [finalAmount, setFinalAmount] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [copiedField, setCopiedField] = useState<string | null>(null);
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
 
   // Validation Errors State
   const [errors, setErrors] = useState<{
@@ -90,17 +91,26 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     general?: string;
   }>({});
 
-  // Lock body scroll when drawer is open
+  // Lock body scroll and listen for Escape key when drawer is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
     }
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isOpen) {
+        handleCloseDrawer();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+
     return () => {
       document.body.style.overflow = "";
+      window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isOpen]);
+  }, [isOpen, handleCloseDrawer]);
 
   const handleCopy = (text: string, fieldName: string) => {
     if (typeof navigator !== "undefined" && navigator.clipboard) {
@@ -356,17 +366,68 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                               {t.cart.emptySubtitle}
                             </p>
                           </div>
+                          <div>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                handleCloseDrawer();
+                                document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
+                              }}
+                              className="mt-2 px-6 py-2.5 rounded-full bg-brand-red hover:bg-brand-red-hover text-brand-gold font-bold text-xs sm:text-sm shadow-md transition-all cursor-pointer inline-flex items-center gap-2 active:scale-95"
+                            >
+                              <ShoppingBag size={15} />
+                              <span>Khám phá các Bộ Kit ngay</span>
+                            </button>
+                          </div>
                         </div>
                       ) : (
                         <div className="space-y-3.5">
                           <div className="flex items-center justify-between">
                             <label className="text-xs sm:text-sm font-bold text-text-wood uppercase tracking-wider">
-                              {t.cart.selectedProducts}
+                              {t.cart.selectedProducts} ({totalCount})
                             </label>
-                            <span className="text-xs text-text-wood/60 font-medium">
-                              {totalCount} sản phẩm
-                            </span>
+                            <button
+                              type="button"
+                              onClick={() => setShowClearConfirm(true)}
+                              className="text-xs text-brand-red/80 hover:text-red-600 font-semibold flex items-center gap-1.5 px-2.5 py-1 rounded-lg hover:bg-red-50 transition-colors cursor-pointer"
+                              title="Xóa toàn bộ sản phẩm khỏi giỏ hàng"
+                            >
+                              <Trash2 size={13} />
+                              <span>Xóa tất cả</span>
+                            </button>
                           </div>
+
+                          {/* Clear Cart Confirmation Dialog */}
+                          {showClearConfirm && (
+                            <motion.div
+                              initial={{ opacity: 0, y: -8 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              className="bg-red-50 border border-red-200 rounded-2xl p-3.5 text-xs text-red-900 space-y-2.5 shadow-sm"
+                            >
+                              <div className="flex items-center justify-between font-semibold">
+                                <span>Bạn có chắc muốn xóa toàn bộ giỏ hàng?</span>
+                              </div>
+                              <div className="flex items-center gap-2 justify-end">
+                                <button
+                                  type="button"
+                                  onClick={() => setShowClearConfirm(false)}
+                                  className="px-3 py-1.5 bg-white border border-red-200 hover:bg-stone-50 rounded-xl text-text-wood font-medium cursor-pointer"
+                                >
+                                  Hủy
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    clearCart();
+                                    setShowClearConfirm(false);
+                                  }}
+                                  className="px-3.5 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold cursor-pointer transition-colors shadow-sm"
+                                >
+                                  Xóa hết
+                                </button>
+                              </div>
+                            </motion.div>
+                          )}
 
                           {cartEntries.map((key) => {
                             const product = PRODUCTS_CATALOG[key];
@@ -523,6 +584,14 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         <span>{t.cart.checkoutBtn}</span>
                         <ArrowRight size={18} />
                       </Button>
+
+                      <button
+                        type="button"
+                        onClick={handleCloseDrawer}
+                        className="w-full text-center text-xs sm:text-sm text-text-wood/70 hover:text-brand-red font-medium py-1 transition-colors cursor-pointer"
+                      >
+                        Tiếp tục xem sản phẩm (Đóng giỏ hàng)
+                      </button>
                     </div>
                   </motion.div>
                 )}
