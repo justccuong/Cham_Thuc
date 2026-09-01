@@ -42,26 +42,6 @@ main {
   overflow-x: hidden;
 }
 
-/* Navigation link underline animation */
-.ct-nav-link {
-  position: relative;
-  transition: color 0.3s ease;
-}
-
-.ct-nav-link::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background-color: #9A1B1F;
-  transition: width 0.3s ease-in-out;
-}
-
-.ct-nav-link:hover::after {
-  width: 100%;
-}
 
 /* Hide scrollbar for horizontal carousel */
 .scrollbar-none {
@@ -89,5 +69,54 @@ body[style*="overflow:hidden"] header {
   opacity: 0 !important;
   pointer-events: none !important;
   transition: transform 0.3s ease, opacity 0.3s ease !important;
+}
+
+/* === UI Polish: Selection, Scrollbar & Link Animation === */
+::selection {
+  background-color: rgba(154, 27, 31, 0.2);
+  color: #2A1B12;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F8F5F0;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(154, 27, 31, 0.3);
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(154, 27, 31, 0.5);
+}
+
+/* Nav link hover underline animation */
+.ct-nav-link {
+  position: relative;
+}
+.ct-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #9A1B1F;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+.ct-nav-link:hover::after,
+.ct-nav-link.active::after {
+  width: 100%;
+}
+
+/* Smooth focus ring for form inputs */
+input:focus-visible,
+textarea:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(154, 27, 31, 0.3);
+  border-color: #9A1B1F !important;
 }
 

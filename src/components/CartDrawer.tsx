@@ -244,9 +244,45 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               </button>
             </div>
 
+            {/* Progress Indicator */}
+            <div className="bg-paper-warm border-b border-text-wood/10 px-5 sm:px-7 py-3 flex items-center justify-between z-10 relative">
+              {[
+                { id: "cart", label: "Giỏ hàng", stepNum: 1 },
+                { id: "checkout", label: "Thanh toán", stepNum: 2 },
+                { id: "success", label: "Hoàn tất", stepNum: 3 },
+              ].map((s, i, arr) => {
+                const isActive = step === s.id;
+                const isPast = arr.findIndex((x) => x.id === step) > i;
+                return (
+                  <React.Fragment key={s.id}>
+                    <div className={`flex flex-col items-center gap-1.5 ${isActive || isPast ? "opacity-100" : "opacity-40"}`}>
+                      <div className={`w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-xs font-bold transition-colors ${isActive ? "bg-brand-red text-white shadow-md" : isPast ? "bg-bamboo-green text-white" : "bg-text-wood/10 text-text-wood"}`}>
+                        {isPast ? <CheckCircle2 size={16} /> : s.stepNum}
+                      </div>
+                      <span className={`text-[10px] sm:text-xs font-bold transition-colors ${isActive ? "text-brand-red" : isPast ? "text-bamboo-green" : "text-text-wood"}`}>
+                        {s.label}
+                      </span>
+                    </div>
+                    {i < arr.length - 1 && (
+                      <div className={`flex-1 h-[2px] mx-2 sm:mx-4 rounded-full transition-colors ${isPast ? "bg-bamboo-green" : "bg-text-wood/10"}`} />
+                    )}
+                  </React.Fragment>
+                );
+              })}
+            </div>
+
+            <div className="flex-1 flex flex-col overflow-hidden relative">
+              <AnimatePresence mode="wait">
             {/* STEP 1: MULTI-PRODUCT CART LIST */}
             {step === "cart" && (
-              <>
+              <motion.div
+                key="cart-step"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className="absolute inset-0 flex flex-col bg-paper-ivory"
+              >
                 <div className="flex-1 overflow-y-auto p-5 sm:p-7 space-y-6">
                   {cartEntries.length === 0 ? (
                     <div className="text-center py-12 space-y-3">
@@ -398,14 +434,19 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     <span>{t.cart.checkoutBtn}</span>
                   </Button>
                 </div>
-              </>
+              </motion.div>
             )}
 
             {/* STEP 2: CHECKOUT FORM */}
             {step === "checkout" && (
-              <form
+              <motion.form
+                key="checkout-step"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
                 onSubmit={handleOrderSubmit}
-                className="flex-1 flex flex-col justify-between overflow-hidden"
+                className="absolute inset-0 flex flex-col justify-between bg-paper-ivory"
               >
                 <div className="flex-1 overflow-y-auto p-5 sm:p-7 space-y-5">
                   {/* Order items recap */}
@@ -451,7 +492,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   {/* Input 1: Full Name */}
                   <div>
                     <label className="block text-xs sm:text-sm font-bold text-text-wood uppercase tracking-wider mb-1.5">
-                      {t.cart.fullNameLabel} *{" "}
+                      Họ và tên nhận hàng *{" "}
                       <span className="text-text-wood/40 font-normal">
                         ({fullName.length}/50)
                       </span>
@@ -459,27 +500,29 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     <input
                       type="text"
                       maxLength={50}
-                      placeholder={t.cart.fullNamePlaceholder}
+                      placeholder="VD: Nguyễn Văn A"
                       value={fullName}
                       onChange={handleFullNameChange}
                       className={`w-full bg-white border ${
                         errors.fullName
-                          ? "border-red-500 bg-red-50/30"
-                          : "border-text-wood/15"
-                      } rounded-xl px-4 h-12 text-sm text-text-wood focus:outline-none focus:border-brand-red transition-colors`}
+                          ? "border-red-500 bg-red-50/30 focus:ring-red-500/20"
+                          : "border-text-wood/15 focus:border-brand-red focus:ring-brand-red/20"
+                      } rounded-xl px-4 h-12 text-sm text-text-wood focus:outline-none focus:ring-2 transition-all`}
                     />
-                    {errors.fullName && (
+                    {errors.fullName ? (
                       <p className="text-xs text-red-600 mt-1 flex items-center gap-1">
                         <AlertCircle size={14} />
                         {errors.fullName}
                       </p>
+                    ) : (
+                      <p className="text-[10.5px] sm:text-xs text-text-wood/50 mt-1.5 font-medium">Nhập tên người nhận để shipper tiện liên lạc.</p>
                     )}
                   </div>
 
                   {/* Input 2: Phone */}
                   <div>
                     <label className="block text-xs sm:text-sm font-bold text-text-wood uppercase tracking-wider mb-1.5">
-                      {t.cart.phoneLabel} *{" "}
+                      Số điện thoại *{" "}
                       <span className="text-text-wood/40 font-normal">
                         ({phone.length}/10)
                       </span>
@@ -487,27 +530,29 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     <input
                       type="tel"
                       maxLength={10}
-                      placeholder={t.cart.phonePlaceholder}
+                      placeholder="VD: 0912345678"
                       value={phone}
                       onChange={handlePhoneChange}
                       className={`w-full bg-white border ${
                         errors.phone
-                          ? "border-red-500 bg-red-50/30"
-                          : "border-text-wood/15"
-                      } rounded-xl px-4 h-12 text-sm text-text-wood focus:outline-none focus:border-brand-red transition-colors`}
+                          ? "border-red-500 bg-red-50/30 focus:ring-red-500/20"
+                          : "border-text-wood/15 focus:border-brand-red focus:ring-brand-red/20"
+                      } rounded-xl px-4 h-12 text-sm text-text-wood focus:outline-none focus:ring-2 transition-all`}
                     />
-                    {errors.phone && (
+                    {errors.phone ? (
                       <p className="text-xs text-red-600 mt-1 flex items-center gap-1">
                         <AlertCircle size={14} />
                         {errors.phone}
                       </p>
+                    ) : (
+                      <p className="text-[10.5px] sm:text-xs text-text-wood/50 mt-1.5 font-medium">Số điện thoại 10 chữ số hợp lệ.</p>
                     )}
                   </div>
 
                   {/* Input 3: Delivery Address */}
                   <div>
                     <label className="block text-xs sm:text-sm font-bold text-text-wood uppercase tracking-wider mb-1.5">
-                      {t.cart.addressLabel} *{" "}
+                      Địa chỉ nhận hàng *{" "}
                       <span className="text-text-wood/40 font-normal">
                         ({address.length}/150)
                       </span>
@@ -515,27 +560,29 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     <input
                       type="text"
                       maxLength={150}
-                      placeholder={t.cart.addressPlaceholder}
+                      placeholder="VD: Số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành"
                       value={address}
                       onChange={handleAddressChange}
                       className={`w-full bg-white border ${
                         errors.address
-                          ? "border-red-500 bg-red-50/30"
-                          : "border-text-wood/15"
-                      } rounded-xl px-4 h-12 text-sm text-text-wood focus:outline-none focus:border-brand-red transition-colors`}
+                          ? "border-red-500 bg-red-50/30 focus:ring-red-500/20"
+                          : "border-text-wood/15 focus:border-brand-red focus:ring-brand-red/20"
+                      } rounded-xl px-4 h-12 text-sm text-text-wood focus:outline-none focus:ring-2 transition-all`}
                     />
-                    {errors.address && (
+                    {errors.address ? (
                       <p className="text-xs text-red-600 mt-1 flex items-center gap-1">
                         <AlertCircle size={14} />
                         {errors.address}
                       </p>
+                    ) : (
+                      <p className="text-[10.5px] sm:text-xs text-text-wood/50 mt-1.5 font-medium">Cung cấp địa chỉ chi tiết để tránh thất lạc đơn hàng.</p>
                     )}
                   </div>
 
                   {/* Input 4: Note */}
                   <div>
                     <label className="block text-xs sm:text-sm font-bold text-text-wood uppercase tracking-wider mb-1.5">
-                      {t.cart.notesLabel}{" "}
+                      Ghi chú thêm (Tùy chọn){" "}
                       <span className="text-text-wood/40 font-normal">
                         ({note.length}/200)
                       </span>
@@ -543,10 +590,10 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     <input
                       type="text"
                       maxLength={200}
-                      placeholder={t.cart.notesPlaceholder}
+                      placeholder="VD: Giao hàng vào giờ hành chính..."
                       value={note}
                       onChange={(e) => setNote(e.target.value.slice(0, 200))}
-                      className="w-full bg-white border border-text-wood/15 rounded-xl px-4 h-12 text-sm text-text-wood focus:outline-none focus:border-brand-red transition-colors"
+                      className="w-full bg-white border border-text-wood/15 rounded-xl px-4 h-12 text-sm text-text-wood focus:outline-none focus:border-brand-red focus:ring-2 focus:ring-brand-red/20 transition-all"
                     />
                   </div>
 
@@ -677,7 +724,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     &lt;- {t.cart.backToCart}
                   </button>
                 </div>
-              </form>
+              </motion.form>
             )}
 
             {/* STEP 3: ORDER SUCCESS & PAYMENT BRANCHING */}
@@ -695,7 +742,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 : "";
 
               return (
-                <div className="flex-1 overflow-y-auto p-6 sm:p-8 flex flex-col items-center text-center space-y-5">
+                <motion.div
+                  key="success-step"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                  className="absolute inset-0 bg-paper-ivory flex-1 overflow-y-auto p-6 sm:p-8 flex flex-col items-center text-center space-y-5"
+                >
                   {/* Success Icon */}
                   <div className="w-18 h-18 sm:w-20 sm:h-20 rounded-full bg-bamboo-green/10 border border-bamboo-green/20 flex items-center justify-center text-bamboo-green">
                     <CheckCircle2 size={42} />
@@ -832,9 +885,11 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   >
                     {t.cart.finishBtn}
                   </Button>
-                </div>
+                </motion.div>
               );
             })()}
+              </AnimatePresence>
+            </div>
           </motion.div>
         </div>
       )}

@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Heart, ShieldCheck, Phone } from "lucide-react";
+import { Heart, ShieldCheck, Phone, Mail } from "lucide-react";
 import { CloudPatternOverlay } from "@/components/CloudPatternOverlay";
 import { useLanguage } from "@/lib/i18n";
 
@@ -68,9 +68,7 @@ export const Footer: React.FC = () => {
               className="h-11 px-4 rounded-full bg-paper-ivory/10 hover:bg-bamboo-green text-paper-ivory text-xs font-semibold flex items-center gap-2 transition-colors"
               aria-label="Email"
             >
-              <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
-              </svg>
+              <Mail size={15} />
               <span>chamthuc2026@gmail.com</span>
             </a>
           </div>

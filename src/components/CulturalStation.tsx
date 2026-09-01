@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { QrCode, Play, ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
@@ -69,6 +69,15 @@ const VILLAGES: VillageStory[] = [
 export const CulturalStation: React.FC = () => {
   const { t } = useLanguage();
   const [activeIdx, setActiveIdx] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+
+  useEffect(() => {
+    if (isHovered) return;
+    const timer = setInterval(() => {
+      setActiveIdx((prev) => (prev === VILLAGES.length - 1 ? 0 : prev + 1));
+    }, 8000);
+    return () => clearInterval(timer);
+  }, [isHovered, activeIdx]);
 
   const current = VILLAGES[activeIdx];
 
@@ -84,6 +93,8 @@ export const CulturalStation: React.FC = () => {
     <section
       id="story"
       className="py-14 sm:py-20 md:py-28 lg:py-32 px-4 sm:px-6 lg:px-8 bg-[#2A1B12] text-[#F8F5F0] border-y border-[#9A1B1F]/20 relative z-10 overflow-hidden"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       <CloudPatternOverlay variant="dark" />
       <div className="max-w-7xl mx-auto relative z-10">
@@ -128,6 +139,17 @@ export const CulturalStation: React.FC = () => {
                 </button>
               );
             })}
+          </div>
+
+          {/* Auto-rotate progress bar */}
+          <div className="mt-4 mx-auto max-w-xs h-0.5 bg-brand-gold/20 rounded-full overflow-hidden">
+            <motion.div
+              key={`progress-${activeIdx}`}
+              className="h-full bg-brand-gold rounded-full"
+              initial={{ width: '0%' }}
+              animate={{ width: '100%' }}
+              transition={{ duration: isHovered ? 0 : 8, ease: 'linear' }}
+            />
           </div>
         </motion.div>
 

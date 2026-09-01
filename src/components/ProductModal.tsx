@@ -33,7 +33,7 @@ const getBlindBoxVariants = (item: CraftItem): BlindBoxVariant[] => {
         tag: "Gốc",
         name: "Bộ Kit DIY Tò He Gốc",
         image: "/products/to-he.jpg",
-        subtext: "Bộ Kit DIY đầy đủ gồm bột nặn, que gỗ và dụng cụ tạo hình.",
+        subtext: "Bộ Kit DIY đầy đủ gồm bột tò he 7 màu, que tre, bộ dụng cụ tạo hình và giấy HDSD.",
       },
     ];
   }
@@ -45,7 +45,7 @@ const getBlindBoxVariants = (item: CraftItem): BlindBoxVariant[] => {
         tag: "Gốc",
         name: "Bộ Kit Nón Lá Mini Gốc",
         image: "/products/non-chuong.jpg",
-        subtext: "Bộ Kit DIY đầy đủ gồm phôi, màu vẽ và cọ.",
+        subtext: "Bộ Kit DIY đầy đủ gồm phôi nón lá trắng, nón lụa mini, màu vẽ, cọ, keo dán, charm và giấy HDSD.",
       },
       {
         id: "gift1",
@@ -78,7 +78,7 @@ const getBlindBoxVariants = (item: CraftItem): BlindBoxVariant[] => {
       tag: "Gốc",
       name: "Bộ Kit Chuồn Chuồn Tre Gốc",
       image: "/products/chuon-chuon-tre.jpg",
-      subtext: "Bộ Kit DIY đầy đủ gồm chuồn chuồn tre mộc, màu vẽ, 2 cọ và chân đế.",
+      subtext: "Bộ Kit DIY đầy đủ gồm 2 chuồn chuồn tre mộc, chân đế, khay pha màu, màu vẽ, 2 cọ và giấy HDSD.",
     },
   ];
 };

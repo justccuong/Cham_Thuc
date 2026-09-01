@@ -14,6 +14,7 @@ export const Navbar: React.FC = () => {
   const { totalCount, openCart } = useCart();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState('hero');
 
   const navLinks = [
     { label: t.nav.home, href: "#hero" },
@@ -26,6 +27,23 @@ export const Navbar: React.FC = () => {
     const onScroll = () => setScrolled(window.scrollY > 80);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = ['hero', 'products', 'story', 'b2b'];
+      let current = 'hero';
+      for (const id of sections) {
+        const el = document.getElementById(id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= 150) current = id;
+        }
+      }
+      setActiveSection(current);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   // Lock body scroll when mobile menu is open
@@ -71,7 +89,7 @@ export const Navbar: React.FC = () => {
               <a
                 key={link.label}
                 href={link.href}
-                className="ct-nav-link hover:text-brand-red transition-colors"
+                className={`ct-nav-link hover:text-brand-red transition-colors ${activeSection === link.href.replace('#', '') ? 'active text-brand-red' : ''}`}
               >
                 {link.label}
               </a>

@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Be_Vietnam_Pro, Space_Grotesk } from "next/font/goo
 import { MessengerChat } from "@/components/MessengerChat";
 import { LanguageProvider } from "@/lib/i18n";
 import { CartProvider } from "@/lib/cart";
+import { CustomCursor } from "@/components/CustomCursor";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -27,7 +28,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://chamthuc.vn"),
+  metadataBase: new URL("https://cham-thuc.vercel.app"),
   title: "Chạm Thức | Chạm tinh hoa - Mở văn hóa",
   description:
     "Dự án phát triển các hộp trải nghiệm văn hóa Việt Nam và bộ kit DIY làng nghề truyền thống.",
@@ -51,7 +52,7 @@ export const metadata: Metadata = {
     title: "Chạm Thức | Chạm tinh hoa - Mở văn hóa",
     description:
       "Dự án phát triển các hộp trải nghiệm văn hóa Việt Nam và bộ kit DIY làng nghề truyền thống.",
-    url: "https://chamthuc.vn",
+    url: "https://cham-thuc.vercel.app",
     siteName: "Chạm Thức",
     images: [
       {
@@ -90,6 +91,7 @@ export default function RootLayout({
       <body className="min-h-screen flex flex-col bg-paper-ivory text-text-wood font-sans antialiased">
         <LanguageProvider>
           <CartProvider>
+            <CustomCursor />
             {children}
             <MessengerChat />
           </CartProvider>
