@@ -222,7 +222,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="relative w-full sm:max-w-xl md:max-w-2xl h-full sm:h-auto max-h-[92vh] my-auto bg-paper-ivory shadow-2xl flex flex-col sm:rounded-3xl border border-text-wood/10 text-text-wood z-[100] overflow-hidden"
+            className="relative w-full sm:max-w-xl md:max-w-2xl h-[100dvh] sm:h-[88vh] sm:max-h-[820px] my-auto bg-paper-ivory shadow-2xl flex flex-col sm:rounded-3xl border border-text-wood/10 text-text-wood z-[100] overflow-hidden"
           >
             {/* Header */}
             <div className="h-16 px-5 sm:px-7 border-b border-text-wood/10 flex items-center justify-between bg-paper-warm flex-shrink-0">
@@ -245,7 +245,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             </div>
 
             {/* Progress Indicator */}
-            <div className="bg-paper-warm border-b border-text-wood/10 px-5 sm:px-7 py-3 flex items-center justify-between z-10 relative">
+            <div className="bg-paper-warm border-b border-text-wood/10 px-5 sm:px-7 py-3 flex items-center justify-between z-10 relative flex-shrink-0">
               {[
                 { id: "cart", label: "Giỏ hàng", stepNum: 1 },
                 { id: "checkout", label: "Thanh toán", stepNum: 2 },
@@ -271,7 +271,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               })}
             </div>
 
-            <div className="flex-1 flex flex-col overflow-hidden relative">
+            <div className="flex-1 min-h-0 flex flex-col overflow-hidden relative">
               <AnimatePresence mode="wait">
             {/* STEP 1: MULTI-PRODUCT CART LIST */}
             {step === "cart" && (
@@ -301,6 +301,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                       </label>
                       {cartEntries.map((key) => {
                         const product = PRODUCTS_CATALOG[key];
+                        if (!product) return null;
                         const qty = cartState[key] || 0;
                         const itemSubtotal = product.price * qty;
 
@@ -457,6 +458,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     </p>
                     {cartEntries.map((key) => {
                       const p = PRODUCTS_CATALOG[key];
+                      if (!p) return null;
                       const q = cartState[key];
                       return (
                         <div
