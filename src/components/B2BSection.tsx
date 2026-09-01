@@ -125,10 +125,11 @@ export const B2BSection: React.FC = () => {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: idx * 0.15, duration: 0.6, ease: "easeOut" }}
-              className="bg-[#EFE9DE] rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-[#9A1B1F]/15 border-l-4 border-l-[#9A1B1F] shadow-[0_10px_25px_-5px_rgba(58,38,24,0.08)] text-left hover:shadow-[0_15px_30px_-5px_rgba(58,38,24,0.14)] transition-all duration-300"
+              whileHover={{ y: -8 }}
+              transition={{ delay: idx * 0.12, duration: 0.5, ease: "easeOut" }}
+              className="bg-[#EFE9DE] rounded-xl sm:rounded-2xl p-6 sm:p-8 border border-[#9A1B1F]/15 border-l-4 border-l-[#9A1B1F] shadow-[0_10px_25px_-5px_rgba(58,38,24,0.08)] hover:shadow-[0_20px_35px_-5px_rgba(154,27,31,0.14)] text-left transition-all duration-300 group cursor-default"
             >
-              <h3 className="font-serif text-xl sm:text-2xl font-bold text-brand-red mb-2 sm:mb-3">
+              <h3 className="font-serif text-xl sm:text-2xl font-bold text-brand-red mb-2 sm:mb-3 group-hover:text-brand-red-hover transition-colors">
                 {pillar.title}
               </h3>
               <p className="font-sans text-sm text-text-wood/75 leading-relaxed font-normal">

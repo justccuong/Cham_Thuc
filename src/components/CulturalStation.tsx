@@ -164,31 +164,17 @@ export const CulturalStation: React.FC = () => {
               transition={{ duration: 0.4 }}
               className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-20 items-center"
             >
-              {/* Artisan / Village visual */}
-              <div className="relative">
-                <div className="relative aspect-[4/5] sm:aspect-[3/4] rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border border-brand-gold/20 bg-[#3A2618]">
+              {/* Village Visual Poster */}
+              <div className="relative group">
+                <div className="relative aspect-square sm:aspect-square rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border border-brand-gold/25 bg-[#1F130B]">
                   <Image
                     src={current.image}
                     alt={current.villageName}
                     fill
                     sizes="(max-width: 1024px) 100vw, 50vw"
-                    className="object-cover"
+                    className="object-contain sm:object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                     priority
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#2A1B12]/80 via-transparent to-transparent" />
-                </div>
-
-                {/* Floating caption (Nghệ nhân ưu tú removed) */}
-                <div className="absolute bottom-3 right-3 sm:-bottom-4 sm:-right-4 md:bottom-6 md:right-6 bg-[#3A2618]/95 backdrop-blur-md rounded-xl sm:rounded-2xl p-3.5 sm:p-4 shadow-xl border border-brand-gold/25 max-w-[220px] sm:max-w-[260px]">
-                  <p className="font-sans text-[10px] sm:text-[11px] font-bold text-brand-gold uppercase tracking-wider mb-0.5">
-                    {current.tag}
-                  </p>
-                  <p className="font-serif text-sm sm:text-base font-bold text-paper-ivory">
-                    {current.villageName}
-                  </p>
-                  <p className="font-sans text-[10px] sm:text-[11px] text-paper-ivory/70 leading-snug">
-                    {current.subtitle}
-                  </p>
                 </div>
 
                 {/* Left / Right Carousel Controls */}
@@ -196,14 +182,14 @@ export const CulturalStation: React.FC = () => {
                   <button
                     onClick={handlePrev}
                     aria-label="Làng nghề trước"
-                    className="w-9 h-9 rounded-full bg-[#2A1B12]/80 hover:bg-brand-gold text-paper-ivory hover:text-[#2A1B12] border border-brand-gold/30 flex items-center justify-center backdrop-blur-sm transition-colors cursor-pointer"
+                    className="w-9 h-9 rounded-full bg-[#2A1B12]/85 hover:bg-brand-gold text-paper-ivory hover:text-[#2A1B12] border border-brand-gold/30 flex items-center justify-center backdrop-blur-sm transition-all duration-300 hover:scale-110 cursor-pointer shadow-lg"
                   >
                     <ChevronLeft size={18} />
                   </button>
                   <button
                     onClick={handleNext}
                     aria-label="Làng nghề tiếp theo"
-                    className="w-9 h-9 rounded-full bg-[#2A1B12]/80 hover:bg-brand-gold text-paper-ivory hover:text-[#2A1B12] border border-brand-gold/30 flex items-center justify-center backdrop-blur-sm transition-colors cursor-pointer"
+                    className="w-9 h-9 rounded-full bg-[#2A1B12]/85 hover:bg-brand-gold text-paper-ivory hover:text-[#2A1B12] border border-brand-gold/30 flex items-center justify-center backdrop-blur-sm transition-all duration-300 hover:scale-110 cursor-pointer shadow-lg"
                   >
                     <ChevronRight size={18} />
                   </button>
@@ -213,9 +199,9 @@ export const CulturalStation: React.FC = () => {
               {/* Story & QR Audio Player */}
               <div className="flex flex-col justify-center space-y-5 sm:space-y-6">
                 {/* Village Cultural Story */}
-                <div className="relative bg-[#3A2618]/90 rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-brand-gold/20 shadow-xl space-y-4">
+                <div className="relative bg-[#3A2618]/90 rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-brand-gold/20 shadow-xl space-y-4 hover:border-brand-gold/40 transition-colors duration-300">
                   <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-brand-gold">
-                    <Sparkles size={14} />
+                    <Sparkles size={14} className="animate-spin-slow text-brand-gold" />
                     <span>{current.villageName}</span>
                   </div>
 
@@ -229,9 +215,9 @@ export const CulturalStation: React.FC = () => {
                 </div>
 
                 {/* QR Audio Player Card */}
-                <div className="bg-[#3A2618] rounded-xl sm:rounded-2xl p-5 sm:p-6 border border-brand-gold/25 shadow-xl">
+                <div className="bg-[#3A2618] rounded-xl sm:rounded-2xl p-5 sm:p-6 border border-brand-gold/25 shadow-xl hover:border-brand-gold/45 transition-all duration-300 group/audio">
                   <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
-                    <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-brand-red flex items-center justify-center flex-shrink-0 shadow-md">
+                    <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-brand-red flex items-center justify-center flex-shrink-0 shadow-md group-hover/audio:scale-105 group-hover/audio:bg-brand-red-hover transition-all">
                       <Play size={18} className="text-brand-gold ml-0.5 fill-current sm:[&]:w-5 sm:[&]:h-5" />
                     </div>
                     <div>
@@ -244,16 +230,20 @@ export const CulturalStation: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Waveform mockup */}
-                  <div className="flex items-end gap-[2px] sm:gap-[3px] h-6 sm:h-8 mb-2 sm:mb-3">
+                  {/* Animated Waveform Equalizer */}
+                  <div className="flex items-end gap-[2px] sm:gap-[3px] h-7 sm:h-8 mb-2 sm:mb-3">
                     {[3, 6, 4, 8, 5, 7, 3, 6, 8, 4, 7, 5, 3, 6, 4, 8, 5, 7, 3, 6, 8, 4, 7, 5, 3, 6, 4, 8].map(
                       (h, i) => (
                         <div
                           key={i}
-                          className={`w-[3px] sm:w-1 rounded-full ${
-                            i < 12 ? "bg-brand-gold" : "bg-paper-ivory/20"
+                          className={`w-[3px] sm:w-1 rounded-full transition-all duration-300 ${
+                            i < 14 ? "bg-brand-gold" : "bg-paper-ivory/20"
                           }`}
-                          style={{ height: `${h * 2.5}px` }}
+                          style={{
+                            height: `${h * 2.8}px`,
+                            animation: `equalizer-bar ${1 + (i % 5) * 0.25}s ease-in-out infinite`,
+                            animationDelay: `${(i % 7) * 0.15}s`,
+                          }}
                         />
                       )
                     )}
@@ -262,7 +252,7 @@ export const CulturalStation: React.FC = () => {
                   <div className="flex items-center justify-between text-[9px] sm:text-[10px] text-paper-ivory/60 font-sans">
                     <span>1:24</span>
                     <div className="flex items-center gap-1 sm:gap-1.5 text-brand-gold font-bold uppercase tracking-wider">
-                      <QrCode size={11} />
+                      <QrCode size={11} className="animate-pulse" />
                       <span>Quét QR trên vỏ hộp</span>
                     </div>
                     <span>{current.audioDuration}</span>
