@@ -87,7 +87,7 @@ export const Footer: React.FC = () => {
             </li>
             <li>
               <a href="#products" className="hover:text-clay-terracotta transition-colors">
-                Bộ Sưu Tập Hương Sắc Giao Thời
+                Bộ Kit DIY Làng Nghề
               </a>
             </li>
             <li>

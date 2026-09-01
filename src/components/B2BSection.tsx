@@ -14,19 +14,19 @@ interface ImpactPillar {
 
 const pillars: ImpactPillar[] = [
   {
-    title: "Kết Nối Nghệ Nhân Và Làng Nghề",
+    title: "Lan tỏa văn hóa Việt",
+    description:
+      "Mỗi hộp quà gắn với một làng nghề truyền thống, giúp doanh nghiệp trao tặng không chỉ một món quà mà còn một câu chuyện văn hóa Việt Nam.",
+  },
+  {
+    title: "Kết nối nghệ nhân và làng nghề",
     description:
       "Góp phần đưa sản phẩm và giá trị của làng nghề đến gần hơn với khách hàng, đối tác và cộng đồng thông qua một hình thức trải nghiệm hiện đại.",
   },
   {
-    title: "Đồng Hành Cùng ESG",
+    title: "Đồng hành cùng ESG",
     description:
       "Kết hợp giá trị văn hóa, cộng đồng và tiêu dùng có trách nhiệm trong các chương trình quà tặng doanh nghiệp, góp phần tạo thêm giá trị xã hội từ mỗi sản phẩm.",
-  },
-  {
-    title: "Bao Bì Xanh",
-    description:
-      "Sử dụng 100% vật liệu tre nứa và bao bì tự nhiên phân hủy sinh học theo định hướng ESG.",
   },
 ];
 

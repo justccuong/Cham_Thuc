@@ -22,24 +22,24 @@ export interface ProductInfo {
 export const PRODUCTS_CATALOG: Record<ProductKey, ProductInfo> = {
   "non-la": {
     key: "non-la",
-    label: "Hộp DIY Nón Lá Mini",
-    village: "Làng Nón Chuông",
+    label: "Bộ DIY Nón Lá Mini",
+    village: "Làng Nón Chuông – Hà Nội",
     price: 160000,
-    image: "/products/non-chuong.jpg",
+    image: "/products/non-la/cover.png",
   },
   "to-he": {
     key: "to-he",
-    label: "Hộp DIY Tò He Dân Gian",
-    village: "Làng Tò He Xuân La",
+    label: "Bộ DIY Tò He Dân Gian",
+    village: "Làng Tò He Xuân La – Hà Nội",
     price: 160000,
-    image: "/products/to-he.jpg",
+    image: "/products/to-he/cover.png",
   },
   "chuon-chuon": {
     key: "chuon-chuon",
-    label: "Hộp DIY Chuồn Chuồn Tre",
-    village: "Làng Tre Thạch Xá",
+    label: "Bộ DIY Chuồn Chuồn Tre",
+    village: "Làng chuồn chuồn tre Thạch Xá - Hà Nội",
     price: 160000,
-    image: "/products/chuon-chuon-tre.jpg",
+    image: "/products/chuon-chuon/cover.png",
   },
 };
 

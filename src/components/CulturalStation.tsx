@@ -14,8 +14,8 @@ interface VillageStory {
   subtitle: string;
   tag: string;
   image: string;
-  quote: string;
-  author: string;
+  story: string;
+  poem: string;
   audioTitle: string;
   audioSubtitle: string;
   audioDuration: string;
@@ -28,11 +28,11 @@ const VILLAGES: VillageStory[] = [
     province: "Hà Nội",
     subtitle: "300 năm gìn giữ nghề nón lá cổ truyền",
     tag: "LÀNG NÓN CHUÔNG",
-    image: "/artisan-portrait.jpg",
-    quote:
-      "“Giữ được nghề không chỉ là giữ miếng cơm, mà là giữ lấy cái hồn quê đã thấm vào từng sợi tre, lá nón qua mấy thế hệ.”",
-    author: "— Nghệ Nhân Làng Chuông",
-    audioTitle: "Nghe Nghệ Nhân Kể Chuyện Làng Chuông",
+    image: "/villages/non-chuong.png",
+    poem: "“Nón Chuông, khua lụa, quai thao làng Đơ”",
+    story:
+      "Trải qua hơn 300 năm gìn giữ và phát triển bên dòng sông Đáy, từng chiếc nón lá làng Chuông được đan cài tỉ mỉ từ nan tre, bẹ lá cọ trắng muốt, lưu giữ nét đẹp thanh lịch đoan trang của phụ nữ Việt.",
+    audioTitle: "Nghe Kể Chuyện Làng Nón Chuông",
     audioSubtitle: "Song ngữ VI / EN · Tiếng chằm nón & Nhạc cụ dân tộc",
     audioDuration: "3:45",
   },
@@ -42,26 +42,26 @@ const VILLAGES: VillageStory[] = [
     province: "Hà Nội",
     subtitle: "Nghệ thuật nặn bột màu dân gian độc nhất vô nhị",
     tag: "LÀNG TÒ HE XUÂN LA",
-    image: "/Làng tò he.png",
-    quote:
-      "“Từng vắt bột màu trên tay không chỉ làm con trẻ say mê, mà là cả một ký ức tuổi thơ hồn nhiên của người Việt qua bao thăng trầm năm tháng.”",
-    author: "— Nghệ Nhân Làng Xuân La",
-    audioTitle: "Nghe Nghệ Nhân Kể Chuyện Tò He",
-    audioSubtitle: "Song ngữ VI / EN · Tiếng nặn bột & Lời ru dân gian",
+    image: "/villages/to-he-xuan-la.png",
+    poem: "“Tò he cô bán mấy đồng — Tôi mua một cái cho chồng tôi chơi”",
+    story:
+      "Từ những vắt bột nếp thơm dẻo nhuộm màu tự nhiên, dưới đôi bàn tay khéo léo của nghệ nhân Xuân La, những con giống dân gian sống động ra đời mang theo cả bầu trời ký ức tuổi thơ trong trẻo.",
+    audioTitle: "Nghe Kể Chuyện Làng Tò He Xuân La",
+    audioSubtitle: "Song ngữ VI / EN · Tiếng nặn bột & Điệu ru dân gian",
     audioDuration: "4:12",
   },
   {
     id: "chuon-chuon-thach-xa",
-    villageName: "Làng Tre Thạch Xá",
+    villageName: "Làng chuồn chuồn tre Thạch Xá",
     province: "Hà Nội",
     subtitle: "Kỳ công chuồn chuồn tre thăng bằng dưới chân chùa Tây Phương",
-    tag: "LÀNG TRE THẠCH XÁ",
-    image: "/LÀNG chuồn chuồn tre thạch xá.png",
-    quote:
-      "“Cái tre mộc mạc tưởng chừng vô tri, nhưng khi tìm đúng trọng tâm cân bằng, con chuồn chuồn như bay lượn và mang lại sự an yên cho mỗi ngôi nhà.”",
-    author: "— Nghệ Nhân Làng Thạch Xá",
-    audioTitle: "Nghe Nghệ Nhân Kể Chuyện Chuồn Chuồn Tre",
-    audioSubtitle: "Song ngữ VI / EN · Tiếng vót tre & Âm vang chùa cổ",
+    tag: "LÀNG CHUỒN CHUỒN TRE THẠCH XÁ",
+    image: "/villages/chuon-chuon-thach-xa.png",
+    poem: "“Chuồn chuồn bay thấp thì mưa — Bay cao thì nắng, bay vừa thì râm”",
+    story:
+      "Dưới chân chùa Tây Phương cổ kính, nghệ nhân làng Thạch Xá vót từng thanh tre mộc mạc, cân đo tỉ mỉ từng milimet để tạo nên những chú chuồn chuồn có thể đậu thăng bằng kỳ diệu trên mọi điểm tựa.",
+    audioTitle: "Nghe Kể Chuyện Chuồn Chuồn Tre Thạch Xá",
+    audioSubtitle: "Song ngữ VI / EN · Tiếng vót tre & Âm vang chuông chùa",
     audioDuration: "3:28",
   },
 ];
@@ -210,26 +210,28 @@ export const CulturalStation: React.FC = () => {
                 </div>
               </div>
 
-              {/* Quote + QR audio */}
-              <div className="flex flex-col justify-center space-y-6 sm:space-y-8">
-                {/* Artisan quote */}
-                <div className="relative bg-[#3A2618]/80 rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-brand-gold/20 shadow-lg">
-                  <span className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-brand-gold mb-3">
-                    <Sparkles size={13} />
-                    Lời Trải Lòng Từ Nghệ Nhân
-                  </span>
-                  <blockquote className="font-serif text-xl sm:text-2xl md:text-3xl text-paper-ivory leading-relaxed italic text-left">
-                    {current.quote}
-                  </blockquote>
-                  <p className="font-sans text-xs sm:text-sm font-bold text-brand-gold tracking-wider uppercase mt-4 sm:mt-6 text-right">
-                    {current.author}
+              {/* Story & QR Audio Player */}
+              <div className="flex flex-col justify-center space-y-5 sm:space-y-6">
+                {/* Village Cultural Story */}
+                <div className="relative bg-[#3A2618]/90 rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-brand-gold/20 shadow-xl space-y-4">
+                  <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-brand-gold">
+                    <Sparkles size={14} />
+                    <span>{current.villageName}</span>
+                  </div>
+
+                  <p className="font-serif text-lg sm:text-xl md:text-2xl text-paper-ivory font-medium italic leading-relaxed">
+                    {current.poem}
+                  </p>
+
+                  <p className="font-sans text-xs sm:text-sm text-paper-ivory/85 leading-relaxed font-light">
+                    {current.story}
                   </p>
                 </div>
 
                 {/* QR Audio Player Card */}
-                <div className="bg-[#3A2618] rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-brand-gold/20 shadow-lg">
+                <div className="bg-[#3A2618] rounded-xl sm:rounded-2xl p-5 sm:p-6 border border-brand-gold/25 shadow-xl">
                   <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl bg-brand-red flex items-center justify-center flex-shrink-0 shadow-md">
+                    <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-brand-red flex items-center justify-center flex-shrink-0 shadow-md">
                       <Play size={18} className="text-brand-gold ml-0.5 fill-current sm:[&]:w-5 sm:[&]:h-5" />
                     </div>
                     <div>

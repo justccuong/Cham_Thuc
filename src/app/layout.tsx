@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     siteName: "Chạm Thức",
     images: [
       {
-        url: "/hero-bg.jpg",
+        url: "/hero/hero-banner.png",
         width: 1200,
         height: 630,
         alt: "Chạm Thức — Chạm tinh hoa, Mở văn hóa",
@@ -70,7 +70,7 @@ export const metadata: Metadata = {
     title: "Chạm Thức | Chạm tinh hoa - Mở văn hóa",
     description:
       "Dự án phát triển các hộp trải nghiệm văn hóa Việt Nam và bộ kit DIY làng nghề truyền thống.",
-    images: ["/hero-bg.jpg"],
+    images: ["/hero/hero-banner.png"],
   },
   robots: {
     index: true,

@@ -26,59 +26,100 @@ interface BlindBoxVariant {
 }
 
 const getBlindBoxVariants = (item: CraftItem): BlindBoxVariant[] => {
-  if (item.id === "to-he") {
+  if (item.id === "non-la") {
     return [
       {
-        id: "base",
-        tag: "Gốc",
-        name: "Bộ Kit DIY Tò He Gốc",
-        image: "/products/to-he.jpg",
-        subtext: "Bộ Kit DIY đầy đủ gồm bột tò he 7 màu, que tre, bộ dụng cụ tạo hình và giấy HDSD.",
+        id: "cover",
+        tag: "Hộp",
+        name: "Hộp DIY Nón Lá Mini",
+        image: "/products/non-la/cover.png",
+        subtext: "Bộ Kit DIY Nón Lá Mini — Đầy đủ dụng cụ và quà tặng nón lụa ngẫu nhiên.",
+      },
+      {
+        id: "flatlay",
+        tag: "Dụng cụ",
+        name: "Trọn bộ nguyên liệu",
+        image: "/products/non-la/flatlay.jpg",
+        subtext: "Phôi nón lá trắng mini, nón lụa mini, vỉ màu acrylic, keo dán, charm/đá và HDSD.",
+      },
+      {
+        id: "inside",
+        tag: "Mở hộp",
+        name: "Bên trong hộp",
+        image: "/products/non-la/inside.jpg",
+        subtext: "Đóng gói chỉn chu, sắp xếp nguyên liệu ngăn nắp và an toàn khi vận chuyển.",
+      },
+      {
+        id: "hats",
+        tag: "Nón lụa",
+        name: "Nón lụa màu ngẫu nhiên",
+        image: "/products/non-la/hats.jpg",
+        subtext: "Mỗi hộp đi kèm 1 chiếc nón lụa mini màu ngẫu nhiên (đỏ, hồng, xanh lá, xanh dương...).",
       },
     ];
   }
 
-  if (item.id === "non-la") {
+  if (item.id === "to-he") {
     return [
       {
-        id: "base",
-        tag: "Gốc",
-        name: "Bộ Kit Nón Lá Mini Gốc",
-        image: "/products/non-chuong.jpg",
-        subtext: "Bộ Kit DIY đầy đủ gồm phôi nón lá trắng, nón lụa mini, màu vẽ, cọ, keo dán, charm và giấy HDSD.",
+        id: "cover",
+        tag: "Hộp",
+        name: "Hộp DIY Tò He Dân Gian",
+        image: "/products/to-he/cover.png",
+        subtext: "Bộ Kit DIY Tò He Xuân La — Đánh thức ký ức tuổi thơ dân gian Việt Nam.",
       },
       {
-        id: "gift1",
-        tag: "Mẫu 01",
-        name: "Quai Lụa & Tua Rua Dân Gian",
-        image: "/products/non-chuong.png",
-        subtext: "Cơ hội nhận ngẫu nhiên: Bộ quai lụa tơ tằm và tua rua dân gian.",
+        id: "flatlay",
+        tag: "Dụng cụ",
+        name: "Trọn bộ nguyên liệu",
+        image: "/products/to-he/flatlay.jpg",
+        subtext: "Bột nặn tò he cao cấp không dính tay kèm que gỗ, bộ dụng cụ tạo hình cơ bản và HDSD.",
       },
       {
-        id: "gift2",
-        tag: "Mẫu 02",
-        name: "Hạt Ngọc & Pattern Thủ Công",
-        image: "/products/lua-van-phuc.jpg",
-        subtext: "Cơ hội nhận ngẫu nhiên: Bộ hạt ngọc và hoa văn đơm thủ công.",
+        id: "inside-top",
+        tag: "Mở hộp",
+        name: "Bên trong hộp",
+        image: "/products/to-he/inside-top.jpg",
+        subtext: "Đóng gói cẩn thận cùng rơm lót giấy kraft thân thiện với môi trường.",
       },
       {
-        id: "secret",
-        tag: "Hiếm",
-        name: "Quai Lụa Sơn Thiếp Vàng Khai Xuân",
-        image: "/products/tranh-dong-ho.jpg",
-        subtext: "Mẫu độc bản bí ẩn: Chi tiết trang trí đặc biệt giới hạn 5%.",
-        isSecret: true,
+        id: "inside-pack",
+        tag: "Chi tiết",
+        name: "Tạo hình tò he",
+        image: "/products/to-he/inside-pack.jpg",
+        subtext: "Tự do sáng tạo nặn những nhân vật dân gian sống động theo trí tưởng tượng.",
       },
     ];
   }
 
   return [
     {
-      id: "base",
-      tag: "Gốc",
-      name: "Bộ Kit Chuồn Chuồn Tre Gốc",
-      image: "/products/chuon-chuon-tre.jpg",
-      subtext: "Bộ Kit DIY đầy đủ gồm 2 chuồn chuồn tre mộc, chân đế, khay pha màu, màu vẽ, 2 cọ và giấy HDSD.",
+      id: "cover",
+      tag: "Hộp",
+      name: "Hộp DIY Chuồn Chuồn Tre",
+      image: "/products/chuon-chuon/cover.png",
+      subtext: "Bộ Kit DIY Chuồn Chuồn Tre Thạch Xá — Tinh hoa thăng bằng tre mộc.",
+    },
+    {
+      id: "flatlay",
+      tag: "Dụng cụ",
+      name: "Trọn bộ nguyên liệu",
+      image: "/products/chuon-chuon/flatlay.jpg",
+      subtext: "Chuồn chuồn tre mộc chưa sơn, bộ vỉ màu Acrylic kèm 2 cọ, chân đế 1 nhánh và HDSD.",
+    },
+    {
+      id: "inside-top",
+      tag: "Mở hộp",
+      name: "Bên trong hộp",
+      image: "/products/chuon-chuon/inside-top.jpg",
+      subtext: "Đóng gói chỉn chu, bảo vệ mô hình chuồn chuồn tre nguyên vẹn.",
+    },
+    {
+      id: "inside-angled",
+      tag: "Chi tiết",
+      name: "Góc mở hộp",
+      image: "/products/chuon-chuon/inside-angled.jpg",
+      subtext: "Khám phá nét đẹp chuồn chuồn tre giữ thăng bằng độc đáo trên chân đế.",
     },
   ];
 };
@@ -260,7 +301,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ item, onClose, onOrd
                     {t.modal.giftNoteTitle}
                   </p>
                   <p className="font-sans text-xs sm:text-sm text-[#3A2618]/80 leading-relaxed font-normal">
-                    {t.modal.giftNoteDesc}
+                    {item.secretItem}
                   </p>
                 </div>
                 )}

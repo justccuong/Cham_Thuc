@@ -18,8 +18,8 @@ export const HeroSection: React.FC = () => {
       {/* Background image — shows clean first */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/hero-bg.jpg"
-          alt="Vietnamese artisan crafting"
+          src="/hero/hero-banner.png"
+          alt="CHẠM THỨC — Chạm Tinh Hoa, Mở Văn Hóa"
           fill
           priority
           sizes="100vw"
