@@ -214,7 +214,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ item, onClose, onOrd
                     />
 
                     {/* Tag Overlay */}
-                    <div className="absolute top-3 left-3 z-20 bg-black/65 backdrop-blur-md text-white text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
+                    <div className="absolute top-3 left-3 z-20 bg-black/75 backdrop-blur-md text-white text-xs sm:text-sm font-bold px-3.5 py-1.5 rounded-full uppercase tracking-wider shadow-md">
                       {activeVariant.tag} — {activeVariant.name}
                     </div>
                   </motion.div>
@@ -222,14 +222,14 @@ export const ProductModal: React.FC<ProductModalProps> = ({ item, onClose, onOrd
               </div>
 
               {/* Subtext under main image */}
-              <p className="font-sans text-xs sm:text-sm text-[#3A2618]/80 bg-white p-3 rounded-xl border border-[#3A2618]/10 font-normal leading-relaxed">
+              <p className="font-sans text-sm sm:text-base text-[#2A1B12] bg-white p-3.5 rounded-xl border border-[#3A2618]/15 font-normal leading-relaxed shadow-sm">
                 {activeVariant.subtext}
               </p>
 
               {/* Thumbnails Section — only shown for products with blind box variants */}
               {variants.length > 1 && (
               <div>
-                <p className="text-[11px] font-bold text-[#3A2618]/60 uppercase tracking-widest mb-2">
+                <p className="text-xs sm:text-sm font-extrabold text-[#3A2618]/75 uppercase tracking-wider mb-2">
                   {t.modal.giftHeader}
                 </p>
                 <div className="grid grid-cols-4 gap-2 sm:gap-3">
@@ -252,7 +252,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ item, onClose, onOrd
                           sizes="80px"
                           className="object-cover"
                         />
-                        <span className="absolute bottom-1 right-1 bg-black/70 text-white text-[9px] font-bold px-1.5 py-0.5 rounded uppercase">
+                        <span className="absolute bottom-1 right-1 bg-black/75 text-white text-[10px] sm:text-xs font-bold px-1.5 py-0.5 rounded uppercase">
                           {v.tag}
                         </span>
                       </button>
@@ -265,29 +265,29 @@ export const ProductModal: React.FC<ProductModalProps> = ({ item, onClose, onOrd
 
             {/* Right Column: Information & CTA */}
             <div className="w-full md:w-1/2 p-5 sm:p-8 flex flex-col justify-between md:overflow-y-auto bg-paper-ivory space-y-5 pb-6 sm:pb-8 flex-shrink-0">
-              <div className="space-y-4">
+              <div className="space-y-4 sm:space-y-5">
                 {/* Village Tag + Title + Price */}
                 <div>
-                  <span className="font-sans text-xs font-bold uppercase tracking-wider text-[#285834] mb-1 block">
+                  <span className="font-sans text-xs sm:text-sm font-extrabold uppercase tracking-wider text-[#285834] mb-1.5 block">
                     {item.village.toUpperCase()}
                   </span>
-                  <h3 className="font-serif text-2xl font-bold text-[#9A1B1F] mb-2 leading-snug">
+                  <h3 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#9A1B1F] mb-2 leading-snug">
                     {item.name}
                   </h3>
-                  <p className="font-price text-3xl font-extrabold text-[#9A1B1F] mb-3">
+                  <p className="font-price text-3xl sm:text-4xl font-black text-[#9A1B1F] mb-3">
                     {priceDisplay} {t.products.priceSuffix}
                   </p>
                 </div>
 
                 {/* Component List with Plain Text Bullets */}
                 <div>
-                  <h4 className="font-sans text-xs font-bold uppercase tracking-wider text-[#3A2618]/80 mb-2">
+                  <h4 className="font-sans text-xs sm:text-sm font-extrabold uppercase tracking-wider text-[#3A2618]/90 mb-2.5">
                     {t.modal.materialsHeader}
                   </h4>
-                  <div className="space-y-1.5 font-sans text-sm text-[#3A2618]/85 pl-1 font-normal">
+                  <div className="space-y-2 font-sans text-sm sm:text-base text-[#2A1B12] pl-1 font-medium leading-relaxed">
                     {item.materials.map((mat, idx) => (
-                      <div key={idx} className="flex items-start gap-2">
-                        <span className="text-[#9A1B1F] font-bold">-</span>
+                      <div key={idx} className="flex items-start gap-2.5">
+                        <span className="text-[#9A1B1F] font-bold text-base sm:text-lg leading-none mt-0.5">•</span>
                         <span>{mat}</span>
                       </div>
                     ))}
@@ -296,11 +296,11 @@ export const ProductModal: React.FC<ProductModalProps> = ({ item, onClose, onOrd
 
                 {/* Highlight Box for Random Gift Note — hidden when no random gift */}
                 {item.secretItem && (
-                <div className="bg-[#9A1B1F]/5 border border-[#9A1B1F]/20 p-4 rounded-xl space-y-1">
-                  <p className="font-sans text-xs font-bold uppercase tracking-wider text-[#9A1B1F]">
+                <div className="bg-[#9A1B1F]/8 border border-[#9A1B1F]/25 p-4 rounded-2xl space-y-1.5 shadow-sm">
+                  <p className="font-sans text-xs sm:text-sm font-extrabold uppercase tracking-wider text-[#9A1B1F]">
                     {t.modal.giftNoteTitle}
                   </p>
-                  <p className="font-sans text-xs sm:text-sm text-[#3A2618]/80 leading-relaxed font-normal">
+                  <p className="font-sans text-xs sm:text-sm text-[#3A2618] leading-relaxed font-medium">
                     {item.secretItem}
                   </p>
                 </div>
@@ -317,9 +317,9 @@ export const ProductModal: React.FC<ProductModalProps> = ({ item, onClose, onOrd
                     onClose();
                     onOrder(key);
                   }}
-                  className="w-full h-12 sm:h-13 bg-[#9A1B1F] hover:bg-[#7A1518] text-[#F4E8C1] shadow-lg flex items-center justify-center gap-2 rounded-xl text-base font-bold uppercase tracking-wider cursor-pointer"
+                  className="w-full h-13 sm:h-14 bg-[#9A1B1F] hover:bg-[#7A1518] text-[#F4E8C1] shadow-xl flex items-center justify-center gap-2.5 rounded-2xl text-base sm:text-lg font-black uppercase tracking-wider cursor-pointer active:scale-95 transition-all"
                 >
-                  <ShoppingBag size={18} />
+                  <ShoppingBag size={20} />
                   <span>
                     {t.modal.selectBoxBtn}
                     {priceDisplay} {t.products.priceSuffix}
