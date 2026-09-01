@@ -80,7 +80,7 @@ const VILLAGES: VillageStory[] = [
   {
     id: "chuon-chuon-thach-xa",
     productKey: "chuon-chuon",
-    villageName: "Làng chuồn chuồn tre Thạch Xá",
+    villageName: "Làng Chuồn Chuồn Tre Thạch Xá",
     location: "Xã Thạch Xá, Huyện Thạch Thất, Hà Nội",
     history: "Kỳ công tre mộc dưới chân chùa Tây Phương",
     subtitle: "Kỳ công chuồn chuồn tre thăng bằng dưới chân chùa Tây Phương",
@@ -159,35 +159,52 @@ export const CulturalStation: React.FC = () => {
             <div className="h-[1px] w-16 bg-[#F8F5F0]" />
           </div>
 
-          {/* Village switcher tabs */}
-          <div className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3.5 mt-4">
+          {/* 3 Equal Symmetrical Village Tabs */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3.5 max-w-2xl mx-auto mt-4">
             {VILLAGES.map((v, idx) => {
               const isActive = idx === activeIdx;
               return (
                 <button
                   key={v.id}
                   onClick={() => setActiveIdx(idx)}
-                  className={`px-4 sm:px-6 py-2.5 rounded-full font-sans text-xs sm:text-sm font-bold tracking-wide transition-all duration-300 cursor-pointer border ${
+                  className={`w-full py-2.5 sm:py-3 px-3 sm:px-4 rounded-2xl font-sans text-xs sm:text-sm font-bold tracking-wide transition-all duration-300 cursor-pointer border text-center flex items-center justify-center ${
                     isActive
-                      ? "bg-brand-gold text-[#2A1B12] border-brand-gold shadow-[0_4px_20px_rgba(244,232,193,0.3)] scale-105"
+                      ? "bg-brand-gold text-[#2A1B12] border-brand-gold shadow-[0_4px_20px_rgba(244,232,193,0.3)] scale-[1.02]"
                       : "bg-[#3A2618]/80 text-paper-ivory/80 border-brand-gold/20 hover:border-brand-gold/50 hover:text-brand-gold hover:bg-[#4A3220]"
                   }`}
                 >
-                  {v.villageName}
+                  <span className="truncate">{v.villageName}</span>
                 </button>
               );
             })}
           </div>
 
-          {/* Auto-rotate progress bar (25 seconds) */}
-          <div className="mt-4 mx-auto max-w-xs h-0.5 bg-brand-gold/20 rounded-full overflow-hidden">
-            <motion.div
-              key={`progress-${activeIdx}`}
-              className="h-full bg-brand-gold rounded-full"
-              initial={{ width: "0%" }}
-              animate={{ width: "100%" }}
-              transition={{ duration: isHovered ? 0 : 25, ease: "linear" }}
-            />
+          {/* 3 Synchronized Segmented Countdown Timer Bars */}
+          <div className="grid grid-cols-3 gap-2.5 sm:gap-3.5 max-w-2xl mx-auto mt-3 px-1">
+            {VILLAGES.map((v, idx) => {
+              const isActive = idx === activeIdx;
+              const isPassed = idx < activeIdx;
+              return (
+                <div
+                  key={`timer-seg-${v.id}`}
+                  onClick={() => setActiveIdx(idx)}
+                  className="h-1 sm:h-1.5 bg-paper-ivory/15 rounded-full overflow-hidden relative cursor-pointer"
+                  title={`Chuyển sang ${v.villageName}`}
+                >
+                  {isPassed ? (
+                    <div className="h-full w-full bg-brand-gold rounded-full" />
+                  ) : isActive ? (
+                    <motion.div
+                      key={`progress-bar-${activeIdx}`}
+                      className="h-full bg-brand-gold rounded-full shadow-[0_0_8px_rgba(244,232,193,0.8)]"
+                      initial={{ width: "0%" }}
+                      animate={{ width: "100%" }}
+                      transition={{ duration: isHovered ? 0 : 25, ease: "linear" }}
+                    />
+                  ) : null}
+                </div>
+              );
+            })}
           </div>
         </motion.div>
 
