@@ -73,9 +73,11 @@ export const CulturalStation: React.FC = () => {
 
   useEffect(() => {
     if (isHovered) return;
+    if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) return;
+
     const timer = setInterval(() => {
       setActiveIdx((prev) => (prev === VILLAGES.length - 1 ? 0 : prev + 1));
-    }, 8000);
+    }, 16000);
     return () => clearInterval(timer);
   }, [isHovered, activeIdx]);
 
@@ -148,7 +150,7 @@ export const CulturalStation: React.FC = () => {
               className="h-full bg-brand-gold rounded-full"
               initial={{ width: '0%' }}
               animate={{ width: '100%' }}
-              transition={{ duration: isHovered ? 0 : 8, ease: 'linear' }}
+              transition={{ duration: isHovered ? 0 : 16, ease: 'linear' }}
             />
           </div>
         </motion.div>
@@ -200,7 +202,7 @@ export const CulturalStation: React.FC = () => {
               <div className="flex flex-col justify-center space-y-5 sm:space-y-6">
                 {/* Village Cultural Story */}
                 <div className="relative bg-[#3A2618]/90 rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-brand-gold/20 shadow-xl space-y-4 hover:border-brand-gold/40 transition-colors duration-300">
-                  <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-brand-gold">
+                  <div className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold uppercase tracking-widest text-brand-gold">
                     <Sparkles size={14} className="animate-spin-slow text-brand-gold" />
                     <span>{current.villageName}</span>
                   </div>
@@ -209,7 +211,7 @@ export const CulturalStation: React.FC = () => {
                     {current.poem}
                   </p>
 
-                  <p className="font-sans text-xs sm:text-sm text-paper-ivory/85 leading-relaxed font-light">
+                  <p className="font-sans text-sm sm:text-base text-paper-ivory/85 leading-relaxed font-light">
                     {current.story}
                   </p>
                 </div>
@@ -217,14 +219,14 @@ export const CulturalStation: React.FC = () => {
                 {/* QR Audio Player Card */}
                 <div className="bg-[#3A2618] rounded-xl sm:rounded-2xl p-5 sm:p-6 border border-brand-gold/25 shadow-xl hover:border-brand-gold/45 transition-all duration-300 group/audio">
                   <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
-                    <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-brand-red flex items-center justify-center flex-shrink-0 shadow-md group-hover/audio:scale-105 group-hover/audio:bg-brand-red-hover transition-all">
-                      <Play size={18} className="text-brand-gold ml-0.5 fill-current sm:[&]:w-5 sm:[&]:h-5" />
+                    <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-brand-red flex items-center justify-center flex-shrink-0 shadow-md group-hover/audio:scale-105 group-hover/audio:bg-brand-red-hover transition-all">
+                      <Play size={20} className="text-brand-gold ml-0.5 fill-current" />
                     </div>
                     <div>
-                      <p className="font-serif text-sm sm:text-base font-bold text-brand-gold">
+                      <p className="font-serif text-base sm:text-lg font-bold text-brand-gold">
                         {current.audioTitle}
                       </p>
-                      <p className="font-sans text-[10px] sm:text-[11px] text-paper-ivory/70">
+                      <p className="font-sans text-xs sm:text-sm text-paper-ivory/70">
                         {current.audioSubtitle}
                       </p>
                     </div>
@@ -249,10 +251,10 @@ export const CulturalStation: React.FC = () => {
                     )}
                   </div>
 
-                  <div className="flex items-center justify-between text-[9px] sm:text-[10px] text-paper-ivory/60 font-sans">
+                  <div className="flex items-center justify-between text-xs sm:text-sm text-paper-ivory/70 font-sans">
                     <span>1:24</span>
-                    <div className="flex items-center gap-1 sm:gap-1.5 text-brand-gold font-bold uppercase tracking-wider">
-                      <QrCode size={11} className="animate-pulse" />
+                    <div className="flex items-center gap-1.5 text-brand-gold font-bold uppercase tracking-wider">
+                      <QrCode size={14} className="animate-pulse" />
                       <span>Quét QR trên vỏ hộp</span>
                     </div>
                     <span>{current.audioDuration}</span>

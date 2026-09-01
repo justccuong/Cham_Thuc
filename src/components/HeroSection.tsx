@@ -86,29 +86,40 @@ export const HeroSection: React.FC = () => {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.55 }}
-          className="font-sans text-sm sm:text-base md:text-lg text-paper-ivory/80 max-w-sm sm:max-w-md font-light leading-relaxed"
+          className="font-sans text-sm sm:text-base md:text-lg text-paper-ivory/80 max-w-sm sm:max-w-md font-light leading-relaxed mb-6 sm:mb-8"
         >
           {t.hero.subtitle}
         </motion.p>
+
+        {/* Prominent High-Contrast CTA Button */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.65 }}
+        >
+          <a
+            href="#products"
+            onClick={(e) => {
+              e.preventDefault();
+              document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
+            }}
+            className="inline-flex items-center justify-center gap-2.5 px-7 sm:px-9 py-3.5 sm:py-4 rounded-full bg-brand-red hover:bg-brand-red-hover text-brand-gold font-bold text-sm sm:text-base uppercase tracking-wider shadow-[0_8px_25px_rgba(154,27,31,0.5)] hover:shadow-[0_12px_35px_rgba(154,27,31,0.7)] transition-all duration-300 hover:scale-105 cursor-pointer border border-brand-gold/30"
+          >
+            <span>{t.hero.ctaExplore}</span>
+            <ArrowDown size={18} className="animate-bounce" />
+          </a>
+        </motion.div>
       </motion.div>
 
-      {/* "Khám phá ngay" — text-only link pinned near bottom */}
-      <motion.a
-        href="#products"
+      {/* Subtle bottom scroll cue */}
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.4, delay: 0.65 }}
-        onClick={(e) => {
-          e.preventDefault();
-          document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
-        }}
-        className="relative z-10 mb-10 sm:mb-14 flex flex-col items-center gap-2 cursor-pointer group"
+        transition={{ duration: 0.4, delay: 0.8 }}
+        className="relative z-10 mb-6 sm:mb-8 text-[11px] sm:text-xs text-paper-ivory/50 uppercase tracking-widest font-sans"
       >
-        <span className="font-sans text-xs sm:text-sm text-paper-ivory/70 tracking-widest uppercase group-hover:text-paper-ivory transition-colors duration-300">
-          {t.hero.ctaExplore}
-        </span>
-        <ArrowDown size={16} className="text-paper-ivory/50 animate-bounce group-hover:text-paper-ivory transition-colors duration-300" />
-      </motion.a>
+        Cuộn xuống để trải nghiệm
+      </motion.div>
     </section>
   );
 };

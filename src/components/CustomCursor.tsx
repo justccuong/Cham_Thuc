@@ -13,8 +13,8 @@ export const CustomCursor: React.FC = () => {
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
 
-  // Smooth springs for outer ring trailing effect
-  const springConfig = { damping: 28, stiffness: 320, mass: 0.4 };
+  // Responsive springs for outer ring trailing effect with zero sluggishness
+  const springConfig = { damping: 38, stiffness: 480, mass: 0.15 };
   const smoothX = useSpring(cursorX, springConfig);
   const smoothY = useSpring(cursorY, springConfig);
 

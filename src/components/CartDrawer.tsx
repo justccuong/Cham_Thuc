@@ -112,7 +112,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
 
   // Form input handlers
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value.replace(/\D/g, "").slice(0, 10);
+    const val = e.target.value.slice(0, 15);
     setPhone(val);
     if (errors.phone) setErrors((prev) => ({ ...prev, phone: undefined }));
   };
@@ -138,10 +138,11 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
       newErrors.fullName = "Họ và tên quá ngắn (tối thiểu 2 ký tự).";
     }
 
+    const cleanPhone = phone.replace(/\D/g, "");
     const phoneRegex = /^0(3|5|7|8|9)\d{8}$/;
-    if (!phone) {
+    if (!cleanPhone) {
       newErrors.phone = "Vui lòng nhập số điện thoại nhận hàng.";
-    } else if (!phoneRegex.test(phone)) {
+    } else if (!phoneRegex.test(cleanPhone)) {
       newErrors.phone = "Số điện thoại không hợp lệ (10 chữ số, bắt đầu bằng 03, 05, 07, 08, 09).";
     }
 
@@ -163,21 +164,22 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     setErrors({});
 
     try {
+      const cleanPhone = phone.replace(/\D/g, "");
       const productNames = cartEntries
-        .map((k) => `${PRODUCTS_CATALOG[k].label} x${cartState[k]}`)
+        .map((k) => `${PRODUCTS_CATALOG[k]?.label || k} x${cartState[k]}`)
         .join(", ");
 
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          name: fullName,
-          phone,
-          address,
+          name: fullName.trim(),
+          phone: cleanPhone,
+          address: address.trim(),
           productName: productNames,
           price: totalPrice,
           paymentMethod,
-          notes: note,
+          notes: note.trim(),
         }),
       });
 
@@ -401,33 +403,33 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                                 </div>
 
                                 {/* Stepper */}
-                                <div className="flex items-center gap-1 bg-paper-warm rounded-xl border border-text-wood/15 p-1 flex-shrink-0">
+                                <div className="flex items-center gap-1.5 bg-paper-warm rounded-2xl border border-text-wood/15 p-1.5 flex-shrink-0 shadow-inner">
                                   <button
                                     onClick={() => updateQuantity(key, qty - 1)}
-                                    className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center text-text-wood/70 hover:text-brand-red hover:bg-white rounded-lg transition-colors cursor-pointer"
+                                    className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-text-wood/75 hover:text-brand-red hover:bg-white rounded-xl transition-all cursor-pointer active:scale-95"
                                     aria-label="Giảm số lượng"
                                   >
-                                    <Minus size={14} />
+                                    <Minus size={16} />
                                   </button>
-                                  <span className="font-price font-bold text-sm sm:text-base w-6 text-center">
+                                  <span className="font-price font-bold text-base sm:text-lg w-7 sm:w-8 text-center text-text-wood">
                                     {qty}
                                   </span>
                                   <button
                                     onClick={() => addItem(key)}
-                                    className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center text-text-wood/70 hover:text-brand-red hover:bg-white rounded-lg transition-colors cursor-pointer"
+                                    className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-text-wood/75 hover:text-brand-red hover:bg-white rounded-xl transition-all cursor-pointer active:scale-95"
                                     aria-label="Tăng số lượng"
                                   >
-                                    <Plus size={14} />
+                                    <Plus size={16} />
                                   </button>
                                 </div>
 
                                 {/* Trash */}
                                 <button
                                   onClick={() => removeItem(key)}
-                                  className="w-8 h-8 flex items-center justify-center text-text-wood/35 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors cursor-pointer flex-shrink-0"
+                                  className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-text-wood/40 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors cursor-pointer flex-shrink-0"
                                   aria-label="Xóa sản phẩm"
                                 >
-                                  <Trash2 size={16} />
+                                  <Trash2 size={18} />
                                 </button>
                               </div>
                             );
