@@ -247,10 +247,10 @@ function GuideContent() {
       <header className="sticky top-0 z-50 bg-[#F8F5F0]/90 backdrop-blur-md border-b border-[#3A2618]/10 px-4 sm:px-8 py-3.5 flex items-center justify-between shadow-sm">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold uppercase tracking-wider text-[#3A2618]/80 hover:text-[#9A1B1F] transition-colors"
+          className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-[#3A2618] hover:text-[#9A1B1F] transition-colors"
         >
           <ArrowLeft size={16} />
-          <span>Trang Chủ Chạm Thức</span>
+          <span>Về trang chủ Chạm Thức</span>
         </Link>
 
         <div className="flex items-center gap-2.5">
@@ -258,11 +258,11 @@ function GuideContent() {
             <Image
               src="/logo.png"
               alt="Chạm Thức Logo"
-              width={32}
-              height={32}
-              className="w-8 h-8 rounded-full object-cover border border-[#3A2618]/15 shadow-sm"
+              width={34}
+              height={34}
+              className="w-8 sm:w-9 h-8 sm:h-9 rounded-full object-cover border border-[#3A2618]/15 shadow-sm"
             />
-            <span className="font-serif font-black text-lg sm:text-xl text-[#9A1B1F] tracking-wide">
+            <span className="font-serif font-black text-lg sm:text-2xl text-[#9A1B1F] tracking-wide">
               CHẠM THỨC
             </span>
           </Link>
@@ -271,20 +271,20 @@ function GuideContent() {
         <div className="flex items-center gap-2.5">
           <button
             onClick={handleShare}
-            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-[#3A2618]/15 text-xs font-semibold text-[#3A2618] hover:border-[#9A1B1F] hover:text-[#9A1B1F] shadow-sm transition-all cursor-pointer"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white border border-[#3A2618]/15 text-xs sm:text-sm font-semibold text-[#3A2618] hover:border-[#9A1B1F] hover:text-[#9A1B1F] shadow-sm transition-all cursor-pointer"
           >
-            <Share2 size={13} />
+            <Share2 size={14} />
             <span>{copied ? "Đã chép link!" : "Chia sẻ"}</span>
           </button>
 
           {/* Cart Button with Count Badge */}
           <button
             onClick={() => openCart()}
-            className="relative px-3.5 py-1.5 bg-[#9A1B1F] hover:bg-[#7A1518] text-[#F4E8C1] font-bold text-xs sm:text-sm rounded-full flex items-center gap-1.5 shadow-md transition-all cursor-pointer active:scale-95"
+            className="relative px-4 py-2 bg-[#9A1B1F] hover:bg-[#7A1518] text-[#F4E8C1] font-bold text-xs sm:text-sm rounded-full flex items-center gap-1.5 shadow-md transition-all cursor-pointer active:scale-95"
             aria-label="Giỏ hàng"
           >
-            <ShoppingBag size={15} />
-            <span className="hidden sm:inline">Giỏ Hàng</span>
+            <ShoppingBag size={16} />
+            <span className="hidden sm:inline">Giỏ hàng</span>
             {totalCount > 0 && (
               <span className="w-5 h-5 bg-[#F4E8C1] text-[#9A1B1F] text-[11px] font-black rounded-full flex items-center justify-center shadow-inner ml-0.5">
                 {totalCount}
@@ -296,21 +296,21 @@ function GuideContent() {
 
       {/* Hero Header Section */}
       <section className="relative z-10 pt-8 sm:pt-14 pb-6 sm:pb-10 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center">
-        <span className="inline-flex items-center gap-1.5 font-sans text-xs sm:text-sm font-extrabold uppercase tracking-widest text-[#9A1B1F] bg-[#9A1B1F]/8 px-4 py-1.5 rounded-full border border-[#9A1B1F]/15 mb-3 sm:mb-4">
-          <Sparkles size={14} className="text-[#9A1B1F]" />
-          TRẠM HƯỚNG DẪN TRẢI NGHIỆM DIY
+        <span className="inline-flex items-center gap-1.5 font-sans text-xs sm:text-sm font-bold text-[#9A1B1F] bg-[#9A1B1F]/10 px-4 py-1.5 rounded-full border border-[#9A1B1F]/20 mb-3 sm:mb-4">
+          <Sparkles size={15} className="text-[#9A1B1F]" />
+          Trạm hướng dẫn trải nghiệm DIY
         </span>
 
         <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#9A1B1F] tracking-tight mb-3 sm:mb-4 leading-tight">
           Khám Phá Cách Tự Tay Hoàn Thiện Tác Phẩm
         </h1>
 
-        <p className="font-sans text-sm sm:text-base md:text-lg text-[#3A2618]/75 max-w-2xl mx-auto font-light leading-relaxed">
+        <p className="font-sans text-sm sm:text-base md:text-lg text-[#2A1B12]/80 max-w-2xl mx-auto font-medium leading-relaxed">
           Quét mã QR từ vỏ hộp để xem video hướng dẫn chi tiết từng bước từ nghệ nhân làng nghề, giúp bạn tự tin tạo nên sản phẩm thủ công di sản độc bản.
         </p>
 
-        {/* 3 Equal Symmetrical Product Selector Tabs */}
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-2xl mx-auto">
+        {/* 3 Equal Symmetrical Product Selector Tabs with Full Width & No Truncation */}
+        <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 max-w-3xl mx-auto">
           {(["non-la", "to-he", "chuon-chuon"] as ProductKey[]).map((pid) => {
             const p = GUIDES_DATA[pid];
             const isActive = activeProduct === pid;
@@ -321,16 +321,16 @@ function GuideContent() {
                   setActiveProduct(pid);
                   setIsPlayingVideo(false);
                 }}
-                className={`w-full py-3 px-4 rounded-2xl font-sans text-xs sm:text-sm font-bold tracking-wide transition-all duration-300 cursor-pointer border flex items-center justify-center gap-2.5 ${
+                className={`w-full py-3 px-3.5 sm:px-4 rounded-2xl font-sans text-xs sm:text-sm md:text-base font-bold tracking-wide transition-all duration-300 cursor-pointer border flex items-center justify-center gap-2.5 ${
                   isActive
                     ? "bg-[#9A1B1F] text-[#F4E8C1] border-[#9A1B1F] shadow-[0_6px_20px_rgba(154,27,31,0.35)] scale-[1.02]"
-                    : "bg-white text-[#3A2618]/80 border-[#3A2618]/15 hover:border-[#9A1B1F]/40 hover:text-[#9A1B1F] hover:bg-stone-50"
+                    : "bg-white text-[#2A1B12] border-[#3A2618]/15 hover:border-[#9A1B1F]/40 hover:text-[#9A1B1F] hover:bg-stone-50"
                 }`}
               >
-                <div className="relative w-6 h-6 rounded-full overflow-hidden flex-shrink-0 border border-white/30">
-                  <Image src={p.coverImage} alt={p.name} fill className="object-cover" sizes="24px" />
+                <div className="relative w-6 h-6 sm:w-7 sm:h-7 rounded-full overflow-hidden flex-shrink-0 border border-white/40">
+                  <Image src={p.coverImage} alt={p.name} fill className="object-cover" sizes="28px" />
                 </div>
-                <span className="truncate">{p.name}</span>
+                <span className="whitespace-nowrap">{p.name}</span>
               </button>
             );
           })}
@@ -339,46 +339,44 @@ function GuideContent() {
 
       {/* Main Content Area */}
       <main className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 sm:pb-24 space-y-10 sm:space-y-14">
-        {/* Active Product Title Header */}
-        <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 sm:p-8 border border-[#3A2618]/15 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-[#285834] block">
-                {currentGuide.village}
-              </span>
-              <span className="text-xs text-[#3A2618]/40">•</span>
-              <div className="flex items-center gap-1 text-xs text-[#3A2618]/70">
-                <MapPin size={12} className="text-[#9A1B1F]" />
+        {/* Active Product Title Header Card */}
+        <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-6 sm:p-8 border border-[#3A2618]/15 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div className="space-y-2 flex-1 min-w-0">
+            <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 text-xs sm:text-sm font-bold text-[#285834]">
+              <span>{currentGuide.village}</span>
+              <span className="text-[#3A2618]/30 hidden sm:inline">•</span>
+              <span className="inline-flex items-center gap-1 text-[#3A2618]/80 font-medium">
+                <MapPin size={13} className="text-[#9A1B1F] flex-shrink-0" />
                 <span>{currentGuide.location}</span>
-              </div>
+              </span>
             </div>
 
-            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-black text-[#9A1B1F]">
+            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-black text-[#9A1B1F] tracking-tight">
               {currentGuide.name}
             </h2>
 
-            <p className="text-xs sm:text-sm text-[#3A2618]/75">
-              Thời lượng xem gợi ý: <span className="font-bold text-[#9A1B1F]">{currentGuide.videoDuration}</span> • Trải nghiệm thực hành: 30–45 phút • Giá: <span className="font-price font-bold text-[#9A1B1F]">{currentGuide.price.toLocaleString("vi-VN")} đ</span>
+            <p className="text-xs sm:text-sm font-medium text-[#2A1B12]/80">
+              Thời lượng xem video: <span className="font-bold text-[#9A1B1F]">{currentGuide.videoDuration}</span> • Trải nghiệm thực hành: 30–45 phút • Giá bộ Kit: <span className="font-price font-bold text-[#9A1B1F] text-base">{currentGuide.price.toLocaleString("vi-VN")} đ</span>
             </p>
           </div>
 
-          <div className="flex items-center gap-3 w-full md:w-auto">
+          <div className="flex items-center gap-3 w-full md:w-auto flex-shrink-0">
             <button
               onClick={() => openCart(activeProduct)}
-              className="flex-1 md:flex-initial inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#9A1B1F] hover:bg-[#7A1518] text-[#F4E8C1] rounded-2xl text-xs sm:text-sm font-bold uppercase tracking-wider shadow-md transition-all cursor-pointer active:scale-95"
+              className="whitespace-nowrap flex-1 md:flex-initial inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-[#9A1B1F] hover:bg-[#7A1518] text-[#F4E8C1] rounded-2xl text-sm font-bold shadow-lg transition-all cursor-pointer active:scale-95 flex-shrink-0"
             >
-              <ShoppingBag size={16} />
+              <ShoppingBag size={17} />
               <span>Đặt Hộp Này</span>
             </button>
 
             <a
               href={`/qr/qr-hdsd-${currentGuide.id}.png`}
               download={`QR_HDSD_${currentGuide.id}.png`}
-              className="inline-flex items-center justify-center gap-2 px-4 py-3 bg-[#F8F5F0] hover:bg-[#9A1B1F]/10 border border-[#3A2618]/15 text-[#3A2618] hover:text-[#9A1B1F] rounded-2xl text-xs sm:text-sm font-bold transition-all"
+              className="whitespace-nowrap inline-flex items-center justify-center gap-2 px-4 py-3.5 bg-white hover:bg-stone-50 border border-[#3A2618]/15 text-[#2A1B12] hover:text-[#9A1B1F] rounded-2xl text-sm font-bold transition-all shadow-sm flex-shrink-0"
               title="Tải mã QR để in ấn trên vỏ hộp / giấy HDSD"
             >
               <Download size={16} />
-              <span className="hidden sm:inline">Tải Mã QR</span>
+              <span>Tải mã QR</span>
             </a>
           </div>
         </div>
@@ -387,7 +385,7 @@ function GuideContent() {
         <section className="space-y-4">
           <div className="flex items-center gap-2.5 text-[#9A1B1F]">
             <Play size={22} className="fill-current" />
-            <h3 className="font-serif text-xl sm:text-2xl font-black">
+            <h3 className="font-serif text-xl sm:text-2xl md:text-3xl font-black">
               Video Hướng Dẫn Chi Tiết
             </h3>
           </div>
@@ -426,14 +424,14 @@ function GuideContent() {
 
                 {/* Bottom Video Meta */}
                 <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6 text-white space-y-1.5">
-                  <span className="inline-block bg-[#9A1B1F] text-[10px] sm:text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-md shadow-sm">
-                    VIDEO CHÍNH THỨC
+                  <span className="inline-block bg-[#9A1B1F] text-xs font-bold px-3 py-1 rounded-md shadow-sm">
+                    Video chính thức từ nghệ nhân
                   </span>
                   <p className="font-serif text-lg sm:text-2xl font-bold drop-shadow-md">
                     {currentGuide.videoTitle}
                   </p>
-                  <p className="text-xs sm:text-sm text-white/80 drop-shadow">
-                    Bấm để xem video từng nét vẽ và động tác của nghệ nhân
+                  <p className="text-xs sm:text-sm text-white/90 drop-shadow font-medium">
+                    Bấm để xem video từng nét vẽ và thao tác của nghệ nhân làng nghề
                   </p>
                 </div>
               </div>
@@ -445,7 +443,7 @@ function GuideContent() {
         <section className="space-y-4">
           <div className="flex items-center gap-2.5 text-[#9A1B1F]">
             <Layers size={22} />
-            <h3 className="font-serif text-xl sm:text-2xl font-black">
+            <h3 className="font-serif text-xl sm:text-2xl md:text-3xl font-black">
               Kiểm Tra Dụng Cụ Trong Hộp Của Bạn
             </h3>
           </div>
@@ -456,14 +454,14 @@ function GuideContent() {
                 key={idx}
                 className="bg-white rounded-2xl p-4 sm:p-5 border border-[#3A2618]/12 shadow-sm flex items-start gap-3.5 hover:border-[#9A1B1F]/35 transition-colors"
               >
-                <div className="w-8 h-8 rounded-full bg-[#285834]/10 text-[#285834] flex items-center justify-center flex-shrink-0 mt-0.5 font-bold text-sm shadow-inner">
+                <div className="w-8 h-8 rounded-full bg-[#285834]/10 text-[#285834] flex items-center justify-center flex-shrink-0 mt-0.5 font-black text-sm shadow-inner">
                   ✓
                 </div>
                 <div className="space-y-1">
                   <h4 className="font-sans font-bold text-sm sm:text-base text-[#2A1B12]">
                     {mat.name}
                   </h4>
-                  <p className="text-xs sm:text-sm text-[#3A2618]/70 font-light leading-relaxed">
+                  <p className="text-xs sm:text-sm text-[#2A1B12]/75 font-medium leading-relaxed">
                     {mat.desc}
                   </p>
                 </div>
@@ -476,7 +474,7 @@ function GuideContent() {
         <section className="space-y-6">
           <div className="flex items-center gap-2.5 text-[#9A1B1F]">
             <Palette size={22} />
-            <h3 className="font-serif text-xl sm:text-2xl font-black">
+            <h3 className="font-serif text-xl sm:text-2xl md:text-3xl font-black">
               4 Bước Hoàn Thiện Tác Phẩm
             </h3>
           </div>
@@ -497,17 +495,17 @@ function GuideContent() {
                 </div>
 
                 <div className="flex-1 space-y-2.5">
-                  <h4 className="font-serif text-lg sm:text-xl font-bold text-[#9A1B1F]">
+                  <h4 className="font-serif text-lg sm:text-xl md:text-2xl font-bold text-[#9A1B1F]">
                     {st.title}
                   </h4>
-                  <p className="font-sans text-sm sm:text-base text-[#3A2618]/90 leading-relaxed font-normal">
+                  <p className="font-sans text-sm sm:text-base text-[#2A1B12] leading-relaxed font-normal">
                     {st.description}
                   </p>
 
                   {st.tips && (
-                    <div className="bg-[#FAF7F2] rounded-xl p-3.5 border border-[#3A2618]/12 text-xs sm:text-sm text-[#3A2618]/85 flex items-start gap-2 mt-2">
+                    <div className="bg-[#FAF7F2] rounded-xl p-3.5 border border-[#3A2618]/12 text-xs sm:text-sm text-[#2A1B12]/85 flex items-start gap-2 mt-2">
                       <span className="font-bold text-[#9A1B1F] flex-shrink-0">Mẹo nhỏ:</span>
-                      <span>{st.tips}</span>
+                      <span className="font-medium">{st.tips}</span>
                     </div>
                   )}
                 </div>
@@ -520,14 +518,14 @@ function GuideContent() {
         <section className="bg-gradient-to-br from-[#9A1B1F] to-[#7A1518] text-[#F4E8C1] rounded-3xl p-6 sm:p-10 shadow-xl space-y-4 sm:space-y-6 border border-[#F4E8C1]/20">
           <div className="flex items-center gap-2.5 text-[#F4E8C1]">
             <Sparkles size={24} />
-            <h3 className="font-serif text-xl sm:text-2xl font-bold tracking-wide">
+            <h3 className="font-serif text-xl sm:text-2xl md:text-3xl font-bold tracking-wide">
               Bí Quyết Từ Nghệ Nhân Làng Nghề
             </h3>
           </div>
 
           <div className="space-y-3">
             {currentGuide.expertTips.map((tip, idx) => (
-              <div key={idx} className="flex items-start gap-3 text-sm sm:text-base text-[#F4E8C1]/90 leading-relaxed font-light">
+              <div key={idx} className="flex items-start gap-3 text-sm sm:text-base text-[#F4E8C1] leading-relaxed font-medium">
                 <CheckCircle2 size={18} className="text-[#F4E8C1] flex-shrink-0 mt-1" />
                 <span>{tip}</span>
               </div>
@@ -544,7 +542,7 @@ function GuideContent() {
             <h4 className="font-serif text-xl sm:text-2xl font-bold text-[#2A1B12]">
               Cần Trợ Giúp Trong Quá Trình Làm?
             </h4>
-            <p className="text-xs sm:text-sm text-[#3A2618]/70 font-light">
+            <p className="text-xs sm:text-sm text-[#2A1B12]/75 font-medium">
               Đội ngũ Chạm Thức luôn sẵn sàng giải đáp thắc mắc hoặc hướng dẫn trực tiếp nếu bạn gặp khó khăn trong khi thực hành.
             </p>
           </div>
@@ -557,14 +555,14 @@ function GuideContent() {
               className="inline-flex items-center gap-2 px-6 py-3.5 bg-[#0084FF] hover:bg-[#006FDB] text-white font-bold text-sm sm:text-base rounded-2xl shadow-lg transition-all cursor-pointer active:scale-95"
             >
               <MessageCircle size={18} />
-              <span>Nhắn Tin Hỗ Trợ Qua Messenger</span>
+              <span>Nhắn tin hỗ trợ qua Messenger</span>
             </a>
 
             <Link
               href="/"
-              className="inline-flex items-center gap-2 px-6 py-3.5 bg-[#F8F5F0] hover:bg-[#3A2618]/10 border border-[#3A2618]/15 text-[#3A2618] font-bold text-sm sm:text-base rounded-2xl transition-all active:scale-95"
+              className="inline-flex items-center gap-2 px-6 py-3.5 bg-[#F8F5F0] hover:bg-[#3A2618]/10 border border-[#3A2618]/15 text-[#2A1B12] font-bold text-sm sm:text-base rounded-2xl transition-all active:scale-95"
             >
-              <span>Xem Thêm Các Hộp DIY Khác</span>
+              <span>Xem thêm các Hộp DIY khác</span>
               <ChevronRight size={16} />
             </Link>
           </div>
