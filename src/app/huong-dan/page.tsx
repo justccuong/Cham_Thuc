@@ -13,22 +13,27 @@ import {
   MessageCircle,
   Download,
   Share2,
-  HelpCircle,
   Layers,
   Palette,
-  ShieldCheck,
+  ShoppingBag,
   ChevronRight,
+  MapPin,
 } from "lucide-react";
 import { CloudPatternOverlay } from "@/components/CloudPatternOverlay";
-
-type ProductId = "non-la" | "to-he" | "chuon-chuon";
+import { Footer } from "@/components/Footer";
+import { CartDrawer } from "@/components/CartDrawer";
+import { CustomCursor } from "@/components/CustomCursor";
+import { useLanguage } from "@/lib/i18n";
+import { useCart, ProductKey } from "@/lib/cart";
 
 interface ProductGuide {
-  id: ProductId;
+  id: ProductKey;
   name: string;
   village: string;
+  location: string;
+  price: number;
   coverImage: string;
-  videoUrl?: string; // YouTube embed or video URL
+  videoUrl: string;
   videoTitle: string;
   videoDuration: string;
   materials: { name: string; desc: string }[];
@@ -41,21 +46,24 @@ interface ProductGuide {
   expertTips: string[];
 }
 
-const GUIDES_DATA: Record<ProductId, ProductGuide> = {
+const GUIDES_DATA: Record<ProductKey, ProductGuide> = {
   "non-la": {
     id: "non-la",
     name: "Bộ DIY Nón Lá Mini",
-    village: "Làng Nón Chuông — Hà Nội",
-    coverImage: "/products/non-chuong.jpg",
+    village: "Làng Nón Chuông – Hà Nội",
+    location: "Xã Phương Trung, Huyện Thanh Oai, Hà Nội",
+    price: 160000,
+    coverImage: "/products/non-la/cover.png",
     videoTitle: "Video Hướng Dẫn: Tự Tay Trang Trí Nón Lá Mini Nghệ Thuật",
     videoDuration: "08:45",
     videoUrl: "https://www.youtube.com/embed/oi-J_56CwCc",
     materials: [
       { name: "Phôi nón lá trắng mini", desc: "Được chằm thủ công từ lá cọ phơi sương làng Chuông" },
-      { name: "Nón lụa mini", desc: "Nón lụa trang trí màu sắc truyền thống" },
+      { name: "Nón lụa mini", desc: "1 chiếc nón lụa mini màu sắc ngẫu nhiên độc bản" },
       { name: "Bộ vỉ màu Acrylic kèm cọ", desc: "Màu acrylic cao cấp chống thấm nước, bám chắc trên lá nón" },
-      { name: "Keo dán charm & Đá trang trí", desc: "Phụ kiện điểm xuyết tạo điểm nhấn thủ công độc bản" },
-      { name: "Hướng dẫn sử dụng & Thẻ nghệ nhân", desc: "Ghi chép câu chuyện di sản và mẹo vẽ nét mảnh" },
+      { name: "Keo dán charm", desc: "Keo dán chuyên dụng chắc chắn và nhanh khô" },
+      { name: "Charm / Đá trang trí", desc: "Phụ kiện điểm xuyết tạo điểm nhấn thủ công độc bản" },
+      { name: "Giấy hướng dẫn sử dụng (HDSD)", desc: "Ghi chép câu chuyện di sản và mẹo vẽ nét mảnh" },
     ],
     steps: [
       {
@@ -96,16 +104,18 @@ const GUIDES_DATA: Record<ProductId, ProductGuide> = {
   "to-he": {
     id: "to-he",
     name: "Bộ DIY Tò He Dân Gian",
-    village: "Làng Tò He Xuân La — Hà Nội",
-    coverImage: "/products/to-he.jpg",
+    village: "Làng Tò He Xuân La – Hà Nội",
+    location: "Xã Phượng Dực, Huyện Phú Xuyên, Hà Nội",
+    price: 160000,
+    coverImage: "/products/to-he/cover.png",
     videoTitle: "Video Hướng Dẫn: Kỹ Thuật Nặn Con Giống Tò He Truyền Thống",
     videoDuration: "10:15",
     videoUrl: "https://www.youtube.com/embed/I5OfubRRNQg",
     materials: [
-      { name: "Bột nặn tò he cao cấp", desc: "Bột mịn không dính tay, an toàn, phối màu tự nhiên rực rỡ" },
+      { name: "Bột tò he 7 màu cao cấp", desc: "Bột nếp dẻo mịn không dính tay, an toàn, nhuộm màu tự nhiên" },
       { name: "Que tre nặn truyền thống", desc: "Thanh tre vót nhẵn làm trục giữ con giống" },
-      { name: "Bộ dụng cụ tạo hình cơ bản", desc: "Lược khía, dao tạo nếp và que vuốt cánh hoa/vảy rồng" },
-      { name: "Hướng dẫn sử dụng", desc: "Sơ đồ tạo hình 6 con giống dân gian từ đơn giản đến nâng cao" },
+      { name: "Bộ dụng cụ tạo hình tò he", desc: "Lược khía, dao tạo nếp và que vuốt cánh hoa/vảy rồng" },
+      { name: "Giấy hướng dẫn sử dụng (HDSD)", desc: "Sơ đồ tạo hình các con giống dân gian từ đơn giản đến nâng cao" },
     ],
     steps: [
       {
@@ -146,16 +156,19 @@ const GUIDES_DATA: Record<ProductId, ProductGuide> = {
   "chuon-chuon": {
     id: "chuon-chuon",
     name: "Bộ DIY Chuồn Chuồn Tre",
-    village: "Làng Tre Thạch Xá — Hà Nội",
-    coverImage: "/products/chuon-chuon-tre.jpg",
+    village: "Làng Chuồn Chuồn Tre Thạch Xá – Hà Nội",
+    location: "Xã Thạch Xá, Huyện Thạch Thất, Hà Nội",
+    price: 160000,
+    coverImage: "/products/chuon-chuon/cover.png",
     videoTitle: "Video Hướng Dẫn: Phối Màu & Cân Bằng Chuồn Chuồn Tre Thạch Xá",
     videoDuration: "07:30",
     videoUrl: "https://www.youtube.com/embed/S6oV_RCgxuU",
     materials: [
-      { name: "Chuồn chuồn tre mộc chưa sơn", desc: "Được vót tay chuẩn xác từ tre rừng Thạch Xá, tự thăng bằng trên đầu mỏ" },
-      { name: "Bộ vỉ màu Acrylic kèm 2 cọ", desc: "1 cọ to quét nền và 1 cọ nét siêu mảnh vẽ hoa văn cánh" },
+      { name: "2 Chuồn chuồn tre mộc chưa sơn", desc: "Được vót tay chuẩn xác từ tre già Thạch Xá, tự thăng bằng trên đầu mỏ" },
       { name: "Chân đế 1 nhánh", desc: "Đế đỡ bằng gỗ/tre tự nhiên để trưng bày chuồn chuồn thăng bằng" },
-      { name: "Hướng dẫn sử dụng", desc: "Gợi ý hoa văn truyền thống và nguyên lý trọng tâm vật lý" },
+      { name: "Khay pha màu", desc: "Khay pha màu tiện lợi giúp phối các gam màu phong phú" },
+      { name: "Bộ vỉ màu Acrylic kèm 2 cọ vẽ", desc: "1 cọ to quét nền và 1 cọ nét siêu mảnh vẽ hoa văn cánh" },
+      { name: "Giấy hướng dẫn sử dụng (HDSD)", desc: "Gợi ý hoa văn truyền thống và nguyên lý đối trọng thăng bằng" },
     ],
     steps: [
       {
@@ -199,13 +212,16 @@ function GuideContent() {
   const searchParams = useSearchParams();
   const productParam = searchParams.get("product") || searchParams.get("san-pham");
 
-  const [activeProduct, setActiveProduct] = useState<ProductId>("non-la");
+  const [activeProduct, setActiveProduct] = useState<ProductKey>("non-la");
   const [isPlayingVideo, setIsPlayingVideo] = useState(false);
   const [copied, setCopied] = useState(false);
 
+  const { totalCount, openCart } = useCart();
+  const { lang, setLang } = useLanguage();
+
   useEffect(() => {
     if (productParam && (productParam === "non-la" || productParam === "to-he" || productParam === "chuon-chuon")) {
-      setActiveProduct(productParam as ProductId);
+      setActiveProduct(productParam as ProductKey);
     }
   }, [productParam]);
 
@@ -223,10 +239,12 @@ function GuideContent() {
 
   return (
     <div className="min-h-screen bg-[#F8F5F0] text-[#2A1B12] font-sans selection:bg-[#9A1B1F]/20 selection:text-[#9A1B1F] relative overflow-x-hidden">
+      <CustomCursor />
+      <CartDrawer />
       <CloudPatternOverlay variant="light" />
 
       {/* Top Floating Navigation Header */}
-      <header className="sticky top-0 z-50 bg-[#F8F5F0]/90 backdrop-blur-md border-b border-[#3A2618]/10 px-4 sm:px-8 py-3.5 flex items-center justify-between">
+      <header className="sticky top-0 z-50 bg-[#F8F5F0]/90 backdrop-blur-md border-b border-[#3A2618]/10 px-4 sm:px-8 py-3.5 flex items-center justify-between shadow-sm">
         <Link
           href="/"
           className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold uppercase tracking-wider text-[#3A2618]/80 hover:text-[#9A1B1F] transition-colors"
@@ -235,46 +253,65 @@ function GuideContent() {
           <span>Trang Chủ Chạm Thức</span>
         </Link>
 
-        <div className="flex items-center gap-2">
-          <Image
-            src="/logo.png"
-            alt="Chạm Thức Logo"
-            width={32}
-            height={32}
-            className="w-8 h-8 rounded-full object-cover border border-[#3A2618]/15"
-          />
-          <span className="font-serif font-bold text-base sm:text-lg text-[#9A1B1F] tracking-wide">
-            CHẠM THỨC
-          </span>
+        <div className="flex items-center gap-2.5">
+          <Link href="/" className="flex items-center gap-2">
+            <Image
+              src="/logo.png"
+              alt="Chạm Thức Logo"
+              width={32}
+              height={32}
+              className="w-8 h-8 rounded-full object-cover border border-[#3A2618]/15 shadow-sm"
+            />
+            <span className="font-serif font-black text-lg sm:text-xl text-[#9A1B1F] tracking-wide">
+              CHẠM THỨC
+            </span>
+          </Link>
         </div>
 
-        <button
-          onClick={handleShare}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-[#3A2618]/15 text-xs font-semibold text-[#3A2618] hover:border-[#9A1B1F] hover:text-[#9A1B1F] shadow-sm transition-all cursor-pointer"
-        >
-          <Share2 size={13} />
-          <span>{copied ? "Đã chép link!" : "Chia sẻ"}</span>
-        </button>
+        <div className="flex items-center gap-2.5">
+          <button
+            onClick={handleShare}
+            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-[#3A2618]/15 text-xs font-semibold text-[#3A2618] hover:border-[#9A1B1F] hover:text-[#9A1B1F] shadow-sm transition-all cursor-pointer"
+          >
+            <Share2 size={13} />
+            <span>{copied ? "Đã chép link!" : "Chia sẻ"}</span>
+          </button>
+
+          {/* Cart Button with Count Badge */}
+          <button
+            onClick={() => openCart()}
+            className="relative px-3.5 py-1.5 bg-[#9A1B1F] hover:bg-[#7A1518] text-[#F4E8C1] font-bold text-xs sm:text-sm rounded-full flex items-center gap-1.5 shadow-md transition-all cursor-pointer active:scale-95"
+            aria-label="Giỏ hàng"
+          >
+            <ShoppingBag size={15} />
+            <span className="hidden sm:inline">Giỏ Hàng</span>
+            {totalCount > 0 && (
+              <span className="w-5 h-5 bg-[#F4E8C1] text-[#9A1B1F] text-[11px] font-black rounded-full flex items-center justify-center shadow-inner ml-0.5">
+                {totalCount}
+              </span>
+            )}
+          </button>
+        </div>
       </header>
 
       {/* Hero Header Section */}
       <section className="relative z-10 pt-8 sm:pt-14 pb-6 sm:pb-10 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center">
-        <span className="inline-flex items-center gap-1.5 font-sans text-xs font-extrabold uppercase tracking-widest text-[#9A1B1F] bg-[#9A1B1F]/8 px-4 py-1.5 rounded-full border border-[#9A1B1F]/15 mb-3 sm:mb-4">
+        <span className="inline-flex items-center gap-1.5 font-sans text-xs sm:text-sm font-extrabold uppercase tracking-widest text-[#9A1B1F] bg-[#9A1B1F]/8 px-4 py-1.5 rounded-full border border-[#9A1B1F]/15 mb-3 sm:mb-4">
           <Sparkles size={14} className="text-[#9A1B1F]" />
           TRẠM HƯỚNG DẪN TRẢI NGHIỆM DIY
         </span>
 
-        <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-black text-[#9A1B1F] tracking-tight mb-3 sm:mb-4">
+        <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#9A1B1F] tracking-tight mb-3 sm:mb-4 leading-tight">
           Khám Phá Cách Tự Tay Hoàn Thiện Tác Phẩm
         </h1>
 
-        <p className="font-sans text-sm sm:text-base text-[#3A2618]/70 max-w-2xl mx-auto font-light leading-relaxed">
+        <p className="font-sans text-sm sm:text-base md:text-lg text-[#3A2618]/75 max-w-2xl mx-auto font-light leading-relaxed">
           Quét mã QR từ vỏ hộp để xem video hướng dẫn chi tiết từng bước từ nghệ nhân làng nghề, giúp bạn tự tin tạo nên sản phẩm thủ công di sản độc bản.
         </p>
 
-        {/* 3 Product Selector Tabs */}
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-2.5 sm:gap-4">
-          {(["non-la", "to-he", "chuon-chuon"] as ProductId[]).map((pid) => {
+        {/* 3 Equal Symmetrical Product Selector Tabs */}
+        <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-2xl mx-auto">
+          {(["non-la", "to-he", "chuon-chuon"] as ProductKey[]).map((pid) => {
             const p = GUIDES_DATA[pid];
             const isActive = activeProduct === pid;
             return (
@@ -284,16 +321,16 @@ function GuideContent() {
                   setActiveProduct(pid);
                   setIsPlayingVideo(false);
                 }}
-                className={`flex items-center gap-2.5 px-4 sm:px-5 py-2.5 sm:py-3 rounded-2xl font-sans text-xs sm:text-sm font-bold tracking-wide transition-all cursor-pointer border ${
+                className={`w-full py-3 px-4 rounded-2xl font-sans text-xs sm:text-sm font-bold tracking-wide transition-all duration-300 cursor-pointer border flex items-center justify-center gap-2.5 ${
                   isActive
-                    ? "bg-[#9A1B1F] text-[#F4E8C1] border-[#9A1B1F] shadow-lg scale-105"
-                    : "bg-white text-[#3A2618]/80 border-[#3A2618]/15 hover:border-[#9A1B1F]/40 hover:text-[#9A1B1F]"
+                    ? "bg-[#9A1B1F] text-[#F4E8C1] border-[#9A1B1F] shadow-[0_6px_20px_rgba(154,27,31,0.35)] scale-[1.02]"
+                    : "bg-white text-[#3A2618]/80 border-[#3A2618]/15 hover:border-[#9A1B1F]/40 hover:text-[#9A1B1F] hover:bg-stone-50"
                 }`}
               >
-                <div className="relative w-6 h-6 rounded-full overflow-hidden flex-shrink-0">
+                <div className="relative w-6 h-6 rounded-full overflow-hidden flex-shrink-0 border border-white/30">
                   <Image src={p.coverImage} alt={p.name} fill className="object-cover" sizes="24px" />
                 </div>
-                <span>{p.name}</span>
+                <span className="truncate">{p.name}</span>
               </button>
             );
           })}
@@ -303,37 +340,54 @@ function GuideContent() {
       {/* Main Content Area */}
       <main className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 sm:pb-24 space-y-10 sm:space-y-14">
         {/* Active Product Title Header */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 sm:p-8 border border-[#3A2618]/10 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div className="space-y-1.5">
-            <span className="text-xs font-bold uppercase tracking-wider text-[#285834] block">
-              {currentGuide.village}
-            </span>
-            <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#9A1B1F]">
+        <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 sm:p-8 border border-[#3A2618]/15 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <span className="text-xs sm:text-sm font-extrabold uppercase tracking-wider text-[#285834] block">
+                {currentGuide.village}
+              </span>
+              <span className="text-xs text-[#3A2618]/40">•</span>
+              <div className="flex items-center gap-1 text-xs text-[#3A2618]/70">
+                <MapPin size={12} className="text-[#9A1B1F]" />
+                <span>{currentGuide.location}</span>
+              </div>
+            </div>
+
+            <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-black text-[#9A1B1F]">
               {currentGuide.name}
             </h2>
-            <p className="text-xs sm:text-sm text-[#3A2618]/70">
-              Thời lượng xem gợi ý: <span className="font-semibold text-[#9A1B1F]">{currentGuide.videoDuration}</span> • Trải nghiệm thực hành: 30–45 phút
+
+            <p className="text-xs sm:text-sm text-[#3A2618]/75">
+              Thời lượng xem gợi ý: <span className="font-bold text-[#9A1B1F]">{currentGuide.videoDuration}</span> • Trải nghiệm thực hành: 30–45 phút • Giá: <span className="font-price font-bold text-[#9A1B1F]">{currentGuide.price.toLocaleString("vi-VN")} đ</span>
             </p>
           </div>
 
           <div className="flex items-center gap-3 w-full md:w-auto">
+            <button
+              onClick={() => openCart(activeProduct)}
+              className="flex-1 md:flex-initial inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#9A1B1F] hover:bg-[#7A1518] text-[#F4E8C1] rounded-2xl text-xs sm:text-sm font-bold uppercase tracking-wider shadow-md transition-all cursor-pointer active:scale-95"
+            >
+              <ShoppingBag size={16} />
+              <span>Đặt Hộp Này</span>
+            </button>
+
             <a
               href={`/qr/qr-hdsd-${currentGuide.id}.png`}
               download={`QR_HDSD_${currentGuide.id}.png`}
-              className="flex-1 md:flex-initial inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-[#F8F5F0] hover:bg-[#9A1B1F]/10 border border-[#3A2618]/15 text-[#3A2618] hover:text-[#9A1B1F] rounded-xl text-xs font-bold transition-all"
+              className="inline-flex items-center justify-center gap-2 px-4 py-3 bg-[#F8F5F0] hover:bg-[#9A1B1F]/10 border border-[#3A2618]/15 text-[#3A2618] hover:text-[#9A1B1F] rounded-2xl text-xs sm:text-sm font-bold transition-all"
               title="Tải mã QR để in ấn trên vỏ hộp / giấy HDSD"
             >
-              <Download size={15} />
-              <span>Tải Mã QR In Ấn</span>
+              <Download size={16} />
+              <span className="hidden sm:inline">Tải Mã QR</span>
             </a>
           </div>
         </div>
 
         {/* SECTION 1: VIDEO PLAYER */}
         <section className="space-y-4">
-          <div className="flex items-center gap-2 text-[#9A1B1F]">
-            <Play size={20} className="fill-current" />
-            <h3 className="font-serif text-xl sm:text-2xl font-bold">
+          <div className="flex items-center gap-2.5 text-[#9A1B1F]">
+            <Play size={22} className="fill-current" />
+            <h3 className="font-serif text-xl sm:text-2xl font-black">
               Video Hướng Dẫn Chi Tiết
             </h3>
           </div>
@@ -371,8 +425,8 @@ function GuideContent() {
                 </button>
 
                 {/* Bottom Video Meta */}
-                <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6 text-white space-y-1">
-                  <span className="inline-block bg-[#9A1B1F] text-[10px] sm:text-xs font-bold uppercase tracking-wider px-2.5 py-1 rounded-md">
+                <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6 text-white space-y-1.5">
+                  <span className="inline-block bg-[#9A1B1F] text-[10px] sm:text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-md shadow-sm">
                     VIDEO CHÍNH THỨC
                   </span>
                   <p className="font-serif text-lg sm:text-2xl font-bold drop-shadow-md">
@@ -389,9 +443,9 @@ function GuideContent() {
 
         {/* SECTION 2: MATERIALS CHECKLIST */}
         <section className="space-y-4">
-          <div className="flex items-center gap-2 text-[#9A1B1F]">
-            <Layers size={20} />
-            <h3 className="font-serif text-xl sm:text-2xl font-bold">
+          <div className="flex items-center gap-2.5 text-[#9A1B1F]">
+            <Layers size={22} />
+            <h3 className="font-serif text-xl sm:text-2xl font-black">
               Kiểm Tra Dụng Cụ Trong Hộp Của Bạn
             </h3>
           </div>
@@ -400,13 +454,13 @@ function GuideContent() {
             {currentGuide.materials.map((mat, idx) => (
               <div
                 key={idx}
-                className="bg-white rounded-2xl p-4 sm:p-5 border border-[#3A2618]/10 shadow-sm flex items-start gap-3.5 hover:border-[#9A1B1F]/30 transition-colors"
+                className="bg-white rounded-2xl p-4 sm:p-5 border border-[#3A2618]/12 shadow-sm flex items-start gap-3.5 hover:border-[#9A1B1F]/35 transition-colors"
               >
-                <div className="w-7 h-7 rounded-full bg-[#285834]/10 text-[#285834] flex items-center justify-center flex-shrink-0 mt-0.5 font-bold text-xs">
+                <div className="w-8 h-8 rounded-full bg-[#285834]/10 text-[#285834] flex items-center justify-center flex-shrink-0 mt-0.5 font-bold text-sm shadow-inner">
                   ✓
                 </div>
                 <div className="space-y-1">
-                  <h4 className="font-sans font-bold text-sm sm:text-base text-[#3A2618]">
+                  <h4 className="font-sans font-bold text-sm sm:text-base text-[#2A1B12]">
                     {mat.name}
                   </h4>
                   <p className="text-xs sm:text-sm text-[#3A2618]/70 font-light leading-relaxed">
@@ -420,10 +474,10 @@ function GuideContent() {
 
         {/* SECTION 3: STEP-BY-STEP WORKFLOW */}
         <section className="space-y-6">
-          <div className="flex items-center gap-2 text-[#9A1B1F]">
-            <Palette size={20} />
-            <h3 className="font-serif text-xl sm:text-2xl font-bold">
-              4 Bước Thực Hiện Từng Bước
+          <div className="flex items-center gap-2.5 text-[#9A1B1F]">
+            <Palette size={22} />
+            <h3 className="font-serif text-xl sm:text-2xl font-black">
+              4 Bước Hoàn Thiện Tác Phẩm
             </h3>
           </div>
 
@@ -435,7 +489,7 @@ function GuideContent() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: idx * 0.1 }}
-                className="bg-white rounded-3xl p-6 sm:p-8 border border-[#3A2618]/10 shadow-sm relative overflow-hidden flex flex-col md:flex-row gap-5 sm:gap-6 items-start"
+                className="bg-white rounded-3xl p-6 sm:p-8 border border-[#3A2618]/12 shadow-sm relative overflow-hidden flex flex-col md:flex-row gap-5 sm:gap-6 items-start hover:shadow-md transition-shadow"
               >
                 {/* Step Big Number Badge */}
                 <div className="flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[#9A1B1F]/8 border border-[#9A1B1F]/20 flex items-center justify-center text-[#9A1B1F] font-serif font-black text-2xl sm:text-3xl shadow-inner">
@@ -446,12 +500,12 @@ function GuideContent() {
                   <h4 className="font-serif text-lg sm:text-xl font-bold text-[#9A1B1F]">
                     {st.title}
                   </h4>
-                  <p className="font-sans text-sm sm:text-base text-[#3A2618]/85 leading-relaxed font-normal">
+                  <p className="font-sans text-sm sm:text-base text-[#3A2618]/90 leading-relaxed font-normal">
                     {st.description}
                   </p>
 
                   {st.tips && (
-                    <div className="bg-[#FAF7F2] rounded-xl p-3.5 border border-[#3A2618]/10 text-xs sm:text-sm text-[#3A2618]/80 flex items-start gap-2 mt-2">
+                    <div className="bg-[#FAF7F2] rounded-xl p-3.5 border border-[#3A2618]/12 text-xs sm:text-sm text-[#3A2618]/85 flex items-start gap-2 mt-2">
                       <span className="font-bold text-[#9A1B1F] flex-shrink-0">Mẹo nhỏ:</span>
                       <span>{st.tips}</span>
                     </div>
@@ -463,9 +517,9 @@ function GuideContent() {
         </section>
 
         {/* SECTION 4: EXPERT TIPS FROM ARTISANS */}
-        <section className="bg-gradient-to-br from-[#9A1B1F] to-[#7A1518] text-[#F4E8C1] rounded-3xl p-6 sm:p-10 shadow-xl space-y-4 sm:space-y-6">
-          <div className="flex items-center gap-2 text-[#F4E8C1]">
-            <Sparkles size={22} />
+        <section className="bg-gradient-to-br from-[#9A1B1F] to-[#7A1518] text-[#F4E8C1] rounded-3xl p-6 sm:p-10 shadow-xl space-y-4 sm:space-y-6 border border-[#F4E8C1]/20">
+          <div className="flex items-center gap-2.5 text-[#F4E8C1]">
+            <Sparkles size={24} />
             <h3 className="font-serif text-xl sm:text-2xl font-bold tracking-wide">
               Bí Quyết Từ Nghệ Nhân Làng Nghề
             </h3>
@@ -482,12 +536,12 @@ function GuideContent() {
         </section>
 
         {/* SECTION 5: LIVE SUPPORT & COMMUNITY SHARE */}
-        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-[#3A2618]/10 shadow-sm text-center space-y-6">
+        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-[#3A2618]/12 shadow-sm text-center space-y-6">
           <div className="max-w-md mx-auto space-y-2">
-            <div className="w-12 h-12 rounded-full bg-[#0084FF]/10 text-[#0084FF] flex items-center justify-center mx-auto mb-2">
+            <div className="w-12 h-12 rounded-full bg-[#0084FF]/10 text-[#0084FF] flex items-center justify-center mx-auto mb-2 shadow-inner">
               <MessageCircle size={26} />
             </div>
-            <h4 className="font-serif text-xl sm:text-2xl font-bold text-[#3A2618]">
+            <h4 className="font-serif text-xl sm:text-2xl font-bold text-[#2A1B12]">
               Cần Trợ Giúp Trong Quá Trình Làm?
             </h4>
             <p className="text-xs sm:text-sm text-[#3A2618]/70 font-light">
@@ -500,7 +554,7 @@ function GuideContent() {
               href="https://m.me/61592690401391"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-6 py-3.5 bg-[#0084FF] hover:bg-[#006FDB] text-white font-bold text-sm sm:text-base rounded-2xl shadow-lg transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-6 py-3.5 bg-[#0084FF] hover:bg-[#006FDB] text-white font-bold text-sm sm:text-base rounded-2xl shadow-lg transition-all cursor-pointer active:scale-95"
             >
               <MessageCircle size={18} />
               <span>Nhắn Tin Hỗ Trợ Qua Messenger</span>
@@ -508,7 +562,7 @@ function GuideContent() {
 
             <Link
               href="/"
-              className="inline-flex items-center gap-2 px-6 py-3.5 bg-[#F8F5F0] hover:bg-[#3A2618]/10 border border-[#3A2618]/15 text-[#3A2618] font-bold text-sm sm:text-base rounded-2xl transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3.5 bg-[#F8F5F0] hover:bg-[#3A2618]/10 border border-[#3A2618]/15 text-[#3A2618] font-bold text-sm sm:text-base rounded-2xl transition-all active:scale-95"
             >
               <span>Xem Thêm Các Hộp DIY Khác</span>
               <ChevronRight size={16} />
@@ -517,10 +571,8 @@ function GuideContent() {
         </section>
       </main>
 
-      {/* Simple Footer for HDSD page */}
-      <footer className="border-t border-[#3A2618]/10 py-8 px-4 text-center text-xs text-[#3A2618]/60 bg-white/50">
-        <p>© 2026 Chạm Thức — Trạm Hướng Dẫn Trải Nghiệm Thủ Công Làng Nghề Việt Nam.</p>
-      </footer>
+      {/* Full Consistent Brand Footer */}
+      <Footer />
     </div>
   );
 }
