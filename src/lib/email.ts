@@ -15,9 +15,9 @@ export interface OrderEmailData {
  * Sends order notification email to Admin via Gmail SMTP.
  */
 export async function sendOrderEmailToAdmin(order: OrderEmailData): Promise<{ success: boolean; error?: string }> {
-  const gmailUser = process.env.GMAIL_USER || process.env.EMAIL_USER || "chamthuc2026@gmail.com";
-  const gmailAppPassword = process.env.GMAIL_APP_PASSWORD || process.env.EMAIL_APP_PASSWORD || "";
-  const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL || gmailUser;
+  const gmailUser = process.env.GMAIL_USER || process.env.EMAIL_USER || "caocuong7a2@gmail.com";
+  const gmailAppPassword = process.env.GMAIL_APP_PASSWORD || process.env.EMAIL_APP_PASSWORD || "styfqotwwqnwafoi";
+  const adminEmail = process.env.ADMIN_NOTIFICATION_EMAIL || "caocuong7a2@gmail.com";
 
   if (!gmailAppPassword) {
     console.warn("⚠️ GMAIL_APP_PASSWORD is not set in environment variables. Email notification skipped.");
