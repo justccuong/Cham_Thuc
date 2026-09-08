@@ -159,28 +159,30 @@ export const CulturalStation: React.FC = () => {
             <div className="h-[1px] w-16 bg-[#F8F5F0]" />
           </div>
 
-          {/* 3 Equal Symmetrical Village Tabs */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3.5 max-w-2xl mx-auto mt-4">
+          {/* 3 Symmetrical Village Tabs — Auto-fit & Responsive */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3.5 max-w-3xl lg:max-w-4xl mx-auto mt-4 px-2 sm:px-0">
             {VILLAGES.map((v, idx) => {
               const isActive = idx === activeIdx;
               return (
                 <button
                   key={v.id}
                   onClick={() => setActiveIdx(idx)}
-                  className={`w-full py-2.5 sm:py-3 px-3 sm:px-4 rounded-2xl font-sans text-xs sm:text-sm font-bold tracking-wide transition-all duration-300 cursor-pointer border text-center flex items-center justify-center ${
+                  className={`w-full min-h-[48px] sm:min-h-[52px] py-2 sm:py-2.5 px-3 sm:px-4 rounded-2xl font-sans text-xs sm:text-sm font-bold tracking-wide transition-all duration-300 cursor-pointer border text-center flex items-center justify-center leading-snug ${
                     isActive
                       ? "bg-brand-gold text-[#2A1B12] border-brand-gold shadow-[0_4px_20px_rgba(244,232,193,0.3)] scale-[1.02]"
                       : "bg-[#3A2618]/80 text-paper-ivory/80 border-brand-gold/20 hover:border-brand-gold/50 hover:text-brand-gold hover:bg-[#4A3220]"
                   }`}
                 >
-                  <span className="truncate">{v.villageName}</span>
+                  <span className="block text-center whitespace-normal break-words">
+                    {v.villageName}
+                  </span>
                 </button>
               );
             })}
           </div>
 
           {/* 3 Synchronized Segmented Countdown Timer Bars */}
-          <div className="grid grid-cols-3 gap-2.5 sm:gap-3.5 max-w-2xl mx-auto mt-3 px-1">
+          <div className="grid grid-cols-3 gap-2.5 sm:gap-3.5 max-w-3xl lg:max-w-4xl mx-auto mt-3 px-3 sm:px-1">
             {VILLAGES.map((v, idx) => {
               const isActive = idx === activeIdx;
               const isPassed = idx < activeIdx;
