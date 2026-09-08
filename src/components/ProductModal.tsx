@@ -153,8 +153,6 @@ export const ProductModal: React.FC<ProductModalProps> = ({ item, onClose, onOrd
     };
   }, [item]);
 
-  if (!isMounted) return null;
-
   const variants = item ? getBlindBoxVariants(item) : [];
   const activeVariant = variants[activeIdx] || variants[0];
   const priceDisplay = item ? new Intl.NumberFormat("vi-VN").format(item.price) : "";
@@ -186,6 +184,8 @@ export const ProductModal: React.FC<ProductModalProps> = ({ item, onClose, onOrd
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [item, variants.length, onClose]);
+
+  if (!isMounted) return null;
 
   return createPortal(
     <AnimatePresence>
