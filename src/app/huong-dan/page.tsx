@@ -390,7 +390,10 @@ function GuideContent() {
             </h3>
           </div>
 
-          <div className="relative w-full aspect-video rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-black group">
+          <div
+            onClick={() => !isPlayingVideo && setIsPlayingVideo(true)}
+            className="relative w-full aspect-video rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border-2 sm:border-4 border-white bg-black group cursor-pointer"
+          >
             {isPlayingVideo ? (
               <iframe
                 src={`${currentGuide.videoUrl}?autoplay=1`}
@@ -405,36 +408,57 @@ function GuideContent() {
                   src={currentGuide.coverImage}
                   alt={currentGuide.videoTitle}
                   fill
-                  className="object-cover opacity-85 group-hover:scale-105 transition-transform duration-700"
+                  className="object-cover opacity-90 group-hover:scale-105 transition-transform duration-700"
                   sizes="(max-width: 1024px) 100vw, 1024px"
                   priority
                 />
 
-                {/* Dark Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/20" />
+                {/* Subtle Gradient Overlay */}
+                <div className="absolute inset-0 bg-black/35 group-hover:bg-black/20 transition-colors" />
 
                 {/* Play Button Trigger */}
-                <button
-                  onClick={() => setIsPlayingVideo(true)}
-                  className="absolute inset-0 m-auto w-18 h-18 sm:w-22 sm:h-22 rounded-full bg-[#9A1B1F] hover:bg-[#7A1518] text-[#F4E8C1] flex items-center justify-center shadow-2xl transition-all duration-300 hover:scale-110 cursor-pointer group-hover:ring-8 group-hover:ring-[#9A1B1F]/30"
-                  aria-label="Phát video hướng dẫn"
+                <div
+                  className="absolute inset-0 m-auto w-16 h-16 sm:w-22 sm:h-22 rounded-full bg-[#9A1B1F] group-hover:bg-[#7A1518] text-[#F4E8C1] flex items-center justify-center shadow-2xl transition-all duration-300 group-hover:scale-110 group-hover:ring-8 group-hover:ring-[#9A1B1F]/30"
+                  aria-hidden="true"
                 >
-                  <Play size={32} className="fill-current ml-1" />
-                </button>
+                  <Play size={28} className="fill-current ml-1 sm:scale-110" />
+                </div>
 
-                {/* Bottom Video Meta */}
-                <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6 text-white space-y-1.5">
-                  <span className="inline-block bg-[#9A1B1F] text-xs font-bold px-3 py-1 rounded-md shadow-sm">
-                    Video chính thức từ nghệ nhân
-                  </span>
-                  <p className="font-serif text-lg sm:text-2xl font-bold drop-shadow-md">
-                    {currentGuide.videoTitle}
-                  </p>
-                  <p className="text-xs sm:text-sm text-white/90 drop-shadow font-medium">
-                    Bấm để xem video từng nét vẽ và thao tác của nghệ nhân làng nghề
-                  </p>
+                {/* Duration Badge */}
+                <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-10 bg-black/75 backdrop-blur-md text-white text-xs font-bold px-3 py-1.5 rounded-full font-price flex items-center gap-1.5 shadow-md">
+                  <span>{currentGuide.videoDuration}</span>
                 </div>
               </div>
+            )}
+          </div>
+
+          {/* Video Metadata Card — Positioned outside & below the video player for unobstructed mobile UX */}
+          <div className="bg-white rounded-2xl p-4 sm:p-5 border border-[#3A2618]/10 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+            <div className="space-y-1.5">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="inline-block bg-[#9A1B1F] text-white text-[11px] sm:text-xs font-bold px-2.5 py-0.5 rounded-md shadow-sm">
+                  Video chính thức từ nghệ nhân
+                </span>
+                <span className="text-xs text-[#3A2618]/60 font-medium">
+                  Thời lượng: {currentGuide.videoDuration}
+                </span>
+              </div>
+              <h4 className="font-serif text-base sm:text-xl font-bold text-[#2A1B12]">
+                {currentGuide.videoTitle}
+              </h4>
+              <p className="text-xs sm:text-sm text-[#3A2618]/75 font-normal leading-relaxed">
+                Bấm nút phát để xem video từng nét vẽ và thao tác chi tiết của nghệ nhân làng nghề.
+              </p>
+            </div>
+
+            {!isPlayingVideo && (
+              <button
+                onClick={() => setIsPlayingVideo(true)}
+                className="self-start sm:self-center px-4 sm:px-5 py-2.5 rounded-full bg-[#9A1B1F] hover:bg-[#7A1518] text-[#F4E8C1] text-xs sm:text-sm font-bold flex items-center gap-2 shadow-md transition-all active:scale-95 cursor-pointer flex-shrink-0"
+              >
+                <Play size={15} className="fill-current" />
+                <span>Xem Video</span>
+              </button>
             )}
           </div>
         </section>
