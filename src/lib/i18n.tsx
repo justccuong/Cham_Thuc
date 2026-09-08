@@ -144,7 +144,7 @@ export const translations: Record<Language, Translations> = {
       badge: "KHÁM PHÁ LÀNG NGHỀ VIỆT NAM",
       title: "BỘ KIT DIY Sản Phẩm Thủ Công Làng Nghề Việt Nam",
       subtitle: "Biết chủ đề – Bất ngờ phiên bản. Chọn làng nghề bạn yêu thích, tự tay hoàn thiện sản phẩm và khám phá những câu chuyện văn hóa được gìn giữ qua nhiều thế hệ.",
-      viewDetails: "Xem chi tiết ->",
+      viewDetails: "Xem chi tiết",
       addToCart: "Thêm Vào Giỏ",
       priceSuffix: "đ",
       items: {
@@ -282,7 +282,7 @@ export const translations: Record<Language, Translations> = {
       badge: "EXPLORE VIETNAMESE CRAFT VILLAGES",
       title: "Handcrafted DIY Kits — Vietnamese Craft Villages",
       subtitle: "Know the theme — Surprise the edition. Pick your favorite craft village, handcraft the product, and discover cultural stories preserved across generations.",
-      viewDetails: "View Details ->",
+      viewDetails: "View Details",
       addToCart: "Add to Cart",
       priceSuffix: "VND",
       items: {
