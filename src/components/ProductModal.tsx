@@ -4,7 +4,7 @@ import React, { useState, useEffect, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ShoppingBag } from "lucide-react";
+import { X, ShoppingBag, ChevronLeft, ChevronRight } from "lucide-react";
 import { CraftItem } from "@/types";
 import { ProductKey } from "@/lib/cart";
 import { Button } from "./ui/Button";
@@ -159,6 +159,34 @@ export const ProductModal: React.FC<ProductModalProps> = ({ item, onClose, onOrd
   const activeVariant = variants[activeIdx] || variants[0];
   const priceDisplay = item ? new Intl.NumberFormat("vi-VN").format(item.price) : "";
 
+  const handlePrevImage = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setActiveIdx((prev) => (prev === 0 ? variants.length - 1 : prev - 1));
+  };
+
+  const handleNextImage = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setActiveIdx((prev) => (prev === variants.length - 1 ? 0 : prev + 1));
+  };
+
+  // Keyboard navigation for modal gallery (ArrowLeft / ArrowRight / Escape)
+  useEffect(() => {
+    if (!item) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") {
+        setActiveIdx((prev) => (prev === 0 ? variants.length - 1 : prev - 1));
+      } else if (e.key === "ArrowRight") {
+        setActiveIdx((prev) => (prev === variants.length - 1 ? 0 : prev + 1));
+      } else if (e.key === "Escape") {
+        onClose();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [item, variants.length, onClose]);
+
   return createPortal(
     <AnimatePresence>
       {item && (
@@ -194,7 +222,7 @@ export const ProductModal: React.FC<ProductModalProps> = ({ item, onClose, onOrd
             {/* Left Column: Visuals & Interactive Blind Box Gallery */}
             <div className="w-full md:w-1/2 p-4 sm:p-6 bg-[#FAF7F2] border-b md:border-b-0 md:border-r border-[#3A2618]/10 flex flex-col justify-between space-y-3 sm:space-y-4 flex-shrink-0">
               {/* Main Display Image */}
-              <div className="relative w-full aspect-[16/10] sm:aspect-[4/3] md:aspect-[5/4] rounded-2xl overflow-hidden shadow-inner bg-stone-200/50">
+              <div className="relative w-full aspect-[16/10] sm:aspect-[4/3] md:aspect-[5/4] rounded-2xl overflow-hidden shadow-inner bg-stone-200/50 group">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeVariant.id}
@@ -214,11 +242,39 @@ export const ProductModal: React.FC<ProductModalProps> = ({ item, onClose, onOrd
                     />
 
                     {/* Tag Overlay */}
-                    <div className="absolute top-3 left-3 z-20 bg-black/75 backdrop-blur-md text-white text-xs sm:text-sm font-bold px-3.5 py-1.5 rounded-full uppercase tracking-wider shadow-md">
+                    <div className="absolute top-3 left-3 z-20 bg-black/75 backdrop-blur-md text-white text-xs sm:text-sm font-bold px-3 sm:px-3.5 py-1.5 rounded-full uppercase tracking-wider shadow-md">
                       {activeVariant.tag} — {activeVariant.name}
                     </div>
                   </motion.div>
                 </AnimatePresence>
+
+                {/* Left / Right Navigation Buttons on Main Image */}
+                {variants.length > 1 && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={handlePrevImage}
+                      className="absolute left-2.5 sm:left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/60 hover:bg-[#9A1B1F] text-white flex items-center justify-center backdrop-blur-md border border-white/20 transition-all duration-200 shadow-lg cursor-pointer hover:scale-110 active:scale-95"
+                      aria-label="Ảnh trước"
+                    >
+                      <ChevronLeft size={20} />
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={handleNextImage}
+                      className="absolute right-2.5 sm:right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/60 hover:bg-[#9A1B1F] text-white flex items-center justify-center backdrop-blur-md border border-white/20 transition-all duration-200 shadow-lg cursor-pointer hover:scale-110 active:scale-95"
+                      aria-label="Ảnh tiếp theo"
+                    >
+                      <ChevronRight size={20} />
+                    </button>
+
+                    {/* Image Counter Indicator */}
+                    <div className="absolute top-3 right-3 z-20 bg-black/75 backdrop-blur-md text-white text-xs sm:text-sm font-bold px-3 py-1.5 rounded-full font-price shadow-md tracking-wider">
+                      {activeIdx + 1} / {variants.length}
+                    </div>
+                  </>
+                )}
               </div>
 
               {/* Subtext under main image */}
